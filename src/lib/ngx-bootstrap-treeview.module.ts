@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
-    imports: [BrowserAnimationsModule, CommonModule, FontAwesomeModule, RouterModule],
+    imports: [BrowserAnimationsModule, CommonModule, FontAwesomeModule, RouterModule.forRoot([])],
     declarations: [NgxBootstrapTreeviewComponent],
     exports: [NgxBootstrapTreeviewComponent]
 })
