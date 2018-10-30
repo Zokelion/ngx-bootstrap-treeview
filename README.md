@@ -1,27 +1,23 @@
+# Work in progress
+
+Hi guys, this plugin is still under development and lacks a lot of features right now.
+I will add some until I think this is complete and fits my needs as a tree plugin.
+
+# Things I want to add
+
+-   Boxes to select/unselect an entire branch
+-   Async loading of children with a loadChildren callback
+-   Possibility to disable animation and maybe add a set of fancy ones when folding/unfolding a branch
+-   Allow a Tree array as an @Input() so this plugin can support multi-root trees
+-   I'll probably have more ideas as this evolves
+
+# Things ngx-bootstrap-treeview (nbt) uses
+
+-   [Angular FontAwesome](https://github.com/FortAwesome/angular-fontawesome)
+-   [Bootstrap](https://getbootstrap.com/) classes
+
 # NgxBootstrapTreeview
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.3.
-
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+This plugin includes a simple component that allows you to visualize/browse and interact with tree data.
+It gives you access to three object classes: Leaf, Tree and LeafClickedEvent
+And a component that will take a Tree as @Input()
