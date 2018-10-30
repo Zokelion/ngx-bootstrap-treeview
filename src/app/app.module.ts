@@ -2,13 +2,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { NgxBootstrapTreeviewModule } from './modules/ngx-bootstrap-treeview/ngx-bootstrap-treeview.module';
-
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgxBootstrapTreeviewModule } from '../lib/ngx-bootstrap-treeview.module';
 
 @NgModule({
     declarations: [AppComponent],
-    imports: [BrowserModule, FontAwesomeModule, NgxBootstrapTreeviewModule],
+    imports: [BrowserModule, NgxBootstrapTreeviewModule],
     providers: [],
     bootstrap: [AppComponent]
 })

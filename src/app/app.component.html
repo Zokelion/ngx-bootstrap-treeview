@@ -6,9 +6,7 @@
     </div>
     <div class="row">
         <div class="col-12 col-sm-6">
-            <ngx-bootstrap-treeview [isOpened]="true" [selectedLeafIcon]="faCheckSquare" [unselectedLeafIcon]="faSquare"
-                [openedFolderIcon]="faFolderOpen" [closedFolderIcon]="faFolder" (leafClicked)="leafClickedEventHandler($event)"
-                [tree]="tree">
+            <ngx-bootstrap-treeview [isOpened]="true" (leafClicked)="leafClickedEventHandler($event)" [tree]="tree">
             </ngx-bootstrap-treeview>
         </div>
         <div class="col-12 col-sm-6">

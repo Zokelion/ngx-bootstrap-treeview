@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { Tree } from './modules/ngx-bootstrap-treeview/models/tree.model';
-import { Leaf } from './modules/ngx-bootstrap-treeview/models/leaf.model';
-import { ILoggingService } from './modules/ngx-bootstrap-treeview/interfaces/ILoggingService.interface';
-import { LeafClickedEvent } from './modules/ngx-bootstrap-treeview/models/leaf-clicked-event.model';
+import { Tree } from '../lib/models/tree.model';
+import { Leaf } from '../lib/models/leaf.model';
+import { ILoggingService } from '../lib/interfaces/ILoggingService.interface';
+import { LeafClickedEvent } from '../lib/models/leaf-clicked-event.model';
 
 @Component({
     selector: 'app-root',

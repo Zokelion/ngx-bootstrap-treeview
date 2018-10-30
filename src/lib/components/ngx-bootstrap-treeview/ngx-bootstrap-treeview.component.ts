@@ -102,7 +102,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         this.childrenState = this.isOpened ? 'visible' : 'hidden';
     }
 
-    public itemClicked(leafClickedEvent: LeafClickedEvent) {
+    public itemClicked(leafClickedEvent?: LeafClickedEvent) {
         /* If we don't have children, we're on a leaf and if we receive no event,
             that means our element got clicked
         */
