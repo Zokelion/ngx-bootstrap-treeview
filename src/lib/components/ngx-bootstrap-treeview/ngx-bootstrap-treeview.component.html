@@ -1,9 +1,26 @@
 <ul [ngClass]="{branch: tree.children, leaf: !tree.children, opened: isOpened}" *ngIf="tree">
     <li>
-        <fa-icon *ngIf="canSelectTree" [icon]="unselectedLeafIcon"></fa-icon>
         <a [routerLink]="[]" (click)="itemClicked()">
-            <fa-icon [icon]="closedFolderIcon" *ngIf="tree.children && !isOpened"></fa-icon>
-            <fa-icon [icon]="openedFolderIcon" *ngIf="tree.children && isOpened"></fa-icon>
+            <!-- Icons if we're reprensenting a branch -->
+
+            <!-- Folder closed, no children selected -->
+            <fa-icon [icon]="closedFolderIcon" *ngIf="tree.children && !isOpened && !selectedLeaves.length"></fa-icon>
+            <!-- Folder closed, children selected but not all -->
+            <fa-layers *ngIf="tree.children && !isOpened && selectedLeaves.length > 0 && selectedLeaves.length < this.leavesCount">
+                <fa-icon [icon]="closedFolderIcon"></fa-icon>
+                <fa-icon [icon]="anyChildrenSelectedIcon" transform="shrink-6 down-1"></fa-icon>
+            </fa-layers>
+            <!-- <fa-icon [icon]="closedFolderIcon" [mask]="anyChildrenSelectedIcon" *ngIf="tree.children && !isOpened && selectedLeaves.length > 0 && selectedLeaves.length < leavesCount"></fa-icon> -->
+            <!-- Folder closed, all children selected -->
+            <fa-icon [icon]="closedFolderIcon" *ngIf="tree.children && !isOpened && selectedLeaves.length === leavesCount"></fa-icon>
+            <!-- Folder opened, no children selected -->
+            <fa-icon [icon]="openedFolderIcon" *ngIf="tree.children && isOpened && !selectedLeaves"></fa-icon>
+            <!-- Folder opened, children selected but not all -->
+            <fa-icon [icon]="openedFolderIcon" *ngIf="tree.children && isOpened && selectedLeaves.length < leavesCount"></fa-icon>
+            <!-- Folder opened, all children selected -->
+            <fa-icon [icon]="openedFolderIcon" *ngIf="tree.children && isOpened && selectedLeaves.length === leavesCount"></fa-icon>
+
+            <!-- Icons if we're reprensenting a leaf -->
             <fa-icon [icon]="unselectedLeafIcon" *ngIf="!tree.children && !isOpened"></fa-icon>
             <fa-icon [icon]="selectedLeafIcon" *ngIf="!tree.children && isOpened"></fa-icon>
             {{ tree.label }}
@@ -11,7 +28,7 @@
         <div *ngIf="tree.children" class="children" [@showHide]="childrenState">
             <ngx-bootstrap-treeview *ngFor="let branch of tree.children" [tree]="branch" (leafClicked)="itemClicked($event)"
                 [selectedLeafIcon]="selectedLeafIcon" [unselectedLeafIcon]="unselectedLeafIcon" [openedFolderIcon]="openedFolderIcon"
-                [closedFolderIcon]="closedFolderIcon">
+                [closedFolderIcon]="closedFolderIcon" [canSelectBranch]="canSelectBranch">
             </ngx-bootstrap-treeview>
         </div>
     </li>

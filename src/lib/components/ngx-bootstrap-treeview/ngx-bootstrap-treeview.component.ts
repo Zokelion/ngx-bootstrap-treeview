@@ -1,6 +1,14 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Tree } from '../../models/tree.model';
-import { faSquare, faCheckSquare, faFolder, faFolderOpen, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import {
+    faSquare,
+    faCheckSquare,
+    faFolder,
+    faFolderOpen,
+    faMinus,
+    faCheck,
+    IconDefinition
+} from '@fortawesome/free-solid-svg-icons';
 import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
 import { Leaf } from '../../models/leaf.model';
 import { LeafClickedEvent } from '../../models/leaf-clicked-event.model';
@@ -10,7 +18,7 @@ import { ILoggingService } from '../../interfaces/ILoggingService.interface';
     // tslint:disable-next-line:component-selector
     selector: 'ngx-bootstrap-treeview',
     templateUrl: './ngx-bootstrap-treeview.component.html',
-    styleUrls: ['./ngx-bootstrap-treeview.component.css'],
+    styleUrls: ['./ngx-bootstrap-treeview.component.scss'],
     animations: [
         trigger('showHide', [
             state(
@@ -60,7 +68,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     public isOpened: boolean;
 
     @Input()
-    public canSelectTree: boolean;
+    public canSelectBranch: boolean;
 
     // Icons inputs
     @Input()
@@ -75,9 +83,17 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     @Input()
     public selectedLeafIcon: IconDefinition;
 
+    @Input()
+    public anyChildrenSelectedIcon: IconDefinition;
+
+    @Input()
+    public allChildrenSelectedIcon: IconDefinition;
+
     public childrenState: string;
 
     public selectedLeaves: Leaf[] = [];
+
+    public leavesCount: number;
 
     constructor() {}
 
@@ -99,7 +115,16 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
             this.unselectedLeafIcon = faSquare;
         }
 
+        if (!this.allChildrenSelectedIcon) {
+            this.allChildrenSelectedIcon = faCheck;
+        }
+
+        if (!this.anyChildrenSelectedIcon) {
+            this.anyChildrenSelectedIcon = faMinus;
+        }
+
         this.childrenState = this.isOpened ? 'visible' : 'hidden';
+        this.leavesCount = this.countLeaves(this.tree);
     }
 
     public itemClicked(leafClickedEvent?: LeafClickedEvent) {
@@ -146,6 +171,20 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         }
 
         this.leafClicked.emit(event);
+    }
+
+    public countLeaves(tree: Tree): number {
+        let leavesCount = 0;
+        if (!tree.children) {
+            leavesCount = 1;
+        } else {
+            tree.children.forEach(child => {
+                leavesCount += this.countLeaves(child);
+            });
+            console.log(leavesCount, 'leaves found for', tree);
+        }
+
+        return leavesCount;
     }
 
     private _selectLeaf(leaf: Leaf) {

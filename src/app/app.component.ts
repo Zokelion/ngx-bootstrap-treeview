@@ -3,6 +3,7 @@ import { Tree } from '../lib/models/tree.model';
 import { Leaf } from '../lib/models/leaf.model';
 import { ILoggingService } from '../lib/interfaces/ILoggingService.interface';
 import { LeafClickedEvent } from '../lib/models/leaf-clicked-event.model';
+import { faFolder, faFolderOpen, faSquare, faCheckSquare, faCheck, faMinus } from '@fortawesome/pro-light-svg-icons';
 
 @Component({
     selector: 'app-root',
@@ -10,7 +11,15 @@ import { LeafClickedEvent } from '../lib/models/leaf-clicked-event.model';
     styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-    public selectedLeaves: Leaf[];
+    public defaultStyleSelectedLeaves: Leaf[];
+    public lightStyleSelectedLeaves: Leaf[];
+
+    public faFolder = faFolder;
+    public faFolderOpen = faFolderOpen;
+    public faSquare = faSquare;
+    public faCheckSquare = faCheckSquare;
+    public faMinus = faMinus;
+    public faCheck = faCheck;
 
     public _loggingService: ILoggingService = console;
 
@@ -73,8 +82,17 @@ export class AppComponent {
         ]
     };
 
-    public leafClickedEventHandler(leafClickedEvent: LeafClickedEvent) {
-        this.selectedLeaves = leafClickedEvent.selectedLeaves;
+    public defaultStyleLeafClickedEventHandler(leafClickedEvent: LeafClickedEvent) {
+        this.defaultStyleSelectedLeaves = leafClickedEvent.selectedLeaves;
+
+        this._loggingService.log(
+            `🍂🌲🍂 Eléments actuellement sélectionnés dans l'arbre:`,
+            leafClickedEvent.selectedLeaves
+        );
+    }
+
+    public lightStyleLeafClickedEventHandler(leafClickedEvent: LeafClickedEvent) {
+        this.lightStyleSelectedLeaves = leafClickedEvent.selectedLeaves;
 
         this._loggingService.log(
             `🍂🌲🍂 Eléments actuellement sélectionnés dans l'arbre:`,
