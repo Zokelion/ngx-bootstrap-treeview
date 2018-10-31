@@ -3,6 +3,9 @@
 Hi guys, this plugin is still under development and lacks a lot of features right now.
 I will add some until I think this is complete and fits my needs as a tree plugin.
 
+The name might be quite confusing but at the moment, there is not any [ngx-bootstrap](https://www.npmjs.com/package/ngx-bootstrap) component involved in this plugin.
+At first I thought I'd need it, then realised I could do everything, at least until now, without using it and I'll try to keep everything going this way.
+
 # Things I want to add
 
 -   Boxes to select/unselect an entire branch
