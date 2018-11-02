@@ -1,21 +1,2 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~bootstrap/scss/bootstrap';
-
-// We put this style here because it concerns some dynamically injected HTML
-// And Angular has a bug on this: https://github.com/angular/angular/issues/7845, https://github.com/angular/angular/issues/7108
-// + ::ng-deep is deprecated and will be removed soon. Since it is the only workaround for this, this component's style will stay there
-ngx-bootstrap-treeview {
-    fa-layers {
-        fa-icon {
-            color: #000;
-
-            &:not(:first-child) svg[data-prefix='fas'] {
-                color: white;
-            }
-
-            &.opened-folder-mask svg {
-                transform: skew(-45deg, 0);
-            }
-        }
-    }
-}

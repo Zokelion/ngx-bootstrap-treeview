@@ -5,4 +5,23 @@ ul {
     fa-icon {
         color: #000;
     }
+
+    // Here we use ::ng-deep since it is the only workaround I could find until now for injected html
+    // Angular already has a few bugs opened about this: https://github.com/angular/angular/issues/7845, https://github.com/angular/angular/issues/7108
+    // ::ng-deep is deprecated and may be removed soon but I didn't find any other way to fix this issue
+    // Anyway, this can't affect anything out of the component since it targets svg contained inside an fa-icon
+    // and fa-icon CSS is scoped to the component since it is before ::ng-deep
+    fa-layers {
+        fa-icon {
+            color: #000;
+
+            &:not(:first-child) ::ng-deep svg[data-prefix='fas'] {
+                color: white;
+            }
+
+            &.opened-folder-mask ::ng-deep svg {
+                transform: skew(-45deg, 0);
+            }
+        }
+    }
 }

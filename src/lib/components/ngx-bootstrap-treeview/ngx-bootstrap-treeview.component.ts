@@ -7,7 +7,6 @@ import {
     faFolderOpen,
     faMinus,
     faCheck,
-    faCheckDouble,
     IconDefinition
 } from '@fortawesome/free-solid-svg-icons';
 import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
