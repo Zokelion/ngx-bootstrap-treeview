@@ -65,6 +65,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     public tree: Tree;
 
     @Input()
+    public loadChildren: Function;
+
+    @Input()
     public isOpened: boolean;
 
     @Input()
@@ -94,6 +97,10 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     public selectedLeaves: Leaf[] = [];
 
     public leavesCount: number;
+
+    public isBranch: boolean;
+
+    public isLeaf: boolean;
 
     constructor() {}
 
@@ -129,6 +136,14 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
             console.log('anyChildrenSelectedIcon customisé:', this.allChildrenSelectedIcon);
         }
 
+        if (this.tree.children || this.loadChildren) {
+            this.isBranch = true;
+        } else {
+            this.isBranch = false;
+        }
+
+        this.isLeaf = !this.isBranch;
+
         this.childrenState = this.isOpened ? 'visible' : 'hidden';
         this.leavesCount = this.countLeaves(this.tree);
     }
@@ -137,11 +152,11 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         /* If we don't have children, we're on a leaf and if we receive no event,
             that means our element got clicked
         */
-        if (!this.tree.children && !leafClickedEvent) {
+        if (!this.isBranch && !leafClickedEvent) {
             this.leafClickedCallback();
-        } else if (this.tree.children && leafClickedEvent) {
+        } else if (this.isBranch && leafClickedEvent) {
             this._leafClickedEventReceived(leafClickedEvent);
-        } else if (this.tree.children && !leafClickedEvent) {
+        } else if (this.isBranch && !leafClickedEvent) {
             // If leaf is not set but we have children, that means we clicked on a link to show/hide content
             // We change "childrenState" and "isOpened" accordingly
             if (this.loggingService) {
