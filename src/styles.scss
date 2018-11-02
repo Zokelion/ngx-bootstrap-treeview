@@ -12,6 +12,10 @@ ngx-bootstrap-treeview {
             &:not(:first-child) svg[data-prefix='fas'] {
                 color: white;
             }
+
+            &.opened-folder-mask svg {
+                transform: skew(-45deg, 0);
+            }
         }
     }
 }

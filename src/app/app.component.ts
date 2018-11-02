@@ -86,7 +86,7 @@ export class AppComponent {
         this.defaultStyleSelectedLeaves = leafClickedEvent.selectedLeaves;
 
         this._loggingService.log(
-            `🍂🌲🍂 Eléments actuellement sélectionnés dans l'arbre:`,
+            `🍂🌲🍂 Eléments actuellement sélectionnés dans l'arbre Default:`,
             leafClickedEvent.selectedLeaves
         );
     }
@@ -95,7 +95,7 @@ export class AppComponent {
         this.lightStyleSelectedLeaves = leafClickedEvent.selectedLeaves;
 
         this._loggingService.log(
-            `🍂🌲🍂 Eléments actuellement sélectionnés dans l'arbre:`,
+            `🍂🌲🍂 Eléments actuellement sélectionnés dans l'arbre Light:`,
             leafClickedEvent.selectedLeaves
         );
     }

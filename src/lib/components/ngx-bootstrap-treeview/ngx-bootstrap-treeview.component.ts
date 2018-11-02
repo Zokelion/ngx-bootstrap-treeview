@@ -7,6 +7,7 @@ import {
     faFolderOpen,
     faMinus,
     faCheck,
+    faCheckDouble,
     IconDefinition
 } from '@fortawesome/free-solid-svg-icons';
 import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
@@ -109,6 +110,8 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
         if (!this.selectedLeafIcon) {
             this.selectedLeafIcon = faCheckSquare;
+        } else {
+            console.log('selectedLeafIcon customisé:', this.selectedLeafIcon);
         }
 
         if (!this.unselectedLeafIcon) {
@@ -117,10 +120,14 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
         if (!this.allChildrenSelectedIcon) {
             this.allChildrenSelectedIcon = faCheck;
+        } else {
+            console.log('allChildrenSelectedIcon customisé:', this.allChildrenSelectedIcon);
         }
 
         if (!this.anyChildrenSelectedIcon) {
             this.anyChildrenSelectedIcon = faMinus;
+        } else {
+            console.log('anyChildrenSelectedIcon customisé:', this.allChildrenSelectedIcon);
         }
 
         this.childrenState = this.isOpened ? 'visible' : 'hidden';
