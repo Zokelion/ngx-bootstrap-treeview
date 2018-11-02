@@ -65,9 +65,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     public tree: Tree;
 
     @Input()
-    public loadChildren: Function;
-
-    @Input()
     public isOpened: boolean;
 
     @Input()
@@ -136,7 +133,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
             console.log('anyChildrenSelectedIcon customisé:', this.allChildrenSelectedIcon);
         }
 
-        if (this.tree.children || this.loadChildren) {
+        if (this.tree.children || this.tree.loadChildren) {
             this.isBranch = true;
         } else {
             this.isBranch = false;
@@ -152,7 +149,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         /* If we don't have children, we're on a leaf and if we receive no event,
             that means our element got clicked
         */
-        if (!this.isBranch && !leafClickedEvent) {
+        if (this.isLeaf && !leafClickedEvent) {
             this.leafClickedCallback();
         } else if (this.isBranch && leafClickedEvent) {
             this._leafClickedEventReceived(leafClickedEvent);
@@ -196,13 +193,12 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
     public countLeaves(tree: Tree): number {
         let leavesCount = 0;
-        if (!tree.children) {
+        if (this.isLeaf || this.tree.loadChildren) {
             leavesCount = 1;
         } else {
             tree.children.forEach(child => {
                 leavesCount += this.countLeaves(child);
             });
-            console.log(leavesCount, 'leaves found for', tree);
         }
 
         return leavesCount;
