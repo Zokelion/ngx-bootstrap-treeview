@@ -3,10 +3,12 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { NgxBootstrapTreeviewModule } from '../lib/ngx-bootstrap-treeview.module';
+import { RoutingModule } from './app.router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
     declarations: [AppComponent],
-    imports: [BrowserModule, NgxBootstrapTreeviewModule],
+    imports: [BrowserModule, BrowserAnimationsModule, RoutingModule, NgxBootstrapTreeviewModule],
     providers: [],
     bootstrap: [AppComponent]
 })
