@@ -41,16 +41,21 @@
 
         <!-- The children display block, only display if our chil -->
         <div *ngIf="tree.children" class="children" [@showHide]="childrenState">
-            <ngx-bootstrap-treeview *ngFor="let branch of tree.children" [tree]="branch" (leafClicked)="itemClicked($event)"
-                [selectedLeafIcon]="selectedLeafIcon" [unselectedLeafIcon]="unselectedLeafIcon" [openedFolderIcon]="openedFolderIcon"
-                [closedFolderIcon]="closedFolderIcon" [canSelectBranch]="canSelectBranch" [anyChildrenSelectedIcon]="anyChildrenSelectedIcon"
+            <ngx-bootstrap-treeview *ngFor="let branch of tree.children" (childrenLoaded)="childrenLoadedEventHandler($event)"
+                [tree]="branch" (leafClicked)="itemClicked($event)" [selectedLeafIcon]="selectedLeafIcon"
+                [unselectedLeafIcon]="unselectedLeafIcon" [openedFolderIcon]="openedFolderIcon" [closedFolderIcon]="closedFolderIcon"
+                [canSelectBranch]="canSelectBranch" [anyChildrenSelectedIcon]="anyChildrenSelectedIcon"
                 [allChildrenSelectedIcon]="allChildrenSelectedIcon">
             </ngx-bootstrap-treeview>
         </div>
 
         <!-- Loading animation, only displayed while we're loading children -->
         <div *ngIf="!tree.children && tree.loadChildren" class="children" [@showHide]="childrenState">
-            <fa-icon [spin]="true" [icon]="loadingIcon"></fa-icon>
+            <ul>
+                <li>
+                    <fa-icon [spin]="true" [icon]="loadingIcon"></fa-icon> Chargement en cours...
+                </li>
+            </ul>
         </div>
     </li>
 </ul>

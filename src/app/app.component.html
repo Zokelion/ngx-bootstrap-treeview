@@ -1,17 +1,17 @@
 <div class="container">
     <div class="row">
         <h1 class="col-12 text-center">
-            Arbres
+            Treeview Sandbox
         </h1>
     </div>
     <div class="row">
-        <div class="col-12 col-sm-6">
-            <h4>Tree with default FontAwesome style</h4>
+        <div class="col-12 col-sm-8">
+            <h4>Async loading, default FontAwesome style</h4>
             <ngx-bootstrap-treeview [isOpened]="true" (leafClicked)="defaultStyleLeafClickedEventHandler($event)"
                 [tree]="deferredTree">
             </ngx-bootstrap-treeview>
         </div>
-        <div class="col-12 col-sm-6">
+        <div class="col-12 col-sm-4">
             <h4>Selected Leaves</h4>
             <ul *ngIf="defaultStyleSelectedLeaves">
                 <li *ngFor="let selectedLeaf of defaultStyleSelectedLeaves">
@@ -22,15 +22,15 @@
     </div>
     <hr>
     <div class="row mt-4">
-        <div class="col-12 col-sm-6">
-            <h4>Tree with Light FontAwesome style (Pro FA only)</h4>
+        <div class="col-12 col-sm-8">
+            <h4>All children loaded example, Light FontAwesome style (Pro FA only)</h4>
             <ngx-bootstrap-treeview [isOpened]="true" (leafClicked)="lightStyleLeafClickedEventHandler($event)" [tree]="tree"
                 [canSelectBranch]="false" [selectedLeafIcon]="faCheckSquare" [unselectedLeafIcon]="faSquare"
                 [openedFolderIcon]="faFolderOpen" [closedFolderIcon]="faFolder" [anyChildrenSelectedIcon]="faMinus"
                 [allChildrenSelectedIcon]="faCheck">
             </ngx-bootstrap-treeview>
         </div>
-        <div class="col-12 col-sm-6">
+        <div class="col-12 col-sm-4">
             <h4>Selected Leaves</h4>
             <ul *ngIf="lightStyleSelectedLeaves">
                 <li *ngFor="let selectedLeaf of lightStyleSelectedLeaves">

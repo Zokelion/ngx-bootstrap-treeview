@@ -220,6 +220,8 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
     public childrenLoadedEventHandler(event: ChildrenLoadedEvent) {
         this.updateLeavesCount();
+
+        this.childrenLoaded.emit(event);
     }
 
     public updateLeavesCount(): void {

@@ -107,7 +107,7 @@ export class AppComponent {
                     ]);
 
                     sub.complete();
-                }, 10000);
+                }, 3000);
             });
         }
     };
