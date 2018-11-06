@@ -7,12 +7,14 @@ import {
     faFolderOpen,
     faMinus,
     faCheck,
+    faSpinner,
     IconDefinition
 } from '@fortawesome/free-solid-svg-icons';
 import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
 import { Leaf } from '../../models/leaf.model';
 import { LeafClickedEvent } from '../../models/leaf-clicked-event.model';
 import { ILoggingService } from '../../interfaces/ILoggingService.interface';
+import { ChildrenLoadedEvent } from 'src/lib/models/children-loaded-event.model';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -58,6 +60,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     @Output()
     public leafClicked: EventEmitter<LeafClickedEvent> = new EventEmitter<LeafClickedEvent>();
 
+    @Output()
+    public childrenLoaded: EventEmitter<ChildrenLoadedEvent> = new EventEmitter<ChildrenLoadedEvent>();
+
     @Input()
     loggingService: ILoggingService;
 
@@ -89,6 +94,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     @Input()
     public allChildrenSelectedIcon: IconDefinition;
 
+    @Input()
+    public loadingIcon: IconDefinition;
+
     public childrenState: string;
 
     public selectedLeaves: Leaf[] = [];
@@ -113,8 +121,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
         if (!this.selectedLeafIcon) {
             this.selectedLeafIcon = faCheckSquare;
-        } else {
-            console.log('selectedLeafIcon customisé:', this.selectedLeafIcon);
         }
 
         if (!this.unselectedLeafIcon) {
@@ -123,14 +129,14 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
         if (!this.allChildrenSelectedIcon) {
             this.allChildrenSelectedIcon = faCheck;
-        } else {
-            console.log('allChildrenSelectedIcon customisé:', this.allChildrenSelectedIcon);
         }
 
         if (!this.anyChildrenSelectedIcon) {
             this.anyChildrenSelectedIcon = faMinus;
-        } else {
-            console.log('anyChildrenSelectedIcon customisé:', this.allChildrenSelectedIcon);
+        }
+
+        if (!this.loadingIcon) {
+            this.loadingIcon = faSpinner;
         }
 
         if (this.tree.children || this.tree.loadChildren) {
@@ -139,10 +145,14 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
             this.isBranch = false;
         }
 
+        if (this.isOpened && !this.tree.children && this.tree.loadChildren) {
+            this._loadChildren();
+        }
+
         this.isLeaf = !this.isBranch;
 
         this.childrenState = this.isOpened ? 'visible' : 'hidden';
-        this.leavesCount = this.countLeaves(this.tree);
+        this.updateLeavesCount();
     }
 
     public itemClicked(leafClickedEvent?: LeafClickedEvent) {
@@ -162,6 +172,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
             this.isOpened = !this.isOpened;
             this.childrenState = this.isOpened ? 'visible' : 'hidden';
+            if (!this.tree.children && this.tree.loadChildren) {
+                this._loadChildren();
+            }
         }
     }
 
@@ -202,6 +215,14 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         }
 
         return leavesCount;
+    }
+
+    public childrenLoadedEventHandler(event: ChildrenLoadedEvent) {
+        this.updateLeavesCount();
+    }
+
+    public updateLeavesCount(): void {
+        this.leavesCount = this.countLeaves(this.tree);
     }
 
     private _selectLeaf(leaf: Leaf) {
@@ -260,5 +281,24 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         });
 
         return result;
+    }
+
+    // Function that is called when we load children in a deferred way
+    private _loadChildren(): void {
+        this.tree.loadChildren().subscribe((children: Tree[]) => {
+            this.tree.children = children.map(child => {
+                if (child.hasChildren === true) {
+                    return {
+                        ...child,
+                        loadChildren: this.tree.loadChildren
+                    };
+                } else {
+                    return child;
+                }
+            });
+        });
+
+        // We emit the fact that we loaded more children so every parent can recompute their leavesCount
+        this.childrenLoaded.emit(new ChildrenLoadedEvent(this.tree));
     }
 }

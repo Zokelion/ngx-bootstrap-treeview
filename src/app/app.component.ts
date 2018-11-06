@@ -4,6 +4,7 @@ import { Leaf } from '../lib/models/leaf.model';
 import { ILoggingService } from '../lib/interfaces/ILoggingService.interface';
 import { LeafClickedEvent } from '../lib/models/leaf-clicked-event.model';
 import { faFolder, faFolderOpen, faSquare, faCheckSquare, faCheck, faMinus } from '@fortawesome/pro-light-svg-icons';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-root',
@@ -80,6 +81,35 @@ export class AppComponent {
                 ]
             }
         ]
+    };
+
+    public deferredTree = {
+        label: 'Deferred Tree',
+        value: 1,
+        loadChildren: () => {
+            return new Observable<Tree[]>(sub => {
+                setTimeout(() => {
+                    sub.next([
+                        {
+                            label: 'Test Branch',
+                            value: 11,
+                            hasChildren: true
+                        },
+                        {
+                            label: 'Test Branch again',
+                            value: 11,
+                            hasChildren: true
+                        },
+                        {
+                            label: 'Test leaf',
+                            value: 13
+                        }
+                    ]);
+
+                    sub.complete();
+                }, 10000);
+            });
+        }
     };
 
     public defaultStyleLeafClickedEventHandler(leafClickedEvent: LeafClickedEvent) {

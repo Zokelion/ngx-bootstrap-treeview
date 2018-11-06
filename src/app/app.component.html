@@ -8,7 +8,7 @@
         <div class="col-12 col-sm-6">
             <h4>Tree with default FontAwesome style</h4>
             <ngx-bootstrap-treeview [isOpened]="true" (leafClicked)="defaultStyleLeafClickedEventHandler($event)"
-                [tree]="tree">
+                [tree]="deferredTree">
             </ngx-bootstrap-treeview>
         </div>
         <div class="col-12 col-sm-6">

@@ -4,47 +4,53 @@
             <!-- Icons if we're reprensenting a branch -->
 
             <!-- Folder closed, no children selected -->
-            <fa-icon [icon]="closedFolderIcon" *ngIf="tree.children && !isOpened && !selectedLeaves.length"></fa-icon>
+            <fa-icon [icon]="closedFolderIcon" *ngIf="isBranch && !isOpened && !selectedLeaves.length"></fa-icon>
 
             <!-- Folder closed, children selected but not all -->
-            <fa-layers *ngIf="tree.children && !isOpened && selectedLeaves.length > 0 && selectedLeaves.length < this.leavesCount">
+            <fa-layers *ngIf="isBranch && !isOpened && selectedLeaves.length > 0 && selectedLeaves.length < this.leavesCount">
                 <fa-icon [icon]="closedFolderIcon"></fa-icon>
                 <fa-icon [icon]="anyChildrenSelectedIcon" transform="shrink-6 down-1"></fa-icon>
             </fa-layers>
 
             <!-- Folder closed, all children selected -->
-            <fa-layers *ngIf="tree.children && !isOpened && selectedLeaves.length === leavesCount">
+            <fa-layers *ngIf="isBranch && !isOpened && selectedLeaves.length === leavesCount">
                 <fa-icon [icon]="closedFolderIcon"></fa-icon>
                 <fa-icon [icon]="allChildrenSelectedIcon" transform="shrink-8 down-1"></fa-icon>
             </fa-layers>
 
             <!-- Folder opened, no children selected -->
-            <fa-icon [icon]="openedFolderIcon" *ngIf="tree.children && isOpened && !selectedLeaves.length"></fa-icon>
+            <fa-icon [icon]="openedFolderIcon" *ngIf="isBranch && isOpened && !selectedLeaves.length"></fa-icon>
 
             <!-- Folder opened, children selected but not all -->
-            <fa-layers *ngIf="tree.children && isOpened && selectedLeaves.length > 0 && selectedLeaves.length < this.leavesCount">
+            <fa-layers *ngIf="isBranch && isOpened && selectedLeaves.length > 0 && selectedLeaves.length < this.leavesCount">
                 <fa-icon [icon]="openedFolderIcon"></fa-icon>
                 <fa-icon [icon]="anyChildrenSelectedIcon" transform="shrink-8 down-3 right-2" class="opened-folder-mask"></fa-icon>
             </fa-layers>
             <!-- Folder opened, all children selected -->
-            <!-- <fa-icon [icon]="openedFolderIcon" *ngIf="tree.children && isOpened && selectedLeaves.length === leavesCount"></fa-icon> -->
-            <fa-layers *ngIf="tree.children && isOpened && selectedLeaves.length === leavesCount">
+            <fa-layers *ngIf="isBranch && isOpened && selectedLeaves.length === leavesCount">
                 <fa-icon [icon]="openedFolderIcon"></fa-icon>
                 <fa-icon [icon]="allChildrenSelectedIcon" transform="shrink-12 down-3 right-1" class="opened-folder-mask"></fa-icon>
             </fa-layers>
             <!-- /branch icons -->
 
             <!-- Icons if we're reprensenting a leaf -->
-            <fa-icon [icon]="unselectedLeafIcon" *ngIf="!tree.children && !isOpened"></fa-icon>
-            <fa-icon [icon]="selectedLeafIcon" *ngIf="!tree.children && isOpened"></fa-icon>
+            <fa-icon [icon]="unselectedLeafIcon" *ngIf="isLeaf && !isOpened"></fa-icon>
+            <fa-icon [icon]="selectedLeafIcon" *ngIf="isLeaf && isOpened"></fa-icon>
             {{ tree.label }}
         </a>
+
+        <!-- The children display block, only display if our chil -->
         <div *ngIf="tree.children" class="children" [@showHide]="childrenState">
             <ngx-bootstrap-treeview *ngFor="let branch of tree.children" [tree]="branch" (leafClicked)="itemClicked($event)"
                 [selectedLeafIcon]="selectedLeafIcon" [unselectedLeafIcon]="unselectedLeafIcon" [openedFolderIcon]="openedFolderIcon"
                 [closedFolderIcon]="closedFolderIcon" [canSelectBranch]="canSelectBranch" [anyChildrenSelectedIcon]="anyChildrenSelectedIcon"
                 [allChildrenSelectedIcon]="allChildrenSelectedIcon">
             </ngx-bootstrap-treeview>
+        </div>
+
+        <!-- Loading animation, only displayed while we're loading children -->
+        <div *ngIf="!tree.children && tree.loadChildren" class="children" [@showHide]="childrenState">
+            <fa-icon [spin]="true" [icon]="loadingIcon"></fa-icon>
         </div>
     </li>
 </ul>
