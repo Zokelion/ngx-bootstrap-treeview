@@ -193,7 +193,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
     public countLeaves(tree: Tree): number {
         let leavesCount = 0;
-        if (this.isLeaf || this.tree.loadChildren) {
+        if (!tree.children || tree.loadChildren) {
             leavesCount = 1;
         } else {
             tree.children.forEach(child => {
