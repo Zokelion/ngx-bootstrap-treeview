@@ -14,7 +14,7 @@ import { trigger, state, style, transition, animate, keyframes } from '@angular/
 import { Leaf } from '../../models/leaf.model';
 import { LeafClickedEvent } from '../../models/leaf-clicked-event.model';
 import { ILoggingService } from '../../interfaces/ILoggingService.interface';
-import { ChildrenLoadedEvent } from 'src/lib/models/children-loaded-event.model';
+import { ChildrenLoadedEvent } from '../../models/children-loaded-event.model';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -206,7 +206,8 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
     public countLeaves(tree: Tree): number {
         let leavesCount = 0;
-        if (this.isLeaf || this.tree.loadChildren) {
+
+        if (!tree.children || tree.loadChildren) {
             leavesCount = 1;
         } else {
             tree.children.forEach(child => {
