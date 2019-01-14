@@ -1,4 +1,4 @@
-<ul [ngClass]="{branch: tree.children, leaf: !tree.children, opened: isOpened}" *ngIf="tree">
+<ul [ngClass]="{ branch: tree.children, leaf: !tree.children, opened: isOpened }" *ngIf="tree">
     <li>
         <a [routerLink]="[]" (click)="itemClicked()">
             <!-- Icons if we're reprensenting a branch -->
@@ -7,13 +7,17 @@
             <fa-icon [icon]="closedFolderIcon" *ngIf="tree.children && !isOpened && !selectedLeaves.length"></fa-icon>
 
             <!-- Folder closed, children selected but not all -->
-            <fa-layers *ngIf="tree.children && !isOpened && selectedLeaves.length > 0 && selectedLeaves.length < this.leavesCount">
+            <fa-layers
+                *ngIf="
+                    tree.children && !isOpened && selectedLeaves.length > 0 && selectedLeaves.length < this.leavesCount
+                "
+            >
                 <fa-icon [icon]="closedFolderIcon"></fa-icon>
                 <fa-icon [icon]="anyChildrenSelectedIcon" transform="shrink-6 down-1"></fa-icon>
             </fa-layers>
 
             <!-- Folder closed, all children selected -->
-            <fa-layers *ngIf="tree.children && !isOpened && selectedLeaves.length === leavesCount">
+            <fa-layers *ngIf="tree.children && !isOpened && selectedLeaves.length === leavesCount && leavesCount > 0">
                 <fa-icon [icon]="closedFolderIcon"></fa-icon>
                 <fa-icon [icon]="allChildrenSelectedIcon" transform="shrink-8 down-1"></fa-icon>
             </fa-layers>
@@ -22,15 +26,26 @@
             <fa-icon [icon]="openedFolderIcon" *ngIf="tree.children && isOpened && !selectedLeaves.length"></fa-icon>
 
             <!-- Folder opened, children selected but not all -->
-            <fa-layers *ngIf="tree.children && isOpened && selectedLeaves.length > 0 && selectedLeaves.length < this.leavesCount">
+            <fa-layers
+                *ngIf="
+                    tree.children && isOpened && selectedLeaves.length > 0 && selectedLeaves.length < this.leavesCount
+                "
+            >
                 <fa-icon [icon]="openedFolderIcon"></fa-icon>
-                <fa-icon [icon]="anyChildrenSelectedIcon" transform="shrink-8 down-3 right-2" class="opened-folder-mask"></fa-icon>
+                <fa-icon
+                    [icon]="anyChildrenSelectedIcon"
+                    transform="shrink-8 down-3 right-2"
+                    class="opened-folder-mask"
+                ></fa-icon>
             </fa-layers>
             <!-- Folder opened, all children selected -->
-            <!-- <fa-icon [icon]="openedFolderIcon" *ngIf="tree.children && isOpened && selectedLeaves.length === leavesCount"></fa-icon> -->
-            <fa-layers *ngIf="tree.children && isOpened && selectedLeaves.length === leavesCount">
+            <fa-layers *ngIf="tree.children && isOpened && selectedLeaves.length === leavesCount && leavesCount > 0">
                 <fa-icon [icon]="openedFolderIcon"></fa-icon>
-                <fa-icon [icon]="allChildrenSelectedIcon" transform="shrink-12 down-3 right-1" class="opened-folder-mask"></fa-icon>
+                <fa-icon
+                    [icon]="allChildrenSelectedIcon"
+                    transform="shrink-12 down-3 right-1"
+                    class="opened-folder-mask"
+                ></fa-icon>
             </fa-layers>
             <!-- /branch icons -->
 
@@ -40,10 +55,23 @@
             {{ tree.label }}
         </a>
         <div *ngIf="tree.children" class="children" [@showHide]="childrenState">
-            <ngx-bootstrap-treeview *ngFor="let branch of tree.children" [tree]="branch" (leafClicked)="itemClicked($event)"
-                [selectedLeafIcon]="selectedLeafIcon" [unselectedLeafIcon]="unselectedLeafIcon" [openedFolderIcon]="openedFolderIcon"
-                [closedFolderIcon]="closedFolderIcon" [canSelectBranch]="canSelectBranch" [anyChildrenSelectedIcon]="anyChildrenSelectedIcon"
-                [allChildrenSelectedIcon]="allChildrenSelectedIcon">
+            <ul *ngIf="tree.children.length === 0">
+                <li>
+                    <i>{{ emptyFolderLabel }}</i>
+                </li>
+            </ul>
+            <ngx-bootstrap-treeview
+                *ngFor="let branch of tree.children"
+                [tree]="branch"
+                (leafClicked)="itemClicked($event)"
+                [selectedLeafIcon]="selectedLeafIcon"
+                [unselectedLeafIcon]="unselectedLeafIcon"
+                [openedFolderIcon]="openedFolderIcon"
+                [closedFolderIcon]="closedFolderIcon"
+                [canSelectBranch]="canSelectBranch"
+                [anyChildrenSelectedIcon]="anyChildrenSelectedIcon"
+                [allChildrenSelectedIcon]="allChildrenSelectedIcon"
+            >
             </ngx-bootstrap-treeview>
         </div>
     </li>

@@ -89,6 +89,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     @Input()
     public allChildrenSelectedIcon: IconDefinition;
 
+    @Input()
+    public emptyFolderLabel = 'This folder is empty';
+
     public childrenState: string;
 
     public selectedLeaves: Leaf[] = [];

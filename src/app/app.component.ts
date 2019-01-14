@@ -78,6 +78,11 @@ export class AppComponent {
                         value: 144
                     }
                 ]
+            },
+            {
+                label: 'Empty folder test',
+                value: 15,
+                children: []
             }
         ]
     };
