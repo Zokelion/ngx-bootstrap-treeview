@@ -1,6 +1,6 @@
 {
     "name": "ngx-bootstrap-treeview",
-    "version": "0.2.6",
+    "version": "0.2.7",
     "description": "Ngx Bootstrap Treeview - Simpl library to visualize, search and interact with tree data",
     "private": true,
     "scripts": {
@@ -13,13 +13,13 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/Zozoleclown/ngx-bootstrap-treeview"
+        "url": "https://github.com/Zokelion/ngx-bootstrap-treeview"
     },
     "contributors": [
         "Pierrick Couget <pierrick.couget@gmail.com>"
     ],
     "license": "MIT",
-    "homepage": "https://github.com/Zozoleclown/ngx-bootstrap-treeview",
+    "homepage": "https://github.com/Zokelion/ngx-bootstrap-treeview",
     "dependencies": {
         "@angular/animations": "~7.0.0",
         "@angular/common": "~7.0.0",

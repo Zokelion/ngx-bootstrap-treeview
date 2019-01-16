@@ -1,11 +1,11 @@
 {
     "$schema": "../../node_modules/ng-packagr/package.schema.json",
     "name": "ngx-bootstrap-treeview",
-    "version": "0.2.6",
+    "version": "0.2.7",
     "description": "Ngx Bootstrap Treeview - Simpl library to visualize, search and interact with tree data",
     "repository": {
         "type": "git",
-        "url": "https://github.com/Zozoleclown/ngx-bootstrap-treeview"
+        "url": "https://github.com/Zokelion/ngx-bootstrap-treeview"
     },
     "contributors": [
         "Pierrick Couget <pierrick.couget@gmail.com>"
