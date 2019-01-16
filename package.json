@@ -37,11 +37,12 @@
         "bootstrap": "^4.1.3",
         "core-js": "^2.5.4",
         "rxjs": "~6.3.3",
+        "tslib": "^1.9.0",
         "zone.js": "~0.8.26"
     },
     "devDependencies": {
-        "@angular-devkit/build-angular": "~0.10.0",
-        "@angular/cli": "~7.0.3",
+        "@angular-devkit/build-angular": "~0.12.0",
+        "@angular/cli": "~7.2.1",
         "@angular/compiler-cli": "~7.0.0",
         "@angular/language-service": "~7.0.0",
         "@types/fs-extra": "^5.0.4",
