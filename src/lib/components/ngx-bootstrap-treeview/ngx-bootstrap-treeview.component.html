@@ -1,4 +1,4 @@
-<ul [ngClass]="{ branch: tree.children, leaf: !tree.children, opened: isOpened }" *ngIf="tree">
+<ul [ngClass]="{ branch: tree.children, leaf: !tree.children, opened: isOpened }" *ngIf="tree" class="mb-0">
     <li>
         <a [routerLink]="[]" (click)="itemClicked()">
             <!-- Icons if we're reprensenting a branch -->
@@ -71,8 +71,24 @@
                 [canSelectBranch]="canSelectBranch"
                 [anyChildrenSelectedIcon]="anyChildrenSelectedIcon"
                 [allChildrenSelectedIcon]="allChildrenSelectedIcon"
+                [loggingService]="loggingService"
             >
             </ngx-bootstrap-treeview>
         </div>
     </li>
 </ul>
+<ng-container *ngIf="trees && !tree">
+    <ngx-bootstrap-treeview
+        *ngFor="let tree of trees"
+        [tree]="tree"
+        (leafClicked)="itemClicked($event)"
+        [selectedLeafIcon]="selectedLeafIcon"
+        [unselectedLeafIcon]="unselectedLeafIcon"
+        [openedFolderIcon]="openedFolderIcon"
+        [closedFolderIcon]="closedFolderIcon"
+        [canSelectBranch]="canSelectBranch"
+        [anyChildrenSelectedIcon]="anyChildrenSelectedIcon"
+        [allChildrenSelectedIcon]="allChildrenSelectedIcon"
+        [loggingService]="loggingService"
+    ></ngx-bootstrap-treeview>
+</ng-container>

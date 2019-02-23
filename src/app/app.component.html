@@ -7,8 +7,12 @@
     <div class="row">
         <div class="col-12 col-sm-6">
             <h4>Tree with default FontAwesome style</h4>
-            <ngx-bootstrap-treeview [isOpened]="true" (leafClicked)="defaultStyleLeafClickedEventHandler($event)"
-                [tree]="tree">
+            <ngx-bootstrap-treeview
+                [isOpened]="true"
+                (leafClicked)="defaultStyleLeafClickedEventHandler($event)"
+                [tree]="tree"
+                [loggingService]="loggingService"
+            >
             </ngx-bootstrap-treeview>
         </div>
         <div class="col-12 col-sm-6">
@@ -20,14 +24,79 @@
             </ul>
         </div>
     </div>
-    <hr>
+    <hr />
     <div class="row mt-4">
         <div class="col-12 col-sm-6">
             <h4>Tree with Light FontAwesome style (Pro FA only)</h4>
-            <ngx-bootstrap-treeview [isOpened]="true" (leafClicked)="lightStyleLeafClickedEventHandler($event)" [tree]="tree"
-                [canSelectBranch]="false" [selectedLeafIcon]="faCheckSquare" [unselectedLeafIcon]="faSquare"
-                [openedFolderIcon]="faFolderOpen" [closedFolderIcon]="faFolder" [anyChildrenSelectedIcon]="faMinus"
-                [allChildrenSelectedIcon]="faCheck">
+            <ngx-bootstrap-treeview
+                [isOpened]="true"
+                (leafClicked)="lightStyleLeafClickedEventHandler($event)"
+                [tree]="tree"
+                [canSelectBranch]="false"
+                [selectedLeafIcon]="faCheckSquare"
+                [unselectedLeafIcon]="faSquare"
+                [openedFolderIcon]="faFolderOpen"
+                [closedFolderIcon]="faFolder"
+                [anyChildrenSelectedIcon]="faMinus"
+                [allChildrenSelectedIcon]="faCheck"
+                [loggingService]="loggingService"
+            >
+            </ngx-bootstrap-treeview>
+        </div>
+        <div class="col-12 col-sm-6">
+            <h4>Selected Leaves</h4>
+            <ul *ngIf="lightStyleSelectedLeaves">
+                <li *ngFor="let selectedLeaf of lightStyleSelectedLeaves">
+                    {{ selectedLeaf.value }} - {{ selectedLeaf.label }}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <hr />
+    <div class="row mt-4">
+        <div class="col-12 col-sm-6">
+            <h4>Multiroot tree with Light FontAwesome style (Pro FA only)</h4>
+            <ngx-bootstrap-treeview
+                [isOpened]="true"
+                (leafClicked)="lightStyleLeafClickedEventHandler($event)"
+                [trees]="trees"
+                [canSelectBranch]="false"
+                [selectedLeafIcon]="faCheckSquare"
+                [unselectedLeafIcon]="faSquare"
+                [openedFolderIcon]="faFolderOpen"
+                [closedFolderIcon]="faFolder"
+                [anyChildrenSelectedIcon]="faMinus"
+                [allChildrenSelectedIcon]="faCheck"
+                [loggingService]="loggingService"
+            >
+            </ngx-bootstrap-treeview>
+        </div>
+        <div class="col-12 col-sm-6">
+            <h4>Selected Leaves</h4>
+            <ul *ngIf="lightStyleSelectedLeaves">
+                <li *ngFor="let selectedLeaf of lightStyleSelectedLeaves">
+                    {{ selectedLeaf.value }} - {{ selectedLeaf.label }}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <hr />
+    <div class="row mt-4">
+        <div class="col-12 col-sm-6">
+            <h4>Multiroot tree with Light FontAwesome style (Pro FA only)</h4>
+            <ngx-bootstrap-treeview
+                [isOpened]="true"
+                (leafClicked)="lightStyleLeafClickedEventHandler($event)"
+                [trees]="trees"
+                [canSelectBranch]="false"
+                [selectedLeafIcon]="faCheckSquare"
+                [unselectedLeafIcon]="faSquare"
+                [openedFolderIcon]="faFolderOpen"
+                [closedFolderIcon]="faFolder"
+                [anyChildrenSelectedIcon]="faMinus"
+                [allChildrenSelectedIcon]="faCheck"
+                [loggingService]="loggingService"
+            >
             </ngx-bootstrap-treeview>
         </div>
         <div class="col-12 col-sm-6">

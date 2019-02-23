@@ -21,7 +21,7 @@ export class AppComponent {
     public faMinus = faMinus;
     public faCheck = faCheck;
 
-    public _loggingService: ILoggingService = console;
+    public loggingService: ILoggingService = console;
 
     public tree: Tree = {
         label: 'Langages de programmation',
@@ -87,10 +87,36 @@ export class AppComponent {
         ]
     };
 
+    public trees: Tree[] = [
+        { ...this.tree },
+        {
+            value: 1111,
+            label: 'Clients',
+            children: [
+                {
+                    label: 'Airbus',
+                    value: 156
+                },
+                {
+                    label: 'Total',
+                    value: 116
+                },
+                {
+                    label: 'EDF',
+                    value: 126
+                },
+                {
+                    label: 'Cap Gemini',
+                    value: 196
+                }
+            ]
+        }
+    ];
+
     public defaultStyleLeafClickedEventHandler(leafClickedEvent: LeafClickedEvent) {
         this.defaultStyleSelectedLeaves = leafClickedEvent.selectedLeaves;
 
-        this._loggingService.log(
+        this.loggingService.log(
             `🍂🌲🍂 Eléments actuellement sélectionnés dans l'arbre Default:`,
             leafClickedEvent.selectedLeaves
         );
@@ -99,7 +125,7 @@ export class AppComponent {
     public lightStyleLeafClickedEventHandler(leafClickedEvent: LeafClickedEvent) {
         this.lightStyleSelectedLeaves = leafClickedEvent.selectedLeaves;
 
-        this._loggingService.log(
+        this.loggingService.log(
             `🍂🌲🍂 Eléments actuellement sélectionnés dans l'arbre Light:`,
             leafClickedEvent.selectedLeaves
         );

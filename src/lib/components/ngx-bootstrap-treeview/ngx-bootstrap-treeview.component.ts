@@ -65,6 +65,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     public tree: Tree;
 
     @Input()
+    public trees: Tree[];
+
+    @Input()
     public isOpened: boolean;
 
     @Input()
@@ -102,9 +105,22 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
     public isLeaf: boolean;
 
+    public isRoot: boolean;
+
     constructor() {}
 
     ngOnInit() {
+        // If we want to display one or more trees
+        if (this.trees && this.trees.length > 1) {
+            this.isRoot = true;
+            this.isBranch = this.isLeaf = false;
+            return;
+        } else if (this.trees) {
+            // Otherwise, we have trees but with less than 2 elements, we assign it to tree
+            // So ngOnInit() can keep going normaly
+            this.tree = this.trees[0];
+        }
+
         // Simple icon settings if we don't have any given as Input()
         if (!this.openedFolderIcon) {
             this.openedFolderIcon = faFolderOpen;
@@ -116,24 +132,17 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
         if (!this.selectedLeafIcon) {
             this.selectedLeafIcon = faCheckSquare;
-        } else {
-            console.log('selectedLeafIcon customisé:', this.selectedLeafIcon);
         }
-
         if (!this.unselectedLeafIcon) {
             this.unselectedLeafIcon = faSquare;
         }
 
         if (!this.allChildrenSelectedIcon) {
             this.allChildrenSelectedIcon = faCheck;
-        } else {
-            console.log('allChildrenSelectedIcon customisé:', this.allChildrenSelectedIcon);
         }
 
         if (!this.anyChildrenSelectedIcon) {
             this.anyChildrenSelectedIcon = faMinus;
-        } else {
-            console.log('anyChildrenSelectedIcon customisé:', this.allChildrenSelectedIcon);
         }
 
         if (this.tree.children || this.tree.loadChildren) {
@@ -154,7 +163,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         */
         if (this.isLeaf && !leafClickedEvent) {
             this.leafClickedCallback();
-        } else if (this.isBranch && leafClickedEvent) {
+        } else if ((this.isBranch || this.isRoot) && leafClickedEvent) {
             this._leafClickedEventReceived(leafClickedEvent);
         } else if (this.isBranch && !leafClickedEvent) {
             // If leaf is not set but we have children, that means we clicked on a link to show/hide content
@@ -208,8 +217,10 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     }
 
     private _selectLeaf(leaf: Leaf) {
-        if (this.loggingService) {
+        if (this.isBranch && this.loggingService) {
             this.loggingService.log(`✔️ Feuille sélectionnée dans ${this.tree.label}:`, leaf);
+        } else if (this.loggingService && this.isRoot) {
+            this.loggingService.log(`✔️ Feuille sélectionnée dans la racine:`, leaf);
         }
 
         this.selectedLeaves = [...this.selectedLeaves, leaf];
@@ -226,9 +237,12 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     }
 
     private _leafClickedEventReceived(leafClickedEvent: LeafClickedEvent) {
-        if (this.loggingService) {
-            this.loggingService.log(`➡ Event entrant dans le parent ${this.tree.label}:` + leafClickedEvent);
+        if (this.loggingService && this.isBranch) {
+            this.loggingService.log(`➡ Event entrant dans le parent ${this.tree.label}:`, leafClickedEvent);
+        } else if (this.loggingService && this.isRoot) {
+            this.loggingService.log(`➡ Event entrant dans la racine:`, leafClickedEvent);
         }
+
         // When a child leaf is clicked, we check our selectedLeaves to select or unselect the clicked one
         const leafIndexInSelectedLeaves = this._leafIndex(this.selectedLeaves, leafClickedEvent.leaf);
 
@@ -241,9 +255,12 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         // Now that the leaf is selected/unselected, we merge our selectedLeaves with the ones of the event
         leafClickedEvent.selectedLeaves = this.selectedLeaves;
 
-        if (this.loggingService) {
+        if (this.isBranch && this.loggingService) {
             this.loggingService.log(`⬅ Event sortant de ${this.tree.label} vers un parent:`, leafClickedEvent);
+        } else if (this.loggingService && this.isRoot) {
+            this.loggingService.log(`⬅ Event sortant de la racine:`, leafClickedEvent);
         }
+
         this.leafClicked.emit(leafClickedEvent);
     }
 
@@ -253,10 +270,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         let result = -1;
 
         leaves.forEach((selectedLeaf, index) => {
-            if (this.loggingService) {
-                this.loggingService.log(index);
-            }
-
             if (selectedLeaf.value === leaf.value && selectedLeaf.label === leaf.label) {
                 result = index;
             }
