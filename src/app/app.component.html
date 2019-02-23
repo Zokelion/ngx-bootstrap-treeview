@@ -55,18 +55,12 @@
     <hr />
     <div class="row mt-4">
         <div class="col-12 col-sm-6">
-            <h4>Multiroot tree with Light FontAwesome style (Pro FA only)</h4>
+            <h4>Multiroot tree with default FontAwesome style</h4>
             <ngx-bootstrap-treeview
                 [isOpened]="true"
                 (leafClicked)="lightStyleLeafClickedEventHandler($event)"
                 [trees]="trees"
                 [canSelectBranch]="false"
-                [selectedLeafIcon]="faCheckSquare"
-                [unselectedLeafIcon]="faSquare"
-                [openedFolderIcon]="faFolderOpen"
-                [closedFolderIcon]="faFolder"
-                [anyChildrenSelectedIcon]="faMinus"
-                [allChildrenSelectedIcon]="faCheck"
                 [loggingService]="loggingService"
             >
             </ngx-bootstrap-treeview>
