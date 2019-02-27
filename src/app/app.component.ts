@@ -4,6 +4,8 @@ import { Leaf } from '../lib/models/leaf.model';
 import { ILoggingService } from '../lib/interfaces/ILoggingService.interface';
 import { LeafClickedEvent } from '../lib/models/leaf-clicked-event.model';
 import { faFolder, faFolderOpen, faSquare, faCheckSquare, faCheck, faMinus } from '@fortawesome/pro-light-svg-icons';
+// import { categories, Branch, Cost } from './categories';
+import { NgxBootstrapTreeviewMapper } from 'src/lib/utils/ngx-bootstrap-treeview-mapper';
 
 @Component({
     selector: 'app-root',
@@ -110,8 +112,35 @@ export class AppComponent {
                     value: 196
                 }
             ]
+        },
+        {
+            value: 100,
+            label: 'Test 1'
+        },
+        {
+            value: 101,
+            label: 'Test 2'
+        },
+        {
+            value: 102,
+            label: 'Test 3'
         }
     ];
+
+    // public item = categories[0];
+    // public items = categories;
+    // public mapper = new NgxBootstrapTreeviewMapper<Branch, Cost>(
+    //     {
+    //         children: 'children',
+    //         leavesKey: 'costs',
+    //         value: 'id',
+    //         label: 'name'
+    //     },
+    //     {
+    //         value: 'id',
+    //         label: 'fullName'
+    //     }
+    // );
 
     public defaultStyleLeafClickedEventHandler(leafClickedEvent: LeafClickedEvent) {
         this.defaultStyleSelectedLeaves = leafClickedEvent.selectedLeaves;

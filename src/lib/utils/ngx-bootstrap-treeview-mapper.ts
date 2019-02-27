@@ -28,7 +28,8 @@ export class NgxBootstrapTreeviewMapper<TreeSourceType extends Object, LeafSourc
                 ...leaves.map(leaf => this.mapLeaf(leaf))
             }
         };
-        return null;
+
+        return result;
     }
 
     mapLeaf(item: LeafSourceType): Leaf {

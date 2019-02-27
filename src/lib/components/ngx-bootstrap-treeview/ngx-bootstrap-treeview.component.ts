@@ -13,6 +13,7 @@ import { trigger, state, style, transition, animate, keyframes } from '@angular/
 import { Leaf } from '../../models/leaf.model';
 import { LeafClickedEvent } from '../../models/leaf-clicked-event.model';
 import { ILoggingService } from '../../interfaces/ILoggingService.interface';
+import { NgxBootstrapTreeviewMapper } from 'src/lib/utils/ngx-bootstrap-treeview-mapper';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -68,6 +69,15 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     public trees: Tree[];
 
     @Input()
+    public mapper: NgxBootstrapTreeviewMapper<Object, Object>;
+
+    @Input()
+    public item: Object;
+
+    @Input()
+    public items: Object[];
+
+    @Input()
     public isOpened: boolean;
 
     @Input()
@@ -110,6 +120,23 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     constructor() {}
 
     ngOnInit() {
+        // We throw an exception if we have item or items but no mapper indicating how to handle them
+        if (!this.mapper && (this.item || this.items)) {
+            throw new Error('"item" or "items" are invalid parameters if you don\'t provide a mapper');
+        }
+
+        // If we have a mapper, it will handle "item" and "items"
+        if (this.mapper) {
+            if (this.items) {
+                this.trees = this.items.map(item => this.mapper.mapTree(item));
+                console.log(this.trees);
+            }
+
+            if (this.item) {
+                this.tree = this.mapper.mapTree(this.item);
+            }
+        }
+
         // If we want to display one or more trees
         if (this.trees && this.trees.length > 1) {
             this.isRoot = true;
@@ -145,7 +172,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
             this.anyChildrenSelectedIcon = faMinus;
         }
 
-        if (this.tree.children || this.tree.loadChildren) {
+        if (this.tree && (this.tree.children || this.tree.loadChildren)) {
             this.isBranch = true;
         } else {
             this.isBranch = false;
@@ -205,9 +232,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
     public countLeaves(tree: Tree): number {
         let leavesCount = 0;
-        if (!tree.children || tree.loadChildren) {
+        if (tree && (!tree.children || tree.loadChildren)) {
             leavesCount = 1;
-        } else {
+        } else if (tree) {
             tree.children.forEach(child => {
                 leavesCount += this.countLeaves(child);
             });
