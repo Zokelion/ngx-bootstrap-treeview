@@ -6,6 +6,7 @@ import { LeafClickedEvent } from '../lib/models/leaf-clicked-event.model';
 import { faFolder, faFolderOpen, faSquare, faCheckSquare, faCheck, faMinus } from '@fortawesome/pro-light-svg-icons';
 // import { categories, Branch, Cost } from './categories';
 import { NgxBootstrapTreeviewMapper } from 'src/lib/utils/ngx-bootstrap-treeview-mapper';
+import { skillsByCategories, Category, Skill } from './skills-by-categories';
 
 @Component({
     selector: 'app-root',
@@ -13,8 +14,13 @@ import { NgxBootstrapTreeviewMapper } from 'src/lib/utils/ngx-bootstrap-treeview
     styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-    public defaultStyleSelectedLeaves: Leaf[];
-    public lightStyleSelectedLeaves: Leaf[];
+    public selectedLeaves = {
+        defaultStyle: [],
+        lightStyle: [],
+        multiroot: [],
+        singleRootFromMapper: [],
+        multirootFromMapper: []
+    };
 
     public faFolder = faFolder;
     public faFolderOpen = faFolderOpen;
@@ -127,35 +133,62 @@ export class AppComponent {
         }
     ];
 
-    // public item = categories[0];
-    // public items = categories;
-    // public mapper = new NgxBootstrapTreeviewMapper<Branch, Cost>(
-    //     {
-    //         children: 'children',
-    //         leavesKey: 'costs',
-    //         value: 'id',
-    //         label: 'name'
-    //     },
-    //     {
-    //         value: 'id',
-    //         label: 'fullName'
-    //     }
-    // );
+    public item = skillsByCategories[0];
+    public items = skillsByCategories;
+    public mapper = new NgxBootstrapTreeviewMapper<Category, Skill>(
+        {
+            children: 'children',
+            leavesKey: 'skills',
+            value: 'id',
+            label: 'name'
+        },
+        {
+            value: 'id',
+            label: 'label'
+        }
+    );
 
-    public defaultStyleLeafClickedEventHandler(leafClickedEvent: LeafClickedEvent) {
-        this.defaultStyleSelectedLeaves = leafClickedEvent.selectedLeaves;
+    public defaultStyleSingleRootLeafClickedEventHandler(leafClickedEvent: LeafClickedEvent) {
+        this.selectedLeaves.defaultStyle = leafClickedEvent.selectedLeaves;
 
         this.loggingService.log(
-            `🍂🌲🍂 Eléments actuellement sélectionnés dans l'arbre Default:`,
+            `🍂🌲🍂 Eléments actuellement sélectionnés dans l'arbre "Default":`,
             leafClickedEvent.selectedLeaves
         );
     }
 
-    public lightStyleLeafClickedEventHandler(leafClickedEvent: LeafClickedEvent) {
-        this.lightStyleSelectedLeaves = leafClickedEvent.selectedLeaves;
+    public lightStyleSinglerootLeafClickedEventHandler(leafClickedEvent: LeafClickedEvent) {
+        this.selectedLeaves.lightStyle = leafClickedEvent.selectedLeaves;
 
         this.loggingService.log(
-            `🍂🌲🍂 Eléments actuellement sélectionnés dans l'arbre Light:`,
+            `🍂🌲🍂 Eléments actuellement sélectionnés dans l'arbre "Light":`,
+            leafClickedEvent.selectedLeaves
+        );
+    }
+
+    public multirootTreeLeafClickedEventHandler(leafClickedEvent: LeafClickedEvent) {
+        this.selectedLeaves.multiroot = leafClickedEvent.selectedLeaves;
+
+        this.loggingService.log(
+            `🍂🌲🍂 Eléments actuellement sélectionnés dans l'arbre "Multiroot":`,
+            leafClickedEvent.selectedLeaves
+        );
+    }
+
+    public multirootFromMapperLeafClickedEventHandler(leafClickedEvent: LeafClickedEvent) {
+        this.selectedLeaves.multirootFromMapper = leafClickedEvent.selectedLeaves;
+
+        this.loggingService.log(
+            `🍂🌲🍂 Eléments actuellement sélectionnés dans l'arbre "multiroot from mapper":`,
+            leafClickedEvent.selectedLeaves
+        );
+    }
+
+    public singlerootFromMapperLeafClickedEventHandler(leafClickedEvent: LeafClickedEvent) {
+        this.selectedLeaves.multirootFromMapper = leafClickedEvent.selectedLeaves;
+
+        this.loggingService.log(
+            `🍂🌲🍂 Eléments actuellement sélectionnés dans l'arbre "singleroot from mapper":`,
             leafClickedEvent.selectedLeaves
         );
     }

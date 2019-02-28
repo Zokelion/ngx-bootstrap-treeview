@@ -129,12 +129,22 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         if (this.mapper) {
             if (this.items) {
                 this.trees = this.items.map(item => this.mapper.mapTree(item));
-                console.log(this.trees);
             }
 
             if (this.item) {
                 this.tree = this.mapper.mapTree(this.item);
             }
+        }
+
+        if (this.mapper) {
+            console.log('Treeview initialized with mapper:', this.mapper);
+        }
+        if (this.item) {
+            console.log('Treeview initialized with item:', this.item);
+            console.log('Resulted in ', this.tree, 'with children of type', typeof this.tree.children);
+        } else if (this.items) {
+            console.log('Treeview initialized with items:', this.items);
+            console.log('Resulted in ', this.trees);
         }
 
         // If we want to display one or more trees

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container mb-5">
     <div class="row">
         <h1 class="col-12 text-center">
             Arbres
@@ -9,7 +9,7 @@
             <h4>Tree with default FontAwesome style</h4>
             <ngx-bootstrap-treeview
                 [isOpened]="true"
-                (leafClicked)="defaultStyleLeafClickedEventHandler($event)"
+                (leafClicked)="defaultStyleSingleRootLeafClickedEventHandler($event)"
                 [tree]="tree"
                 [loggingService]="loggingService"
             >
@@ -17,8 +17,8 @@
         </div>
         <div class="col-12 col-sm-6">
             <h4>Selected Leaves</h4>
-            <ul *ngIf="defaultStyleSelectedLeaves">
-                <li *ngFor="let selectedLeaf of defaultStyleSelectedLeaves">
+            <ul *ngIf="selectedLeaves.defaultStyle">
+                <li *ngFor="let selectedLeaf of selectedLeaves.defaultStyle">
                     {{ selectedLeaf.value }} - {{ selectedLeaf.label }}
                 </li>
             </ul>
@@ -30,7 +30,7 @@
             <h4>Tree with Light FontAwesome style (Pro FA only)</h4>
             <ngx-bootstrap-treeview
                 [isOpened]="true"
-                (leafClicked)="lightStyleLeafClickedEventHandler($event)"
+                (leafClicked)="lightStyleSinglerootLeafClickedEventHandler($event)"
                 [tree]="tree"
                 [canSelectBranch]="false"
                 [selectedLeafIcon]="faCheckSquare"
@@ -45,8 +45,8 @@
         </div>
         <div class="col-12 col-sm-6">
             <h4>Selected Leaves</h4>
-            <ul *ngIf="lightStyleSelectedLeaves">
-                <li *ngFor="let selectedLeaf of lightStyleSelectedLeaves">
+            <ul *ngIf="selectedLeaves.lightStyle">
+                <li *ngFor="let selectedLeaf of selectedLeaves.lightStyle">
                     {{ selectedLeaf.value }} - {{ selectedLeaf.label }}
                 </li>
             </ul>
@@ -55,10 +55,10 @@
     <hr />
     <div class="row mt-4">
         <div class="col-12 col-sm-6">
-            <h4>Multiroot tree with default FontAwesome style</h4>
+            <h4>Multiroot tree</h4>
             <ngx-bootstrap-treeview
                 [isOpened]="true"
-                (leafClicked)="defaultStyleLeafClickedEventHandler($event)"
+                (leafClicked)="multirootTreeLeafClickedEventHandler($event)"
                 [trees]="trees"
                 [canSelectBranch]="false"
                 [loggingService]="loggingService"
@@ -67,8 +67,8 @@
         </div>
         <div class="col-12 col-sm-6">
             <h4>Selected Leaves</h4>
-            <ul *ngIf="defaultStyleSelectedLeaves">
-                <li *ngFor="let selectedLeaf of defaultStyleSelectedLeaves">
+            <ul *ngIf="selectedLeaves.multiroot">
+                <li *ngFor="let selectedLeaf of selectedLeaves.multiroot">
                     {{ selectedLeaf.value }} - {{ selectedLeaf.label }}
                 </li>
             </ul>
@@ -77,26 +77,44 @@
     <hr />
     <div class="row mt-4">
         <div class="col-12 col-sm-6">
-            <h4>Multiroot tree with Light FontAwesome style (Pro FA only)</h4>
+            <h4>Singleroot tree built using mapper</h4>
             <ngx-bootstrap-treeview
                 [isOpened]="true"
-                (leafClicked)="lightStyleLeafClickedEventHandler($event)"
-                [trees]="trees"
+                (leafClicked)="singlerootFromMapperLeafClickedEventHandler($event)"
+                [item]="item"
+                [mapper]="mapper"
                 [canSelectBranch]="false"
-                [selectedLeafIcon]="faCheckSquare"
-                [unselectedLeafIcon]="faSquare"
-                [openedFolderIcon]="faFolderOpen"
-                [closedFolderIcon]="faFolder"
-                [anyChildrenSelectedIcon]="faMinus"
-                [allChildrenSelectedIcon]="faCheck"
                 [loggingService]="loggingService"
             >
             </ngx-bootstrap-treeview>
         </div>
         <div class="col-12 col-sm-6">
             <h4>Selected Leaves</h4>
-            <ul *ngIf="lightStyleSelectedLeaves">
-                <li *ngFor="let selectedLeaf of lightStyleSelectedLeaves">
+            <ul *ngIf="selectedLeaves.singleRootFromMapper">
+                <li *ngFor="let selectedLeaf of selectedLeaves.singleRootFromMapper">
+                    {{ selectedLeaf.value }} - {{ selectedLeaf.label }}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <hr />
+    <div class="row mt-4">
+        <div class="col-12 col-sm-6">
+            <h4>Multiroot tree built using mapper</h4>
+            <ngx-bootstrap-treeview
+                [isOpened]="true"
+                (leafClicked)="multirootFromMapperLeafClickedEventHandler($event)"
+                [items]="items"
+                [mapper]="mapper"
+                [canSelectBranch]="false"
+                [loggingService]="loggingService"
+            >
+            </ngx-bootstrap-treeview>
+        </div>
+        <div class="col-12 col-sm-6">
+            <h4>Selected Leaves</h4>
+            <ul *ngIf="selectedLeaves.multirootFromMapper">
+                <li *ngFor="let selectedLeaf of selectedLeaves.multirootFromMapper">
                     {{ selectedLeaf.value }} - {{ selectedLeaf.label }}
                 </li>
             </ul>
