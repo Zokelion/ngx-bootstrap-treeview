@@ -67,8 +67,8 @@
         </div>
         <div class="col-12 col-sm-6">
             <h4>Selected Leaves</h4>
-            <ul *ngIf="lightStyleSelectedLeaves">
-                <li *ngFor="let selectedLeaf of lightStyleSelectedLeaves">
+            <ul *ngIf="defaultStyleSelectedLeaves">
+                <li *ngFor="let selectedLeaf of defaultStyleSelectedLeaves">
                     {{ selectedLeaf.value }} - {{ selectedLeaf.label }}
                 </li>
             </ul>
