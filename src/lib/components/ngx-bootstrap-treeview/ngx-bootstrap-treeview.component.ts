@@ -244,9 +244,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     }
 
     private _selectLeaf(leaf: Leaf) {
-        if (this.isBranch && this.loggingService) {
+        if (!this.isRoot && this.loggingService) {
             this.loggingService.log(`✔️ Feuille sélectionnée dans ${this.tree.label}:`, leaf);
-        } else if (this.loggingService && this.isRoot) {
+        } else if (this.loggingService) {
             this.loggingService.log(`✔️ Feuille sélectionnée dans la racine:`, leaf);
         }
 
@@ -254,8 +254,10 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     }
 
     private _unselectLeaf(leaf: Leaf) {
-        if (this.loggingService) {
+        if (!this.isRoot && this.loggingService) {
             this.loggingService.log(`❌ Feuille désélectionnée dans ${this.tree.label}:`, leaf);
+        } else if (this.loggingService) {
+            this.loggingService.log(`❌ Feuille désélectionnée dans la racine:`, leaf);
         }
 
         const index = this._leafIndex(this.selectedLeaves, leaf);
@@ -271,9 +273,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         }
 
         // When a child leaf is clicked, we check our selectedLeaves to select or unselect the clicked one
-        const leafIndexInSelectedLeaves = this._leafIndex(this.selectedLeaves, leafClickedEvent.leaf);
-
-        if (leafIndexInSelectedLeaves === -1) {
+        if (!this._leafExistsIn(this.selectedLeaves, leafClickedEvent.leaf)) {
             this._selectLeaf(leafClickedEvent.leaf);
         } else {
             this._unselectLeaf(leafClickedEvent.leaf);
@@ -303,5 +303,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         });
 
         return result;
+    }
+
+    private _leafExistsIn(leaves: Leaf[], leaf: Leaf) {
+        return this._leafIndex(leaves, leaf) !== -1;
     }
 }
