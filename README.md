@@ -110,22 +110,22 @@ For further documentation refer to the [API Documentation](#api-documentation) p
 ### NgxBootstrapTreeviewComponent
 Here is a list of all the @Input():
 
-|          Name           |            Type            | Required |      default value       | Description                                                                                                                           |
-| :---------------------: | :------------------------: | :------: | :----------------------: | :------------------------------------------------------------------------------------------------------------------------------------ |
-|          tree           |            Tree            |    ❌     |       `undefined`        | Used as datasource for singleroot trees. Equivalent to giving `trees` with only one item                                              |
-|          trees          |           Tree[]           |    ❌     |       `undefined`        | Used when giving an array of [`Tree`](#tree-model) as the datasource                                                                  |
-|         mapper          | NgxBootstrapTreeviewMapper |    ❌     |       `undefined`        | This is mandatory when providing the `items` or `item` parameter. It is used when building the treeview. Further documentation below. |
-|          item           |           Object           |    ❌     |       `undefined`        | The object you want to display in the tree. Equivalent to giving `items` with only one entry.                                         |
-|          items          |          Object[]          |    ❌     |       `undefined`        | List of objects you want to display in the treeview. The tree will use the mapper and iterate over this to build the view.            |
-|        isOpened         |          boolean           |    ❌     |         `false`          | If true, first level tree(s) is/are opened by default                                                                                 |
-|     canSelectBranch     |          boolean           |    ❌     |         `false`          | Not implemented yet, will come with custom right click implementation                                                                 |
-|    openedFolderIcon     |       IconDefinition       |    ❌     |      `faFolderOpen`      | Icon used to represent an opened branch                                                                                               |
-|    closedFolderIcon     |       IconDefinition       |    ❌     |        `faFolder`        | Icon used to represent a closed branch                                                                                                |
-|   unselectedLeafIcon    |       IconDefinition       |    ❌     |        `faSquare`        | Icon used on not selected leaves                                                                                                      |
-|    selectedLeafIcon     |       IconDefinition       |    ❌     |     `faCheckSquare`      | Icon used on selected meaves                                                                                                          |
-| anyChildrenSelectedIcon |       IconDefinition       |    ❌     |        `faMinus`         | Icon that will be put inside of the folder icon if it contains at least one ticked leaf                                               |
-| allChildrenSelectedIcon |       IconDefinition       |    ❌     |        `faCheck`         | Icon that will be put inside of the folder icon if all of its children are selected                                                   |
-|    emptyFolderLabel     |           string           |    ❌     | `"This folder is empty"` | The label to display inside empty branches                                                                                            |
+|          Name           |            Type            |      default value       | Description                                                                                                                           |
+| :---------------------: | :------------------------: | :----------------------: | :------------------------------------------------------------------------------------------------------------------------------------ |
+|          tree           |    [Tree](#tree-model)     |       `undefined`        | Used as datasource for singleroot trees. Equivalent to giving `trees` with only one item                                              |
+|          trees          |   [Tree](#tree-model)[]    |       `undefined`        | Used when giving an array of [Tree](#tree-model) as the datasource                                                                    |
+|         mapper          | NgxBootstrapTreeviewMapper |       `undefined`        | This is mandatory when providing the `items` or `item` parameter. It is used when building the treeview. Further documentation below. |
+|          item           |           Object           |       `undefined`        | The object you want to display in the tree. Equivalent to giving `items` with only one entry.                                         |
+|          items          |          Object[]          |       `undefined`        | List of objects you want to display in the treeview. The tree will use the mapper and iterate over this to build the view.            |
+|        isOpened         |          boolean           |         `false`          | If true, first level tree(s) is/are opened by default                                                                                 |
+|     canSelectBranch     |          boolean           |         `false`          | Not implemented yet, will come with custom right click implementation                                                                 |
+|    openedFolderIcon     |       IconDefinition       |      `faFolderOpen`      | Icon used to represent an opened branch                                                                                               |
+|    closedFolderIcon     |       IconDefinition       |        `faFolder`        | Icon used to represent a closed branch                                                                                                |
+|   unselectedLeafIcon    |       IconDefinition       |        `faSquare`        | Icon used on not selected leaves                                                                                                      |
+|    selectedLeafIcon     |       IconDefinition       |     `faCheckSquare`      | Icon used on selected meaves                                                                                                          |
+| anyChildrenSelectedIcon |       IconDefinition       |        `faMinus`         | Icon that will be put inside of the folder icon if it contains at least one ticked leaf                                               |
+| allChildrenSelectedIcon |       IconDefinition       |        `faCheck`         | Icon that will be put inside of the folder icon if all of its children are selected                                                   |
+|    emptyFolderLabel     |           string           | `"This folder is empty"` | The label to display inside empty branches                                                                                            |
 ### LeafClickedEvent
 
 ### Tree (model)
@@ -160,7 +160,7 @@ export class Leaf {
 -   Boxes or custom right click to select/unselect an entire branch
 -   Async loading of children with a loadChildren callback **(started working on it, paused right now)**
 -   Possibility to disable animation and maybe add a set of fancy ones when folding/unfolding a branch
--   ~~Allow a Tree array as an @Input() so this plugin can support multi-root trees~~ **(Done)**
+-   ~~Allow a [Tree](#tree-model) array as an @Input() so this plugin can support multi-root trees~~ **(Done)**
 -   I'll probably have more ideas as this evolves
 
 ## Things ngx-bootstrap-treeview uses
