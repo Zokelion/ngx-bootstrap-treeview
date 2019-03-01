@@ -126,6 +126,9 @@ Here is a list of all the @Input():
 | anyChildrenSelectedIcon |       IconDefinition       |        `faMinus`         | Icon that will be put inside of the folder icon if it contains at least one ticked leaf                                               |
 | allChildrenSelectedIcon |       IconDefinition       |        `faCheck`         | Icon that will be put inside of the folder icon if all of its children are selected                                                   |
 |    emptyFolderLabel     |           string           | `"This folder is empty"` | The label to display inside empty branches                                                                                            |
+
+None of these inputs are mandatory. Just remember that the tree MUST have a datasource. Either by providing `tree` or `trees`, or by giving a `mapper` + `items` or `items`.
+
 ### LeafClickedEvent
 
 ### Tree (model)
