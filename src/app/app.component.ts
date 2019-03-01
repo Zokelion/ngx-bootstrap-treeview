@@ -91,22 +91,22 @@ export class AppComponent {
         { ...this.tree },
         {
             value: 1111,
-            label: 'Clients',
+            label: 'Customers',
             children: [
                 {
-                    label: 'Airbus',
+                    label: 'Norton',
                     value: 156
                 },
                 {
-                    label: 'Total',
+                    label: 'Symantec',
                     value: 116
                 },
                 {
-                    label: 'EDF',
+                    label: 'Some company',
                     value: 126
                 },
                 {
-                    label: 'Cap Gemini',
+                    label: 'Zokelion',
                     value: 196
                 }
             ]

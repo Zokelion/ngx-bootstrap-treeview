@@ -102,12 +102,155 @@ For further documentation refer to the [API Documentation](#api-documentation) p
 ```
 
 ## Features
+For this section, we'll consider having a Tree[] with the following value: 
+```ts
+const roots = [
+    {
+        label: 'Langages de programmation',
+        value: 1,
+        children: [
+            {
+                label: 'C++',
+                value: 11
+            },
+            {
+                label: 'Angular',
+                value: 12
+            },
+            {
+                label: 'C#',
+                value: 13,
+                children: [
+                    {
+                        label: 'LinQ',
+                        value: 131
+                    },
+                    {
+                        label: 'UWP',
+                        value: 132
+                    },
+                    {
+                        label: 'Sharepoint',
+                        value: 133
+                    },
+                    {
+                        label: 'WPF',
+                        value: 134
+                    }
+                ]
+            },
+            {
+                label: 'Java',
+                value: 14,
+                children: [
+                    {
+                        label: 'J2E',
+                        value: 141
+                    },
+                    {
+                        label: 'Spring Framework',
+                        value: 142
+                    },
+                    {
+                        label: 'Vanilla Java',
+                        value: 143
+                    },
+                    {
+                        label: 'Android',
+                        value: 144
+                    }
+                ]
+            },
+            {
+                label: 'Empty folder test',
+                value: 15,
+                children: []
+            }
+        ]
+    }, {
+        value: 1111,
+        label: 'Customers',
+        children: [
+            {
+                label: 'Norton',
+                value: 156
+            },
+            {
+                label: 'Symantec',
+                value: 116
+            },
+            {
+                label: 'Some company',
+                value: 126
+            },
+            {
+                label: 'Zokelion',
+                value: 196
+            }
+        ]
+    }
+]
+```
+
+The next paragraphs will just show some HTML snippets that rely on these datas. We'll see later [how to use custom objects to build our tree](#using-mapper)
 
 ### Simple singleroot tree
-
+```html
+<!-- Here, roots[0] is a Tree since roots is a Tree[] -->
+<ngx-bootstrap-treeview
+    [tree]="roots[0]"
+    [mapper]="mapper"
+    [isOpened]="true"
+>
+</ngx-bootstrap-treeview>
+```
 ### Simple multiroot tree
-
+```html
+<ngx-bootstrap-treeview
+    [trees]="roots"
+    [mapper]="mapper"
+    [isOpened]="true"
+>
+</ngx-bootstrap-treeview>
+```
 ### Icons customization
+All icons can be customized, as long as you have access to them in your FontAwesome library. As an example, here, we're using FontAwesome light style. First, let's take an eye to what our TS should look like:
+```ts
+// Import the every IconDefinition you'll want to use
+import { faFolder, faFolderOpen, faSquare, faCheckSquare, faCheck, faMinus } from '@fortawesome/pro-light-svg-icons';
+
+@Component({
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+    // Register them into your component
+    public faFolder = faFolder;
+    public faFolderOpen = faFolderOpen;
+    public faSquare = faSquare;
+    public faCheckSquare = faCheckSquare;
+    public faMinus = faMinus;
+    public faCheck = faCheck;
+}
+```
+
+And then, back to some HTML:
+```html
+<!-- [propertyYouWantToChangeIcon]="nameInComponent" -->
+<ngx-bootstrap-treeview
+    [isOpened]="true"
+    [trees]="trees"
+    [canSelectBranch]="false"
+    [selectedLeafIcon]="faCheckSquare"
+    [unselectedLeafIcon]="faSquare"
+    [openedFolderIcon]="faFolderOpen"
+    [closedFolderIcon]="faFolder"
+    [anyChildrenSelectedIcon]="faMinus"
+    [allChildrenSelectedIcon]="faCheck"
+>
+</ngx-bootstrap-treeview>
+```
 
 ## Using mapper
 The mapper takes two maps as a params as well as 2 types. For our example, we'll use these 2 classes to generate our treeview:
