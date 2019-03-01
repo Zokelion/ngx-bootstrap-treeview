@@ -35,11 +35,12 @@
 
 ## Quick warning
 
-Hi guys, this plugin is still under development and lacks a lot of features right now.
-I will add some until I think this is complete and fits my needs as a treeview plugin.
+Hi guys, this plugin is still under development and still lacks some features.
 
 The name might be quite confusing but at the moment, there is not any [ngx-bootstrap](https://www.npmjs.com/package/ngx-bootstrap) component involved in this plugin.
 At first I thought I'd need it, then realised I could do everything, at least until now, without using it and I'll try to keep everything going this way.
+
+PS: I think this readme is quite complete. If you find anything missing, don't hesitate to open an issue, I wrote a mnay things over a short period of time, it's highly probable that I forgot to mention something here 😅.
 
 ## Getting Started
 
@@ -403,6 +404,7 @@ interface LeafMap {
 
 ## Todo List
 
+-   ~~Find a way to support custom objects as datasource~~ **(See [Using Mapper](#using-mapper) part of the readme)**
 -   Boxes or custom right click to select/unselect an entire branch
 -   Async loading of children with a loadChildren callback **(started working on it, paused right now)**
 -   Possibility to disable animation and maybe add a set of fancy ones when folding/unfolding a branch
