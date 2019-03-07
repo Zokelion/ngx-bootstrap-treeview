@@ -1,0 +1,9 @@
+nav .active {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+div.container-fluid {
+    height: calc(100vh - 3.5rem);
+    overflow: auto;
+    margin-top: 3.5rem;
+}

@@ -1,2 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~bootstrap/scss/bootstrap';
+
+.html-sample {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.data-container,
+.selected-leaves-container,
+.tree-container {
+    background-color: rgba(0, 0, 0, 0.1);
+    height: 360px;
+    overflow: auto;
+}
+
+.data-column,
+.selected-leaves-column,
+.tree-column {
+    @extend .col-12;
+    @extend .col-lg-4;
+}

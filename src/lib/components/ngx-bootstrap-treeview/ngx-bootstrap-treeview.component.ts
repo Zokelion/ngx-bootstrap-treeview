@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChildren, QueryList } from '@angular/core';
 import { Tree } from '../../models/tree.model';
 import {
     faSquare,
@@ -104,6 +104,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
     @Input()
     public emptyFolderLabel = 'This folder is empty';
+
+    @ViewChildren(NgxBootstrapTreeviewComponent)
+    public children: QueryList<NgxBootstrapTreeviewComponent>;
 
     public childrenState: string;
 
@@ -253,6 +256,42 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         return leavesCount;
     }
 
+    public select(value: number | string) {
+        if (this.isLeaf && !this.isOpened && this.tree.value === value) {
+            // If unselectedLeaf, we act as if we got clicked
+            this.leafClickedCallback();
+        } else {
+            // this.isRoot || this.isTree
+            this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
+                child.select(value);
+            });
+        }
+    }
+
+    public unselect(value: number | string) {
+        if (this.isLeaf && this.isOpened && this.tree.value === value) {
+            // If unselectedLeaf, we act as if we got clicked
+            this.leafClickedCallback();
+        } else {
+            // this.isRoot || this.isTree
+            this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
+                child.select(value);
+            });
+        }
+    }
+
+    public toggle(value: number | string) {
+        if (this.isLeaf && this.tree.value === value) {
+            // If unselectedLeaf, we act as if we got clicked
+            this.leafClickedCallback();
+        } else {
+            // this.isRoot || this.isTree
+            this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
+                child.toggle(value);
+            });
+        }
+    }
+
     private _selectLeaf(leaf: Leaf) {
         if (!this.isRoot && this.loggingService) {
             this.loggingService.log(`✔️ Feuille sélectionnée dans ${this.tree.label}:`, leaf);
@@ -260,7 +299,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
             this.loggingService.log(`✔️ Feuille sélectionnée dans la racine:`, leaf);
         }
 
-        this.selectedLeaves = [...this.selectedLeaves, leaf];
+        if (!this._leafExistsIn(this.selectedLeaves, leaf)) {
+            this.selectedLeaves = [...this.selectedLeaves, leaf];
+        }
     }
 
     private _unselectLeaf(leaf: Leaf) {
@@ -271,8 +312,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         }
 
         const index = this._leafIndex(this.selectedLeaves, leaf);
-
-        this.selectedLeaves.splice(index, 1);
+        if (index !== -1) {
+            this.selectedLeaves.splice(index, 1);
+        }
     }
 
     private _leafClickedEventReceived(leafClickedEvent: LeafClickedEvent) {
