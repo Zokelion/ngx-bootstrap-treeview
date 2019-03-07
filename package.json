@@ -1,7 +1,7 @@
 {
     "name": "ngx-bootstrap-treeview",
-    "version": "0.4.2",
-    "description": "Ngx Bootstrap Treeview - Simpl library to visualize, search and interact with tree data",
+    "version": "1.0.0",
+    "description": "Ngx Bootstrap Treeview - Simple library to visualize, search and interact with tree data",
     "private": true,
     "scripts": {
         "ng": "ng",

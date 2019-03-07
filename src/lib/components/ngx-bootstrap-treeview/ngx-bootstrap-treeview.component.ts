@@ -270,7 +270,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
     public unselect(value: number | string) {
         if (this.isLeaf && this.isOpened && this.tree.value === value) {
-            // If unselectedLeaf, we act as if we got clicked
+            // If selectedLeaf, we act as if we got clicked
             this.leafClickedCallback();
         } else {
             // this.isRoot || this.isTree
@@ -282,7 +282,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
     public toggle(value: number | string) {
         if (this.isLeaf && this.tree.value === value) {
-            // If unselectedLeaf, we act as if we got clicked
+            // We act as if we got clicked
             this.leafClickedCallback();
         } else {
             // this.isRoot || this.isTree
