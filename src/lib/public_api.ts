@@ -5,3 +5,4 @@ export * from './models/leaf.model';
 export * from './models/tree-map.model';
 export * from './models/tree.model';
 export * from './utils/ngx-bootstrap-treeview-mapper';
+export * from './components/ngx-bootstrap-treeview/ngx-bootstrap-treeview.component';
