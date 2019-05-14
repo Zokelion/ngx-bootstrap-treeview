@@ -86,11 +86,9 @@
             #contextMenu
             [ngClass]="{ 'd-none': !isContextMenuVisible, 'd-block': isContextMenuVisible }"
         >
-            <button class="list-group-item list-group-item-action px-3 py-2">Test 1</button>
-            <button class="list-group-item list-group-item-action px-3 py-2">Test 2</button>
-            <button class="list-group-item list-group-item-action px-3 py-2">Test 3</button>
-            <button class="list-group-item list-group-item-action px-3 py-2">Test 4</button>
-            <button class="list-group-item list-group-item-action px-3 py-2">Test 5</button>
+            <button class="context-menu-item list-group-item list-group-item-action px-3" *ngFor="let i of [1, 2, 3, 4, 5, 6]">
+                Test {{ i }}
+            </button>
         </div>
         <div *ngIf="tree.children" class="children" [@showHide]="childrenState">
             <ul *ngIf="tree.children.length === 0">

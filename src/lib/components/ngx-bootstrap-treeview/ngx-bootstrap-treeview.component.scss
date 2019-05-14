@@ -1,3 +1,5 @@
+$context-menu-items-spacing: 0.125rem;
+
 ul {
     list-style-type: none;
     overflow: visible;
@@ -6,10 +8,35 @@ ul {
         position: relative;
 
         .context-menu {
-            position: absolute;
-            z-index: 100;
-            top: 0;
+            background-color: #fff;
+            border-radius: 0.25rem;
             left: 0;
+            position: absolute;
+            top: 0;
+            z-index: 100;
+
+            .context-menu-item {
+                border-top-width: 0;
+                border-bottom-width: 0;
+                padding-top: $context-menu-items-spacing / 2;
+                padding-bottom: $context-menu-items-spacing / 2;
+                transition: background-color 0.3s;
+
+                &:first-of-type {
+                    padding-top: $context-menu-items-spacing;
+                    border-top-width: 1px;
+                }
+
+                &:last-of-type {
+                    padding-bottom: $context-menu-items-spacing;
+                    border-bottom-width: 1px;
+                }
+
+                &:hover {
+                    background: rgba(black, 0.8);
+                    color: #fff;
+                }
+            }
         }
     }
 
