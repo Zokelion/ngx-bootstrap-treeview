@@ -1,4 +1,15 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChildren, QueryList, HostListener } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    Input,
+    Output,
+    EventEmitter,
+    ViewChildren,
+    QueryList,
+    HostListener,
+    ViewChild,
+    ElementRef
+} from '@angular/core';
 import { Tree } from '../../models/tree.model';
 import {
     faSquare,
@@ -107,10 +118,13 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     public emptyFolderLabel = 'This folder is empty';
 
     @Input()
-    public contextMenu: NgxBootstrapTreeviewContextMenu;
+    public contextMenuData: NgxBootstrapTreeviewContextMenu;
 
     @ViewChildren(NgxBootstrapTreeviewComponent)
     public children: QueryList<NgxBootstrapTreeviewComponent>;
+
+    @ViewChild('contextMenu')
+    public contextMenu: ElementRef<HTMLDivElement>;
 
     public childrenState: string;
 
@@ -269,14 +283,23 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
     public onContextMenu(event: MouseEvent): void {
         this.isContextMenuVisible = true;
+
         console.log('Context menu triggered on ', this);
         event.preventDefault();
         event.stopPropagation();
+
+        this.contextMenu.nativeElement.style.top = event.layerY.toString() + 'px';
+        this.contextMenu.nativeElement.style.left = event.layerX.toString() + 'px';
     }
 
-    @HostListener('document:click')
-    public onDocumentClicked() {
-        this.isContextMenuVisible = false;
+    @HostListener('document:click', ['$event'])
+    public onDocumentClicked(event: Event) {
+        if (this.isContextMenuVisible) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            this.isContextMenuVisible = false;
+        }
     }
 
     private _selectLeaf(leaf: Leaf) {

@@ -81,8 +81,16 @@
                 {{ tree.label }}
             </span>
         </a>
-        <div class="contextmenu" *ngIf="isContextMenuVisible">
-            Test content
+        <div
+            class="context-menu list-group"
+            #contextMenu
+            [ngClass]="{ 'd-none': !isContextMenuVisible, 'd-block': isContextMenuVisible }"
+        >
+            <button class="list-group-item list-group-item-action px-3 py-2">Test 1</button>
+            <button class="list-group-item list-group-item-action px-3 py-2">Test 2</button>
+            <button class="list-group-item list-group-item-action px-3 py-2">Test 3</button>
+            <button class="list-group-item list-group-item-action px-3 py-2">Test 4</button>
+            <button class="list-group-item list-group-item-action px-3 py-2">Test 5</button>
         </div>
         <div *ngIf="tree.children" class="children" [@showHide]="childrenState">
             <ul *ngIf="tree.children.length === 0">

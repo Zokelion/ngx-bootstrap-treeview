@@ -1,6 +1,17 @@
 ul {
     list-style-type: none;
-    overflow: hidden;
+    overflow: visible;
+
+    li {
+        position: relative;
+
+        .context-menu {
+            position: absolute;
+            z-index: 100;
+            top: 0;
+            left: 0;
+        }
+    }
 
     fa-icon {
         color: #000;
