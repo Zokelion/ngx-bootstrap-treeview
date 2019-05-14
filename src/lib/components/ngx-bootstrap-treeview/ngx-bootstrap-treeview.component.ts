@@ -85,25 +85,30 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
     // Icons inputs
     @Input()
-    public openedFolderIcon: IconDefinition;
+    public openedFolderIcon: IconDefinition = faFolderOpen;
 
     @Input()
-    public closedFolderIcon: IconDefinition;
+    public closedFolderIcon: IconDefinition = faFolder;
 
     @Input()
-    public unselectedLeafIcon: IconDefinition;
+    public unselectedLeafIcon: IconDefinition = faSquare;
 
     @Input()
-    public selectedLeafIcon: IconDefinition;
+    public selectedLeafIcon: IconDefinition = faCheckSquare;
 
     @Input()
-    public anyChildrenSelectedIcon: IconDefinition;
+    public anyChildrenSelectedIcon: IconDefinition = faMinus;
 
     @Input()
-    public allChildrenSelectedIcon: IconDefinition;
+    public allChildrenSelectedIcon: IconDefinition = faCheck;
 
     @Input()
     public emptyFolderLabel = 'This folder is empty';
+
+    @Input()
+    public rightClickMenu: {
+        [label: string]: (...args: any) => void;
+    };
 
     @ViewChildren(NgxBootstrapTreeviewComponent)
     public children: QueryList<NgxBootstrapTreeviewComponent>;
@@ -114,6 +119,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
     public leavesCount: number;
 
+    // This one is set to true
     public isBranch: boolean;
 
     public isLeaf: boolean;
@@ -148,30 +154,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
             // Otherwise, we have trees but with less than 2 elements, we assign it to tree
             // So ngOnInit() can keep going normaly
             this.tree = this.trees[0];
-        }
-
-        // Simple icon settings if we don't have any given as Input()
-        if (!this.openedFolderIcon) {
-            this.openedFolderIcon = faFolderOpen;
-        }
-
-        if (!this.closedFolderIcon) {
-            this.closedFolderIcon = faFolder;
-        }
-
-        if (!this.selectedLeafIcon) {
-            this.selectedLeafIcon = faCheckSquare;
-        }
-        if (!this.unselectedLeafIcon) {
-            this.unselectedLeafIcon = faSquare;
-        }
-
-        if (!this.allChildrenSelectedIcon) {
-            this.allChildrenSelectedIcon = faCheck;
-        }
-
-        if (!this.anyChildrenSelectedIcon) {
-            this.anyChildrenSelectedIcon = faMinus;
         }
 
         if (this.tree && (this.tree.children || this.tree.loadChildren)) {
