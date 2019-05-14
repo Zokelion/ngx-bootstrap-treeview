@@ -81,6 +81,9 @@
                 {{ tree.label }}
             </span>
         </a>
+        <div class="contextmenu" *ngIf="isContextMenuVisible">
+            Test content
+        </div>
         <div *ngIf="tree.children" class="children" [@showHide]="childrenState">
             <ul *ngIf="tree.children.length === 0">
                 <li>

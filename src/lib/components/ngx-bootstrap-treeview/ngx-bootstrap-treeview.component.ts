@@ -127,6 +127,8 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     // If we have "trees" property set and it has more than one tree, this is set to true
     public isRoot: boolean;
 
+    public isContextMenuVisible = false;
+
     constructor() {}
 
     ngOnInit() {
@@ -266,6 +268,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     }
 
     public onContextMenu(event: MouseEvent): void {
+        this.isContextMenuVisible = true;
         console.log('Context menu triggered on ', this);
         event.preventDefault();
         event.stopPropagation();
