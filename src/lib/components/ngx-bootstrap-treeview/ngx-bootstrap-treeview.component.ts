@@ -139,17 +139,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
             }
         }
 
-        if (this.mapper) {
-            console.log('Treeview initialized with mapper:', this.mapper);
-        }
-        if (this.item) {
-            console.log('Treeview initialized with item:', this.item);
-            console.log('Resulted in ', this.tree, 'with children of type', typeof this.tree.children);
-        } else if (this.items) {
-            console.log('Treeview initialized with items:', this.items);
-            console.log('Resulted in ', this.trees);
-        }
-
         // If we want to display one or more trees
         if (this.trees && this.trees.length > 1) {
             this.isRoot = true;
@@ -198,7 +187,8 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     }
 
     public itemClicked(leafClickedEvent?: LeafClickedEvent) {
-        /* If we don't have children, we're on a leaf and if we receive no event,
+        /*
+            If we 're on a leaf and we receive no event,
             that means our element got clicked
         */
         if (this.isLeaf && !leafClickedEvent) {
