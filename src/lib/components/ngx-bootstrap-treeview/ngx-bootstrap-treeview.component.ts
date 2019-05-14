@@ -146,8 +146,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     constructor() {}
 
     ngOnInit() {
-        console.log('ContextMenu: ', this.contextMenuData);
-
         // We throw an exception if we have item or items but no mapper indicating how to handle them
         if (!this.mapper && (this.item || this.items)) {
             throw new Error('"item" or "items" are invalid parameters if you don\'t provide a mapper');
