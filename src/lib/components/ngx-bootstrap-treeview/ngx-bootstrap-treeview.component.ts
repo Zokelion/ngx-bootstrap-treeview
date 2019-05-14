@@ -14,6 +14,7 @@ import { Leaf } from '../../models/leaf.model';
 import { LeafClickedEvent } from '../../models/leaf-clicked-event.model';
 import { ILoggingService } from '../../interfaces/ILoggingService.interface';
 import { NgxBootstrapTreeviewMapper } from '../../utils/ngx-bootstrap-treeview-mapper';
+import { NgxBootstrapTreeviewContextMenu } from 'src/lib/models/ngx-bootstrap-treeview-context-menu.model';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -106,9 +107,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     public emptyFolderLabel = 'This folder is empty';
 
     @Input()
-    public rightClickMenu: {
-        [label: string]: (...args: any) => void;
-    };
+    public contextMenu: NgxBootstrapTreeviewContextMenu;
 
     @ViewChildren(NgxBootstrapTreeviewComponent)
     public children: QueryList<NgxBootstrapTreeviewComponent>;
