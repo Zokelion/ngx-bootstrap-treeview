@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChildren, QueryList, HostListener } from '@angular/core';
 import { Tree } from '../../models/tree.model';
 import {
     faSquare,
@@ -272,6 +272,11 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         console.log('Context menu triggered on ', this);
         event.preventDefault();
         event.stopPropagation();
+    }
+
+    @HostListener('document:click')
+    public onDocumentClicked() {
+        this.isContextMenuVisible = false;
     }
 
     private _selectLeaf(leaf: Leaf) {
