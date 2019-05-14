@@ -5,6 +5,7 @@ import { SimpleDataComponent } from './simple-data/simple-data.component';
 import { CustomStylingComponent } from './custom-styling/custom-styling.component';
 import { MultirootTreeComponent } from './multiroot-tree/multiroot-tree.component';
 import { UsingMapperComponent } from './using-mapper/using-mapper.component';
+import { ContextMenuComponent } from './context-menu/context-menu.component';
 
 const routes: Routes = [
     {
@@ -13,7 +14,8 @@ const routes: Routes = [
             { path: 'simple-data', component: SimpleDataComponent },
             { path: 'custom-styling', component: CustomStylingComponent },
             { path: 'multiroot-tree', component: MultirootTreeComponent },
-            { path: 'using-mapper', component: UsingMapperComponent }
+            { path: 'using-mapper', component: UsingMapperComponent },
+            { path: 'context-menu', component: ContextMenuComponent }
         ]
     },
     { path: '**', redirectTo: '/' }

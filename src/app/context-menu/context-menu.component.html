@@ -1,0 +1,33 @@
+<div class="container">
+    <div class="row">
+        <div class="tree-column">
+            <h5>Default usage</h5>
+            <div class="tree-container">
+                <ngx-bootstrap-treeview
+                    [isOpened]="true"
+                    [tree]="tree"
+                    [canSelectBranch]="false"
+                    [loggingService]="logger"
+                    [contextMenuData]="treeContextMenu"
+                >
+                </ngx-bootstrap-treeview>
+            </div>
+        </div>
+        <div class="col-12 col-xl-4 col-md-3 selected-leaves-column">
+            <h5>Selected Leaves</h5>
+            <div class="selected-leaves-container">
+                <!-- <ul *ngIf="selectedLeaves.length">
+                    <li *ngFor="let selectedLeaf of selectedLeaves">
+                        {{ selectedLeaf.value }} - {{ selectedLeaf.label }}
+                    </li>
+                </ul> -->
+            </div>
+        </div>
+        <div class="col-12 col-md-5 col-xl-4 data-column">
+            <h5>
+                Data sample (one Tree object)
+            </h5>
+            <pre class="data-container">{{ tree | json }}</pre>
+        </div>
+    </div>
+</div>
