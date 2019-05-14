@@ -1,7 +1,7 @@
 import { Tree } from 'src/lib/public_api';
 
 export const tree: Tree = {
-    label: 'Langages de programmation',
+    label: 'Programming',
     value: 1,
     children: [
         {

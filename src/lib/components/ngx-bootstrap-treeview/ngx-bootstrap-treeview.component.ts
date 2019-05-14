@@ -119,11 +119,13 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
     public leavesCount: number;
 
-    // This one is set to true
+    // If our "tree" property has children, this is set to true
     public isBranch: boolean;
 
+    // If our "tree" property has no children, this one is set to true
     public isLeaf: boolean;
 
+    // If we have "trees" property set and it has more than one tree, this is set to true
     public isRoot: boolean;
 
     constructor() {}
