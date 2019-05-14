@@ -86,8 +86,12 @@
             #contextMenu
             [ngClass]="{ 'd-none': !isContextMenuVisible, 'd-block': isContextMenuVisible }"
         >
-            <button class="context-menu-item list-group-item list-group-item-action px-3" *ngFor="let i of [1, 2, 3, 4, 5, 6]">
-                Test {{ i }}
+            <button
+                class="context-menu-item list-group-item list-group-item-action px-3"
+                *ngFor="let label of getContextMenuLabels()"
+                (click)="onContextMenuItemClicked(label)"
+            >
+                {{ label }}
             </button>
         </div>
         <div *ngIf="tree.children" class="children" [@showHide]="childrenState">

@@ -118,7 +118,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     public emptyFolderLabel = 'This folder is empty';
 
     @Input()
-    public contextMenuData: NgxBootstrapTreeviewContextMenu;
+    public contextMenuData: NgxBootstrapTreeviewContextMenu = {};
 
     @ViewChildren(NgxBootstrapTreeviewComponent)
     public children: QueryList<NgxBootstrapTreeviewComponent>;
@@ -300,6 +300,14 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
             this.isContextMenuVisible = false;
         }
+    }
+
+    public getContextMenuLabels(): string[] {
+        return Object.keys(this.contextMenuData) || [];
+    }
+
+    public onContextMenuItemClicked(label: string): void {
+        this.contextMenuData[label]();
     }
 
     private _selectLeaf(leaf: Leaf) {
