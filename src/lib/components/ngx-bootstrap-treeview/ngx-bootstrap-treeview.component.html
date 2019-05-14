@@ -1,6 +1,6 @@
 <ul [ngClass]="{ branch: tree.children, leaf: !tree.children, opened: isOpened }" *ngIf="tree" class="mb-0">
     <li>
-        <a [routerLink]="[]" (click)="itemClicked()">
+        <a [routerLink]="[]" (click)="itemClicked()" (contextmenu)="onContextMenu($event)">
             <!-- Icons if we're reprensenting a branch -->
             <span class="icon">
                 <!-- Folder closed, no children selected -->

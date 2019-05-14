@@ -265,6 +265,12 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         }
     }
 
+    public onContextMenu(event: MouseEvent): void {
+        console.log('Context menu triggered on ', this);
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
     private _selectLeaf(leaf: Leaf) {
         if (!this.isRoot && this.loggingService) {
             this.loggingService.log(`✔️ Feuille sélectionnée dans ${this.tree.label}:`, leaf);
