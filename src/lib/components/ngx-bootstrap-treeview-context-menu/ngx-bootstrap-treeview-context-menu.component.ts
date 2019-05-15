@@ -14,6 +14,8 @@ import {
 } from '@angular/core';
 import { NgxBootstrapTreeviewContextMenuData } from 'src/lib/models/ngx-bootstrap-treeview-context-menu-data.model';
 import { NgxBootstrapTreeviewContextMenuConfig } from 'src/lib/models/ngx-bootstrap-treeview-context-menu-config.model';
+import { Tree } from 'src/lib/models/tree.model';
+import { Leaf } from 'src/lib/models/leaf.model';
 
 @Component({
     // tslint:disable-next-line: component-selector
@@ -31,6 +33,9 @@ export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChang
 
     @Input()
     public config: NgxBootstrapTreeviewContextMenuConfig = this._defaultConfig;
+
+    @Input()
+    public target: Leaf | Tree;
 
     @Input()
     public firedBy: MouseEvent;
@@ -56,6 +61,8 @@ export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChang
     }
 
     ngOnChanges(changes: SimpleChanges): void {
+        this.config = { ...this._defaultConfig, ...this.config };
+
         if (this.firedBy) {
             this.firedBy.preventDefault();
             this.firedBy.stopPropagation();
@@ -92,7 +99,7 @@ export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChang
     }
 
     public onItemClicked(label: string): void {
-        this.config.data[label]();
+        this.config.data[label](this.target);
     }
 
     public hide(): void {
