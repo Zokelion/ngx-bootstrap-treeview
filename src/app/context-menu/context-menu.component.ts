@@ -19,6 +19,14 @@ export class ContextMenuComponent implements OnInit {
             },
             'Add a leaf here': (target: Tree) => {
                 console.log('Wanna add a leaf to', target.label);
+
+                target.children = [
+                    ...target.children,
+                    {
+                        value: 9,
+                        label: 'Added by test'
+                    }
+                ];
             }
         }
     };
