@@ -82,7 +82,7 @@
             </span>
         </a>
 
-        <ngx-bootstrap-treeview-context-menu [data]="contextMenuData" [firedBy]="lastContextMenuEvent">
+        <ngx-bootstrap-treeview-context-menu [config]="contextMenuConfig" [firedBy]="lastContextMenuEvent">
         </ngx-bootstrap-treeview-context-menu>
 
         <div *ngIf="tree.children" class="children" [@showHide]="childrenState">
@@ -103,7 +103,7 @@
                 [anyChildrenSelectedIcon]="anyChildrenSelectedIcon"
                 [allChildrenSelectedIcon]="allChildrenSelectedIcon"
                 [loggingService]="loggingService"
-                [contextMenuData]="contextMenuData"
+                [contextMenuConfig]="contextMenuConfig"
             >
             </ngx-bootstrap-treeview>
         </div>
@@ -122,6 +122,6 @@
         [anyChildrenSelectedIcon]="anyChildrenSelectedIcon"
         [allChildrenSelectedIcon]="allChildrenSelectedIcon"
         [loggingService]="loggingService"
-        [contextMenuData]="contextMenuData"
+        [contextMenuConfig]="contextMenuConfig"
     ></ngx-bootstrap-treeview>
 </ng-container>
