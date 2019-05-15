@@ -279,10 +279,8 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     }
 
     public onContextMenu(event: MouseEvent): void {
+        // The event will be stopped by context menu component
         this.lastContextMenuEvent = event;
-
-        // event.preventDefault();
-        // event.stopPropagation();
     }
 
     private _selectLeaf(leaf: Leaf) {
