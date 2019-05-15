@@ -123,9 +123,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     @ViewChildren(NgxBootstrapTreeviewComponent)
     public children: QueryList<NgxBootstrapTreeviewComponent>;
 
-    @ViewChild('contextMenu')
-    public contextMenu: ElementRef<HTMLDivElement>;
-
     public childrenState: string;
 
     public selectedLeaves: Leaf[] = [];
@@ -141,7 +138,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     // If we have "trees" property set and it has more than one tree, this is set to true
     public isRoot: boolean;
 
-    public isContextMenuVisible = false;
+    public lastContextMenuEvent: MouseEvent;
 
     constructor() {}
 
@@ -282,32 +279,10 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     }
 
     public onContextMenu(event: MouseEvent): void {
-        this.isContextMenuVisible = true;
+        this.lastContextMenuEvent = event;
 
-        console.log('Context menu triggered on ', this);
-        event.preventDefault();
-        event.stopPropagation();
-
-        this.contextMenu.nativeElement.style.top = event.layerY.toString() + 'px';
-        this.contextMenu.nativeElement.style.left = event.layerX.toString() + 'px';
-    }
-
-    @HostListener('document:click', ['$event'])
-    public onDocumentClicked(event: Event) {
-        if (this.isContextMenuVisible) {
-            event.preventDefault();
-            event.stopPropagation();
-
-            this.isContextMenuVisible = false;
-        }
-    }
-
-    public getContextMenuLabels(): string[] {
-        return Object.keys(this.contextMenuData) || [];
-    }
-
-    public onContextMenuItemClicked(label: string): void {
-        this.contextMenuData[label]();
+        // event.preventDefault();
+        // event.stopPropagation();
     }
 
     private _selectLeaf(leaf: Leaf) {

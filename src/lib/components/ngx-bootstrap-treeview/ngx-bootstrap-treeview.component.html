@@ -81,19 +81,10 @@
                 {{ tree.label }}
             </span>
         </a>
-        <div
-            class="context-menu list-group"
-            #contextMenu
-            [ngClass]="{ 'd-none': !isContextMenuVisible, 'd-block': isContextMenuVisible }"
-        >
-            <button
-                class="context-menu-item list-group-item list-group-item-action px-3"
-                *ngFor="let label of getContextMenuLabels()"
-                (click)="onContextMenuItemClicked(label)"
-            >
-                {{ label }}
-            </button>
-        </div>
+
+        <ngx-bootstrap-treeview-context-menu [data]="contextMenuData" [firedBy]="lastContextMenuEvent">
+        </ngx-bootstrap-treeview-context-menu>
+
         <div *ngIf="tree.children" class="children" [@showHide]="childrenState">
             <ul *ngIf="tree.children.length === 0">
                 <li>

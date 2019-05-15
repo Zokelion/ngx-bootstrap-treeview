@@ -1,0 +1,10 @@
+<div class="context-menu list-group" [ngClass]="{ 'd-none': !isVisible, 'd-block': isVisible }" #container>
+    <button
+        class="context-menu-item {{ itemsClass }}"
+        *ngFor="let label of getLabels()"
+        (click)="onItemClicked(label)"
+        [ngClass]="{ 'list-group-item list-group-item-action px-3': !itemsClass }"
+    >
+        {{ label }}
+    </button>
+</div>
