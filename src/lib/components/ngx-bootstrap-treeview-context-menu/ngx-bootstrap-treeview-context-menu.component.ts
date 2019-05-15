@@ -7,7 +7,8 @@ import {
     Renderer2,
     SimpleChanges,
     OnChanges,
-    ViewChild
+    ViewChild,
+    NgZone
 } from '@angular/core';
 import { NgxBootstrapTreeviewContextMenuData } from 'src/lib/models/ngx-bootstrap-treeview-context-menu-data.model';
 import { NgxBootstrapTreeviewContextMenuConfig } from 'src/lib/models/ngx-bootstrap-treeview-context-menu-config.model';
@@ -37,10 +38,12 @@ export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChang
 
     public isVisible = false;
 
-    constructor(private _renderer: Renderer2) {}
+    constructor(private _renderer: Renderer2, private _zone: NgZone) {}
 
     ngOnInit() {
         this.config = { ...this._defaultConfig, ...this.config };
+
+        this._renderer.listen(document, 'click.out-zone', this.onDocumentClicked.bind(this));
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -59,13 +62,15 @@ export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChang
         }
     }
 
-    @HostListener('document:click', ['$event'])
     public onDocumentClicked(event: Event) {
+        console.log('Click outside of zone JS received');
         if (this.isVisible) {
             event.preventDefault();
             event.stopPropagation();
 
-            this.isVisible = false;
+            this._zone.run(() => {
+                this.isVisible = false;
+            });
         }
     }
 
