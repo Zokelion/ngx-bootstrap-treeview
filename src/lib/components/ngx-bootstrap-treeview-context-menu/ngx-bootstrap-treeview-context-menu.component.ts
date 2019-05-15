@@ -9,7 +9,7 @@ import {
     OnChanges,
     ViewChild
 } from '@angular/core';
-import { NgxBootstrapTreeviewContextMenu } from 'src/lib/models/ngx-bootstrap-treeview-context-menu.model';
+import { NgxBootstrapTreeviewContextMenuData } from 'src/lib/models/ngx-bootstrap-treeview-context-menu-data.model';
 
 @Component({
     // tslint:disable-next-line: component-selector
@@ -19,7 +19,7 @@ import { NgxBootstrapTreeviewContextMenu } from 'src/lib/models/ngx-bootstrap-tr
 })
 export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChanges {
     @Input()
-    public data: NgxBootstrapTreeviewContextMenu;
+    public data: NgxBootstrapTreeviewContextMenuData;
 
     @Input()
     public itemsClass: string;

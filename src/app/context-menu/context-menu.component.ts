@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { tree, trees } from '../tree-data';
-import { NgxBootstrapTreeviewContextMenu } from 'src/lib/models/ngx-bootstrap-treeview-context-menu.model';
+import { NgxBootstrapTreeviewContextMenuData } from 'src/lib/models/ngx-bootstrap-treeview-context-menu-data.model';
 import { ILoggingService } from 'src/lib/interfaces/ILoggingService.interface';
 
 @Component({
@@ -11,7 +11,7 @@ import { ILoggingService } from 'src/lib/interfaces/ILoggingService.interface';
 export class ContextMenuComponent implements OnInit {
     public tree = tree;
     public logger: ILoggingService = console;
-    public treeContextMenu: NgxBootstrapTreeviewContextMenu = {
+    public treeContextMenu: NgxBootstrapTreeviewContextMenuData = {
         'Add a new branch': () => {
             console.log('Wanting to add a new branch');
         },
