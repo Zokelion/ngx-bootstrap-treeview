@@ -8,7 +8,9 @@ import {
     SimpleChanges,
     OnChanges,
     ViewChild,
-    NgZone
+    NgZone,
+    Output,
+    EventEmitter
 } from '@angular/core';
 import { NgxBootstrapTreeviewContextMenuData } from 'src/lib/models/ngx-bootstrap-treeview-context-menu-data.model';
 import { NgxBootstrapTreeviewContextMenuConfig } from 'src/lib/models/ngx-bootstrap-treeview-context-menu-config.model';
@@ -32,6 +34,12 @@ export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChang
 
     @Input()
     public firedBy: MouseEvent;
+
+    @Output()
+    public hidden = new EventEmitter<void>();
+
+    @Output()
+    public shown = new EventEmitter<void>();
 
     @ViewChild('container')
     public container: ElementRef<HTMLDListElement>;
@@ -60,6 +68,7 @@ export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChang
             this._renderer.setStyle(nativeElement, 'left', x + 'px');
 
             this.isVisible = true;
+            this.shown.emit();
         }
     }
 
@@ -89,6 +98,8 @@ export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChang
     public hide(): void {
         this._zone.run(() => {
             this.isVisible = false;
+
+            this.hidden.emit();
         });
     }
 }
