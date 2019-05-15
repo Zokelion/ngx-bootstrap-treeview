@@ -19,9 +19,6 @@ import { NgxBootstrapTreeviewContextMenu } from 'src/lib/models/ngx-bootstrap-tr
 })
 export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChanges {
     @Input()
-    public isVisible = false;
-
-    @Input()
     public data: NgxBootstrapTreeviewContextMenu;
 
     @Input()
@@ -38,6 +35,8 @@ export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChang
 
     @ViewChild('container')
     public container: ElementRef<HTMLDListElement>;
+
+    public isVisible = false;
 
     constructor(private _elementRef: ElementRef, private _renderer: Renderer2) {}
 
