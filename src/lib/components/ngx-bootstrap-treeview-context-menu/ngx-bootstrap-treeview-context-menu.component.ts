@@ -43,7 +43,6 @@ export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChang
     ngOnInit() {}
 
     ngOnChanges(changes: SimpleChanges): void {
-        console.log(this.firedBy);
         if (this.firedBy) {
             this.firedBy.preventDefault();
             this.firedBy.stopPropagation();
