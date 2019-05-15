@@ -8,7 +8,9 @@ import {
     QueryList,
     HostListener,
     ViewChild,
-    ElementRef
+    ElementRef,
+    SimpleChanges,
+    OnChanges
 } from '@angular/core';
 import { Tree } from '../../models/tree.model';
 import {
@@ -68,7 +70,7 @@ import { NgxBootstrapTreeviewContextMenuConfig } from 'src/lib/models/ngx-bootst
         ])
     ]
 })
-export class NgxBootstrapTreeviewComponent implements OnInit {
+export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
     @Output()
     public leafClicked: EventEmitter<LeafClickedEvent> = new EventEmitter<LeafClickedEvent>();
 
@@ -185,6 +187,15 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         this.leavesCount = this.countLeaves(this.tree);
     }
 
+    ngOnChanges(changes: SimpleChanges): void {
+        if ('tree' in changes) {
+            this.tree = changes.tree.currentValue;
+            this.leavesCount = this.countLeaves(this.tree);
+
+            console.log('New tree', this.tree);
+            console.log('New leaves count:', this.leavesCount);
+        }
+    }
     public itemClicked(leafClickedEvent?: LeafClickedEvent) {
         /*
             If we 're on a leaf and we receive no event,
