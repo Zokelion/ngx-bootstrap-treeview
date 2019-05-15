@@ -38,7 +38,7 @@ export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChang
 
     public isVisible = false;
 
-    constructor(private _elementRef: ElementRef, private _renderer: Renderer2) {}
+    constructor(private _renderer: Renderer2) {}
 
     ngOnInit() {}
 
