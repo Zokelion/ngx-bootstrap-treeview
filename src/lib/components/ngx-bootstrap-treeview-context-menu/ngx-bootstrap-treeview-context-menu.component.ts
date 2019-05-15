@@ -42,7 +42,7 @@ export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChang
     public shown = new EventEmitter<void>();
 
     @ViewChild('container')
-    public container: ElementRef<HTMLDListElement>;
+    public container: ElementRef<HTMLDivElement>;
 
     public isVisible = false;
 
