@@ -44,6 +44,7 @@ export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChang
         this.config = { ...this._defaultConfig, ...this.config };
 
         this._renderer.listen(document, 'click.out-zone', this.onDocumentClicked.bind(this));
+        this._renderer.listen(document, 'keyup.out-zone', this.onKeyPressed.bind(this));
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -63,14 +64,17 @@ export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChang
     }
 
     public onDocumentClicked(event: Event) {
-        console.log('Click outside of zone JS received');
         if (this.isVisible) {
             event.preventDefault();
             event.stopPropagation();
 
-            this._zone.run(() => {
-                this.isVisible = false;
-            });
+            this.hide();
+        }
+    }
+
+    public onKeyPressed(event: KeyboardEvent) {
+        if (this.isVisible && event.key.toLowerCase() === 'escape') {
+            this.hide();
         }
     }
 
@@ -80,5 +84,11 @@ export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChang
 
     public onItemClicked(label: string): void {
         this.config.data[label]();
+    }
+
+    public hide(): void {
+        this._zone.run(() => {
+            this.isVisible = false;
+        });
     }
 }
