@@ -1,3 +1,4 @@
+<!-- This part is used if we have a single tree inputed to our component -->
 <ul
     [ngClass]="{ branch: tree.children, leaf: !tree.children, opened: isOpened, 'pl-0': isFirstLevel }"
     *ngIf="tree"
@@ -129,6 +130,9 @@
         </div>
     </li>
 </ul>
+<!-- END Single tree provided -->
+
+<!-- If we provided an array of trees as an input, this part will be called -->
 <ng-container *ngIf="trees && !tree">
     <ngx-bootstrap-treeview
         *ngFor="let tree of trees"
@@ -143,6 +147,6 @@
         [allChildrenSelectedIcon]="allChildrenSelectedIcon"
         [loggingService]="loggingService"
         [contextMenus]="contextMenus"
-        [isFirstLevel]="false"
     ></ngx-bootstrap-treeview>
 </ng-container>
+<!-- End multiple trees provided -->
