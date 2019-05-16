@@ -3,6 +3,7 @@ import { tree } from '../tree-data';
 import { ILoggingService } from 'src/lib/interfaces/ILoggingService.interface';
 import { NgxBootstrapTreeviewContextMenuConfig } from 'src/lib/models/ngx-bootstrap-treeview-context-menu-config.model';
 import { Tree } from 'src/lib/public_api';
+import { NgxBootstrapTreeviewContextMenus } from 'src/lib/models/ngx-bootstrap-treeview-context-menus.model';
 
 @Component({
     selector: 'app-context-menu',
@@ -12,7 +13,7 @@ import { Tree } from 'src/lib/public_api';
 export class ContextMenuComponent implements OnInit {
     public tree = tree;
     public logger: ILoggingService = console;
-    public treeContextMenuConfig: NgxBootstrapTreeviewContextMenuConfig = {
+    public branchContextMenuConfig: NgxBootstrapTreeviewContextMenuConfig = {
         data: {
             'Add a new branch': (target: Tree) => {
                 console.log('Wanting to add a new branch to the tree', target.label);
@@ -37,6 +38,19 @@ export class ContextMenuComponent implements OnInit {
                 ];
             }
         }
+    };
+
+    public leafContextMenuConfig = {
+        data: {
+            'Context menu test': (target: Tree) => {
+                alert('So... You wanted to do something on ' + target.label + ', huh ?');
+            }
+        }
+    };
+
+    public treeContextMenu: NgxBootstrapTreeviewContextMenus = {
+        branchMenu: this.branchContextMenuConfig,
+        leafMenu: this.leafContextMenuConfig
     };
 
     constructor() {}

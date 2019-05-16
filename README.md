@@ -22,6 +22,7 @@
   - [Declaring a mapper](#declaring-a-mapper)
   - [Understanding the maps](#understanding-the-maps)
   - [Wrap it all together](#wrap-it-all-together)
+- [Customizing context menu](#customizing-context-menu)
 - [API Documentation](#api-documentation)
   - [NgxBootstrapTreeviewComponent](#ngxbootstraptreeviewcomponent)
   - [NgxBootstrapTreeviewMapper](#ngxbootstraptreeviewmapper)
@@ -316,6 +317,11 @@ And then we just give it to our treeview within the HTML
 >
 </ngx-bootstrap-treeview>
 ```
+
+## Customizing context menu
+
+Version 1.1 introduced a feature that allow user to have a custom context menu when right clicking the tree.
+<!-- TODO Documentation here -->
 
 ## API Documentation
 

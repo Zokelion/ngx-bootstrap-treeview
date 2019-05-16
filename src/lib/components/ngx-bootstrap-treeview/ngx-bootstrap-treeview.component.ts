@@ -1,18 +1,4 @@
-import {
-    Component,
-    OnInit,
-    Input,
-    Output,
-    EventEmitter,
-    ViewChildren,
-    QueryList,
-    HostListener,
-    ViewChild,
-    ElementRef,
-    SimpleChanges,
-    OnChanges,
-    DoCheck
-} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChildren, QueryList } from '@angular/core';
 import { Tree } from '../../models/tree.model';
 import {
     faSquare,
@@ -28,8 +14,7 @@ import { Leaf } from '../../models/leaf.model';
 import { LeafClickedEvent } from '../../models/leaf-clicked-event.model';
 import { ILoggingService } from '../../interfaces/ILoggingService.interface';
 import { NgxBootstrapTreeviewMapper } from '../../utils/ngx-bootstrap-treeview-mapper';
-import { NgxBootstrapTreeviewContextMenuData } from 'src/lib/models/ngx-bootstrap-treeview-context-menu-data.model';
-import { NgxBootstrapTreeviewContextMenuConfig } from 'src/lib/models/ngx-bootstrap-treeview-context-menu-config.model';
+import { NgxBootstrapTreeviewContextMenus } from 'src/lib/models/ngx-bootstrap-treeview-context-menus.model';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -122,8 +107,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     public emptyFolderLabel = 'This folder is empty';
 
     @Input()
-    public contextMenuConfig: NgxBootstrapTreeviewContextMenuConfig = {
-        data: {}
+    public contextMenus: NgxBootstrapTreeviewContextMenus = {
+        leafMenu: { data: {} },
+        branchMenu: { data: {} }
     };
 
     @ViewChildren(NgxBootstrapTreeviewComponent)

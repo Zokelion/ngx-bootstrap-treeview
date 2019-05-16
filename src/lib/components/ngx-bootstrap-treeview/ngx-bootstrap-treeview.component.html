@@ -83,7 +83,15 @@
         </a>
 
         <ngx-bootstrap-treeview-context-menu
-            [config]="contextMenuConfig"
+            *ngIf="isLeaf"
+            [config]="contextMenus.leafMenu"
+            [firedBy]="lastContextMenuEvent"
+            [target]="tree"
+        >
+        </ngx-bootstrap-treeview-context-menu>
+        <ngx-bootstrap-treeview-context-menu
+            *ngIf="isBranch"
+            [config]="contextMenus.branchMenu"
             [firedBy]="lastContextMenuEvent"
             [target]="tree"
         >
@@ -108,7 +116,7 @@
                     [anyChildrenSelectedIcon]="anyChildrenSelectedIcon"
                     [allChildrenSelectedIcon]="allChildrenSelectedIcon"
                     [loggingService]="loggingService"
-                    [contextMenuConfig]="contextMenuConfig"
+                    [contextMenus]="contextMenus"
                 >
                 </ngx-bootstrap-treeview>
             </ng-container>
@@ -128,6 +136,6 @@
         [anyChildrenSelectedIcon]="anyChildrenSelectedIcon"
         [allChildrenSelectedIcon]="allChildrenSelectedIcon"
         [loggingService]="loggingService"
-        [contextMenuConfig]="contextMenuConfig"
+        [contextMenus]="contextMenus"
     ></ngx-bootstrap-treeview>
 </ng-container>
