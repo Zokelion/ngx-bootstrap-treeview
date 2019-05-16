@@ -4,5 +4,8 @@ export * from './models/leaf-map.model';
 export * from './models/leaf.model';
 export * from './models/tree-map.model';
 export * from './models/tree.model';
+export * from './models/ngx-bootstrap-treeview-context-menu-data.model';
+export * from './models/ngx-bootstrap-treeview-context-menu-config.model';
+export * from './models/ngx-bootstrap-treeview-context-menus.model';
 export * from './utils/ngx-bootstrap-treeview-mapper';
 export * from './components/ngx-bootstrap-treeview/ngx-bootstrap-treeview.component';
