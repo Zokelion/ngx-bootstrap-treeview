@@ -20,7 +20,7 @@ export class ContextMenuComponent implements OnInit {
                     ...target.children,
                     {
                         label: 'Added branch',
-                        value: 12,
+                        value: Math.round(Math.random() * 100000),
                         children: []
                     }
                 ];
@@ -31,7 +31,7 @@ export class ContextMenuComponent implements OnInit {
                 target.children = [
                     ...target.children,
                     {
-                        value: 9,
+                        value: Math.round(Math.random() * 100000),
                         label: 'Added by test'
                     }
                 ];

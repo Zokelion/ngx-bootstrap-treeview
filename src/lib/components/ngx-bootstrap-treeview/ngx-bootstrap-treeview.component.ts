@@ -10,7 +10,8 @@ import {
     ViewChild,
     ElementRef,
     SimpleChanges,
-    OnChanges
+    OnChanges,
+    DoCheck
 } from '@angular/core';
 import { Tree } from '../../models/tree.model';
 import {
@@ -70,7 +71,7 @@ import { NgxBootstrapTreeviewContextMenuConfig } from 'src/lib/models/ngx-bootst
         ])
     ]
 })
-export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
+export class NgxBootstrapTreeviewComponent implements OnInit {
     @Output()
     public leafClicked: EventEmitter<LeafClickedEvent> = new EventEmitter<LeafClickedEvent>();
 
@@ -187,15 +188,13 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
         this.leavesCount = this.countLeaves(this.tree);
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        if ('tree' in changes) {
-            this.tree = changes.tree.currentValue;
-            this.leavesCount = this.countLeaves(this.tree);
+    // ngDoCheck(): void {
+    //     this.leavesCount = this.countLeaves(this.tree);
 
-            console.log('New tree', this.tree);
-            console.log('New leaves count:', this.leavesCount);
-        }
-    }
+    //     console.log('New tree', this.tree);
+    //     console.log('New leaves count:', this.leavesCount);
+    // }
+
     public itemClicked(leafClickedEvent?: LeafClickedEvent) {
         /*
             If we 're on a leaf and we receive no event,
@@ -295,6 +294,12 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
     public onContextMenu(event: MouseEvent): void {
         // The event will be stopped by context menu component
         this.lastContextMenuEvent = event;
+    }
+
+    public onElementAdded(): boolean {
+        this.leavesCount = this.countLeaves(this.tree);
+
+        return true;
     }
 
     private _selectLeaf(leaf: Leaf) {

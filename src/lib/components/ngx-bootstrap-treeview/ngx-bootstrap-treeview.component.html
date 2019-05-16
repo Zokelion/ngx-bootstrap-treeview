@@ -82,7 +82,11 @@
             </span>
         </a>
 
-        <ngx-bootstrap-treeview-context-menu [config]="contextMenuConfig" [firedBy]="lastContextMenuEvent" [target]="tree">
+        <ngx-bootstrap-treeview-context-menu
+            [config]="contextMenuConfig"
+            [firedBy]="lastContextMenuEvent"
+            [target]="tree"
+        >
         </ngx-bootstrap-treeview-context-menu>
 
         <div *ngIf="tree.children" class="children" [@showHide]="childrenState">
@@ -91,21 +95,23 @@
                     <i>{{ emptyFolderLabel }}</i>
                 </li>
             </ul>
-            <ngx-bootstrap-treeview
-                *ngFor="let branch of tree.children"
-                [tree]="branch"
-                (leafClicked)="itemClicked($event)"
-                [selectedLeafIcon]="selectedLeafIcon"
-                [unselectedLeafIcon]="unselectedLeafIcon"
-                [openedFolderIcon]="openedFolderIcon"
-                [closedFolderIcon]="closedFolderIcon"
-                [canSelectBranch]="canSelectBranch"
-                [anyChildrenSelectedIcon]="anyChildrenSelectedIcon"
-                [allChildrenSelectedIcon]="allChildrenSelectedIcon"
-                [loggingService]="loggingService"
-                [contextMenuConfig]="contextMenuConfig"
-            >
-            </ngx-bootstrap-treeview>
+            <ng-container *ngFor="let branch of tree.children">
+                <ngx-bootstrap-treeview
+                    *ngIf="onElementAdded()"
+                    [tree]="branch"
+                    (leafClicked)="itemClicked($event)"
+                    [selectedLeafIcon]="selectedLeafIcon"
+                    [unselectedLeafIcon]="unselectedLeafIcon"
+                    [openedFolderIcon]="openedFolderIcon"
+                    [closedFolderIcon]="closedFolderIcon"
+                    [canSelectBranch]="canSelectBranch"
+                    [anyChildrenSelectedIcon]="anyChildrenSelectedIcon"
+                    [allChildrenSelectedIcon]="allChildrenSelectedIcon"
+                    [loggingService]="loggingService"
+                    [contextMenuConfig]="contextMenuConfig"
+                >
+                </ngx-bootstrap-treeview>
+            </ng-container>
         </div>
     </li>
 </ul>
