@@ -12,10 +12,9 @@ import {
     Output,
     EventEmitter
 } from '@angular/core';
-import { NgxBootstrapTreeviewContextMenuData } from 'src/lib/models/ngx-bootstrap-treeview-context-menu-data.model';
-import { NgxBootstrapTreeviewContextMenuConfig } from 'src/lib/models/ngx-bootstrap-treeview-context-menu-config.model';
-import { Tree } from 'src/lib/models/tree.model';
-import { Leaf } from 'src/lib/models/leaf.model';
+import { NgxBootstrapTreeviewContextMenuConfig } from '../../models/ngx-bootstrap-treeview-context-menu-config.model';
+import { Tree } from '../../models/tree.model';
+import { Leaf } from '../../models/leaf.model';
 
 @Component({
     // tslint:disable-next-line: component-selector

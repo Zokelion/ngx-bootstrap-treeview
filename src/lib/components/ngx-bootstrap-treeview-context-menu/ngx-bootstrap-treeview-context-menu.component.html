@@ -3,7 +3,7 @@
         class="context-menu-item {{ config.itemsClass }}"
         *ngFor="let label of getLabels()"
         (click)="onItemClicked(label)"
-        [ngClass]="{ 'list-group-item list-group-item-action px-3': !itemsClass }"
+        [ngClass]="{ 'list-group-item list-group-item-action px-3': !config.itemsClass }"
     >
         {{ label }}
     </button>

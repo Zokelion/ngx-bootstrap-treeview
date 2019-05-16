@@ -14,7 +14,7 @@ import { Leaf } from '../../models/leaf.model';
 import { LeafClickedEvent } from '../../models/leaf-clicked-event.model';
 import { ILoggingService } from '../../interfaces/ILoggingService.interface';
 import { NgxBootstrapTreeviewMapper } from '../../utils/ngx-bootstrap-treeview-mapper';
-import { NgxBootstrapTreeviewContextMenus } from 'src/lib/models/ngx-bootstrap-treeview-context-menus.model';
+import { NgxBootstrapTreeviewContextMenus } from '../../models/ngx-bootstrap-treeview-context-menus.model';
 
 @Component({
     // tslint:disable-next-line:component-selector
