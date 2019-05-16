@@ -112,6 +112,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         branchMenu: { data: {} }
     };
 
+    @Input()
+    public isFirstLevel = true;
+
     @ViewChildren(NgxBootstrapTreeviewComponent)
     public children: QueryList<NgxBootstrapTreeviewComponent>;
 
