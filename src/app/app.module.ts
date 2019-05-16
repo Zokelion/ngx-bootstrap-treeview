@@ -10,6 +10,7 @@ import { UsingMapperComponent } from './using-mapper/using-mapper.component';
 import { CustomStylingComponent } from './custom-styling/custom-styling.component';
 import { MultirootTreeComponent } from './multiroot-tree/multiroot-tree.component';
 import { ContextMenuComponent } from './context-menu/context-menu.component';
+import { ProgrammaticFoldingComponent } from './programmatic-folding/programmatic-folding.component';
 
 @NgModule({
     declarations: [
@@ -18,7 +19,8 @@ import { ContextMenuComponent } from './context-menu/context-menu.component';
         UsingMapperComponent,
         CustomStylingComponent,
         MultirootTreeComponent,
-        ContextMenuComponent
+        ContextMenuComponent,
+        ProgrammaticFoldingComponent
     ],
     imports: [BrowserModule, BrowserAnimationsModule, RoutingModule, NgxBootstrapTreeviewModule],
     providers: [],

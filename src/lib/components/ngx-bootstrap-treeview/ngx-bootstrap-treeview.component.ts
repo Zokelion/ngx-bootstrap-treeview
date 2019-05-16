@@ -291,6 +291,28 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         return true;
     }
 
+    public fold(id: number | string): void {
+        if (this.isBranch && this.tree.value === id) {
+            this.isOpened = false;
+            this.childrenState = 'hidden';
+
+            this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
+                child.fold(id);
+            });
+        }
+    }
+
+    public unfold(id: number | string): void {
+        if (this.isBranch && this.tree.value === id) {
+            this.isOpened = true;
+            this.childrenState = 'visible';
+
+            this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
+                child.fold(id);
+            });
+        }
+    }
+
     private _selectLeaf(leaf: Leaf) {
         if (!this.isRoot && this.loggingService) {
             this.loggingService.log(`✔️ Feuille sélectionnée dans ${this.tree.label}:`, leaf);

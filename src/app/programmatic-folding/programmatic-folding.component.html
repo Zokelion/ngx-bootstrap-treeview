@@ -1,0 +1,32 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-4">
+            <h5>Default usage</h5>
+            <div class="tree-container">
+                <ngx-bootstrap-treeview
+                    [isOpened]="true"
+                    (leafClicked)="onLeafClicked($event)"
+                    [tree]="tree"
+                    [loggingService]="logger"
+                    #treeview
+                >
+                </ngx-bootstrap-treeview>
+            </div>
+        </div>
+        <div class="col-12 col-xl-4 col-md-3">
+            <h5>Actions demo</h5>
+            <div class="buttons-container d-flex flex-column">
+                <button class="btn btn-primary mb-2" (click)="onFoldButtonClicked(13)">Fold "C#" via TS</button>
+                <button class="btn btn-primary mb-2" (click)="onUnfoldButtonClicked(13)">Unfold "C#" via TS</button>
+                <button class="btn btn-primary mb-2" (click)="treeview.fold(14)">Fold "Java" without TS</button>
+                <button class="btn btn-primary mb-2" (click)="treeview.unfold(14)">Unfold "Java" without TS</button>
+            </div>
+        </div>
+        <div class="col-12 col-md-5 col-xl-4">
+            <h5>
+                Data sample (one Tree object)
+            </h5>
+            <pre class="data-container">{{ tree | json }}</pre>
+        </div>
+    </div>
+</div>

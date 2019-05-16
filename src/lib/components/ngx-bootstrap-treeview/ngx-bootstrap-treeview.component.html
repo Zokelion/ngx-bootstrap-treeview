@@ -87,6 +87,7 @@
             </span>
         </a>
 
+        <!-- Custom context menu -->
         <ngx-bootstrap-treeview-context-menu
             *ngIf="isLeaf; else branchMenu"
             [config]="contextMenus.leafMenu"
@@ -102,6 +103,7 @@
             >
             </ngx-bootstrap-treeview-context-menu>
         </ng-template>
+        <!-- END Custom context menu -->
 
         <div *ngIf="tree.children" class="children" [@showHide]="childrenState">
             <ul *ngIf="tree.children.length === 0">

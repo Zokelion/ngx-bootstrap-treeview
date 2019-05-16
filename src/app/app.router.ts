@@ -6,6 +6,7 @@ import { CustomStylingComponent } from './custom-styling/custom-styling.componen
 import { MultirootTreeComponent } from './multiroot-tree/multiroot-tree.component';
 import { UsingMapperComponent } from './using-mapper/using-mapper.component';
 import { ContextMenuComponent } from './context-menu/context-menu.component';
+import { ProgrammaticFoldingComponent } from './programmatic-folding/programmatic-folding.component';
 
 const routes: Routes = [
     {
@@ -15,7 +16,8 @@ const routes: Routes = [
             { path: 'custom-styling', component: CustomStylingComponent },
             { path: 'multiroot-tree', component: MultirootTreeComponent },
             { path: 'using-mapper', component: UsingMapperComponent },
-            { path: 'context-menu', component: ContextMenuComponent }
+            { path: 'context-menu', component: ContextMenuComponent },
+            { path: 'programmatic-folding', component: ProgrammaticFoldingComponent }
         ]
     },
     { path: '**', redirectTo: '/' }
