@@ -293,9 +293,11 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
     public fold(id: number | string): void {
         if (this.isBranch && this.tree.value === id) {
+            console.log('I,', this.tree.label, 'should be folded');
+
             this.isOpened = false;
             this.childrenState = 'hidden';
-
+        } else if (this.isBranch && this.children.length) {
             this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
                 child.fold(id);
             });
@@ -304,11 +306,13 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
     public unfold(id: number | string): void {
         if (this.isBranch && this.tree.value === id) {
+            console.log('I,', this.tree.label, 'should be unfolded');
+
             this.isOpened = true;
             this.childrenState = 'visible';
-
+        } else if (this.isBranch && this.children.length) {
             this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
-                child.fold(id);
+                child.unfold(id);
             });
         }
     }
