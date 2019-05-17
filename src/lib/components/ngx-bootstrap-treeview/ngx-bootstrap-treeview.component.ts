@@ -79,6 +79,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     public isOpened: boolean;
 
     @Input()
+    public isSelectMultiple = true;
+
+    @Input()
     public item: Object;
 
     @Input()
@@ -271,7 +274,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         } else {
             // this.isRoot || this.isTree
             this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
-                child.select(value);
+                child.unselect(value);
             });
         }
     }
@@ -337,6 +340,10 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         }
 
         if (!this._leafExistsIn(this.selectedLeaves, leaf)) {
+            if (this.isFirstLevel && !this.isSelectMultiple) {
+                this.selectedLeaves.forEach(selectedLeaf => this.unselect(selectedLeaf.value));
+            }
+
             this.selectedLeaves = [...this.selectedLeaves, leaf];
         }
     }
@@ -355,6 +362,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     }
 
     private _leafClickedEventReceived(leafClickedEvent: LeafClickedEvent) {
+        // Just some logging
         if (this.loggingService && this.isBranch) {
             this.loggingService.log(`➡ Event entrant dans le parent ${this.tree.label}:`, leafClickedEvent);
         } else if (this.loggingService && this.isRoot) {
@@ -364,20 +372,21 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         // When a child leaf is clicked, we check our selectedLeaves to select or unselect the clicked one
         if (!this._leafExistsIn(this.selectedLeaves, leafClickedEvent.leaf)) {
             this._selectLeaf(leafClickedEvent.leaf);
-        } else {
+        } else if (!this.isSelectMultiple) {
             this._unselectLeaf(leafClickedEvent.leaf);
         }
 
         // Now that the leaf is selected/unselected, we merge our selectedLeaves with the ones of the event
         leafClickedEvent.selectedLeaves = this.selectedLeaves;
 
+        this.leafClicked.emit(leafClickedEvent);
+
+        // Just some logging
         if (this.isBranch && this.loggingService) {
             this.loggingService.log(`⬅ Event sortant de ${this.tree.label} vers un parent:`, leafClickedEvent);
         } else if (this.loggingService && this.isRoot) {
             this.loggingService.log(`⬅ Event sortant de la racine:`, leafClickedEvent);
         }
-
-        this.leafClicked.emit(leafClickedEvent);
     }
 
     // Function used to check if a given leaf does exist in sleectedLeaves array
