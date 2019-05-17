@@ -341,7 +341,10 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
         if (!this._leafExistsIn(this.selectedLeaves, leaf)) {
             if (this.isFirstLevel && !this.isSelectMultiple) {
-                this.selectedLeaves.forEach(selectedLeaf => this.unselect(selectedLeaf.value));
+                this.selectedLeaves.forEach(selectedLeaf => {
+                    this.unselect(selectedLeaf.value);
+                    this._unselectLeaf(selectedLeaf);
+                });
             }
 
             this.selectedLeaves = [...this.selectedLeaves, leaf];
@@ -372,7 +375,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         // When a child leaf is clicked, we check our selectedLeaves to select or unselect the clicked one
         if (!this._leafExistsIn(this.selectedLeaves, leafClickedEvent.leaf)) {
             this._selectLeaf(leafClickedEvent.leaf);
-        } else if (!this.isSelectMultiple) {
+        } else if (this._leafExistsIn(this.selectedLeaves, leafClickedEvent.leaf) && this.isSelectMultiple) {
             this._unselectLeaf(leafClickedEvent.leaf);
         }
 
