@@ -1,10 +1,16 @@
 <div class="container">
     <div class="row">
         <div class="col-12 col-md-4">
-            <h5>Default usage</h5>
+            <h5 class="d-flex justify-content-between">
+                <span>
+                    Default usage
+                </span>
+                <span *ngIf="clickedItem">On {{ clickedItem.label }} </span>
+            </h5>
             <div class="tree-container">
                 <ngx-bootstrap-treeview
                     [isOpened]="true"
+                    (branchClicked)="onBranchClicked($event)"
                     (leafClicked)="onLeafClicked($event)"
                     [tree]="tree"
                     [loggingService]="logger"

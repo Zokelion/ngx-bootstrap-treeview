@@ -57,20 +57,26 @@ import { NgxBootstrapTreeviewContextMenus } from '../../models/ngx-bootstrap-tre
     ]
 })
 export class NgxBootstrapTreeviewComponent implements OnInit {
-    @Output()
-    public leafClicked: EventEmitter<LeafClickedEvent> = new EventEmitter<LeafClickedEvent>();
+    @Input()
+    public canSelectBranch: boolean;
 
     @Input()
-    public loggingService: ILoggingService;
+    public contextMenus: NgxBootstrapTreeviewContextMenus = {
+        leafMenu: { data: {} },
+        branchMenu: { data: {} }
+    };
 
     @Input()
-    public tree: Tree;
+    public emptyFolderLabel = 'This folder is empty';
 
     @Input()
-    public trees: Tree[];
+    public isAnimationDisabled = false;
 
     @Input()
-    public mapper: NgxBootstrapTreeviewMapper<Object, Object>;
+    public isFirstLevel = true;
+
+    @Input()
+    public isOpened: boolean;
 
     @Input()
     public item: Object;
@@ -79,10 +85,16 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     public items: Object[];
 
     @Input()
-    public isOpened: boolean;
+    public loggingService: ILoggingService;
 
     @Input()
-    public canSelectBranch: boolean;
+    public mapper: NgxBootstrapTreeviewMapper<Object, Object>;
+
+    @Input()
+    public tree: Tree;
+
+    @Input()
+    public trees: Tree[];
 
     // Icons inputs
     @Input()
@@ -103,23 +115,14 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     @Input()
     public allChildrenSelectedIcon: IconDefinition = faCheck;
 
-    @Input()
-    public emptyFolderLabel = 'This folder is empty';
+    @Output()
+    public branchClicked = new EventEmitter<Tree>();
 
-    @Input()
-    public contextMenus: NgxBootstrapTreeviewContextMenus = {
-        leafMenu: { data: {} },
-        branchMenu: { data: {} }
-    };
-
-    @Input()
-    public isFirstLevel = true;
+    @Output()
+    public leafClicked: EventEmitter<LeafClickedEvent> = new EventEmitter<LeafClickedEvent>();
 
     @ViewChildren(NgxBootstrapTreeviewComponent)
     public children: QueryList<NgxBootstrapTreeviewComponent>;
-
-    @Input()
-    public isAnimationDisabled = false;
 
     public childrenState: string;
 
@@ -205,6 +208,8 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
             this.isOpened = !this.isOpened;
             this.childrenState = this.isOpened ? 'visible' : 'hidden';
+
+            this.branchClicked.emit(this.tree);
         }
     }
 
@@ -281,6 +286,10 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
                 child.toggle(value);
             });
         }
+    }
+
+    public onBranchClicked(branch: Tree) {
+        this.branchClicked.emit(branch);
     }
 
     public onContextMenu(event: MouseEvent): void {

@@ -12,6 +12,7 @@ export class SimpleDataComponent implements OnInit {
     public selectedLeaves: Leaf[] = [];
     public tree: Tree = tree;
     public logger: ILoggingService = console;
+    public clickedItem: Tree | Leaf;
 
     constructor() {}
 
@@ -19,10 +20,15 @@ export class SimpleDataComponent implements OnInit {
 
     public onLeafClicked(leafClickedEvent: LeafClickedEvent) {
         this.selectedLeaves = leafClickedEvent.selectedLeaves;
+        this.clickedItem = leafClickedEvent.leaf;
 
         this.logger.log(
             `🍂🌲🍂 Eléments actuellement sélectionnés dans l'arbre "Default":`,
             leafClickedEvent.selectedLeaves
         );
+    }
+
+    public onBranchClicked(branch: Tree) {
+        this.clickedItem = branch;
     }
 }

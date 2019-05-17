@@ -120,6 +120,7 @@
                 <ngx-bootstrap-treeview
                     *ngIf="onElementAdded()"
                     [tree]="branch"
+                    (branchClicked)="onBranchClicked($event)"
                     (leafClicked)="itemClicked($event)"
                     [selectedLeafIcon]="selectedLeafIcon"
                     [unselectedLeafIcon]="unselectedLeafIcon"
@@ -144,6 +145,7 @@
     <ngx-bootstrap-treeview
         *ngFor="let tree of trees"
         [tree]="tree"
+        (branchClicked)="onBranchClicked($event)"
         (leafClicked)="itemClicked($event)"
         [selectedLeafIcon]="selectedLeafIcon"
         [unselectedLeafIcon]="unselectedLeafIcon"
