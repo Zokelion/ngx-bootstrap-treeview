@@ -22,17 +22,17 @@ import { NgxBootstrapTreeviewContextMenus } from '../../models/ngx-bootstrap-tre
     templateUrl: './ngx-bootstrap-treeview.component.html',
     styleUrls: ['./ngx-bootstrap-treeview.component.scss'],
     animations: [
-        trigger('showHide', [
-            state(
-                'visible',
-                style({
-                    display: 'block'
-                })
-            ),
+        trigger('childrenAnimationTrigger', [
             state(
                 'hidden',
                 style({
                     display: 'none'
+                })
+            ),
+            state(
+                'visible',
+                style({
+                    display: 'block'
                 })
             ),
             transition('visible => hidden', [
@@ -117,6 +117,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
     @ViewChildren(NgxBootstrapTreeviewComponent)
     public children: QueryList<NgxBootstrapTreeviewComponent>;
+
+    @Input()
+    public isAnimationDisabled = false;
 
     public childrenState: string;
 

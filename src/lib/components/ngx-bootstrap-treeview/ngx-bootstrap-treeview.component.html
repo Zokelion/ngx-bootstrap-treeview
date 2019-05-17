@@ -105,7 +105,12 @@
         </ng-template>
         <!-- END Custom context menu -->
 
-        <div *ngIf="tree.children" class="children" [@showHide]="childrenState">
+        <div
+            *ngIf="tree.children"
+            class="children"
+            [@.disabled]="isAnimationDisabled"
+            [@childrenAnimationTrigger]="childrenState"
+        >
             <ul *ngIf="tree.children.length === 0">
                 <li>
                     <i>{{ emptyFolderLabel }}</i>
