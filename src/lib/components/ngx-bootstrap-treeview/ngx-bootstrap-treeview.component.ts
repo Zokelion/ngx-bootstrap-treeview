@@ -94,6 +94,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     public mapper: NgxBootstrapTreeviewMapper<Object, Object>;
 
     @Input()
+    public preselectedItems: string[] | number[];
+
+    @Input()
     public tree: Tree;
 
     @Input()
