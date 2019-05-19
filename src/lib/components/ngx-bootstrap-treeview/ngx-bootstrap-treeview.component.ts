@@ -91,7 +91,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     public mapper: NgxBootstrapTreeviewMapper<Object, Object>;
 
     @Input()
-    public preselectedItems: string[] | number[] = [];
+    public preselectedItems: any[] = [];
 
     @Input()
     public tree: Tree;
@@ -256,7 +256,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         return leavesCount;
     }
 
-    public select(value: number | string) {
+    public select(value: any) {
         if (this.isLeaf && this.tree.value === value && !this.isOpened) {
             this._leafToggle();
         } else if (this.isRoot || this.isBranch) {
@@ -267,7 +267,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         }
     }
 
-    public unselect(value: number | string) {
+    public unselect(value: any) {
         if (this.isLeaf && this.tree.value === value && this.isOpened) {
             this._leafToggle();
         } else if (this.isRoot || this.isBranch) {
@@ -296,7 +296,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         return true;
     }
 
-    public fold(id: number | string): void {
+    public fold(id: any): void {
         if (this.isBranch && this.tree.value === id) {
             this.isOpened = false;
             this.childrenState = 'hidden';
@@ -307,7 +307,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         }
     }
 
-    public unfold(id: number | string): void {
+    public unfold(id: any): void {
         if (this.isBranch && this.tree.value === id) {
             this.isOpened = true;
             this.childrenState = 'visible';
