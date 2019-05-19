@@ -5,7 +5,7 @@
     class="mb-0"
 >
     <li>
-        <a [routerLink]="[]" (click)="itemClicked()" (contextmenu)="onContextMenu($event)">
+        <a [routerLink]="[]" (click)="onClick()" (contextmenu)="onContextMenu($event)">
             <!-- Icons if we're reprensenting a branch -->
             <span class="icon">
                 <!-- Folder closed, no children selected -->
@@ -121,7 +121,7 @@
                     *ngIf="onElementAdded()"
                     [tree]="branch"
                     (branchClicked)="onBranchClicked($event)"
-                    (leafClicked)="itemClicked($event)"
+                    (leafClicked)="onChildLeafClicked($event)"
                     [selectedLeafIcon]="selectedLeafIcon"
                     [unselectedLeafIcon]="unselectedLeafIcon"
                     [openedFolderIcon]="openedFolderIcon"
@@ -146,7 +146,7 @@
         *ngFor="let tree of trees"
         [tree]="tree"
         (branchClicked)="onBranchClicked($event)"
-        (leafClicked)="itemClicked($event)"
+        (leafClicked)="onChildLeafClicked($event)"
         [selectedLeafIcon]="selectedLeafIcon"
         [unselectedLeafIcon]="unselectedLeafIcon"
         [openedFolderIcon]="openedFolderIcon"

@@ -190,16 +190,12 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         });
     }
 
-    public itemClicked(leafClickedEvent?: LeafClickedEvent) {
-        /*
-            If we 're on a leaf and we receive no event,
-            that means our element got clicked
-        */
-        if (this.isLeaf && !leafClickedEvent) {
+    public onClick() {
+        if (this.isLeaf) {
             this.leafClickedCallback();
-        } else if ((this.isBranch || this.isRoot) && leafClickedEvent) {
-            this._leafClickedEventReceived(leafClickedEvent);
-        } else if (this.isBranch && !leafClickedEvent) {
+        }
+
+        if (this.isBranch) {
             // If leaf is not set but we have children, that means we clicked on a link to show/hide content
             // We change "childrenState" and "isOpened" accordingly
             if (this.loggingService) {
@@ -211,6 +207,32 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
             this.branchClicked.emit(this.tree);
         }
+    }
+
+    public onChildLeafClicked(leafClickedEvent: LeafClickedEvent): void {
+        if (this.loggingService && this.isBranch) {
+            this.loggingService.log(`➡ Event entrant dans le parent ${this.tree.label}:`, leafClickedEvent);
+        } else if (this.loggingService && this.isRoot) {
+            this.loggingService.log(`➡ Event entrant dans la racine:`, leafClickedEvent);
+        }
+
+        // When a child leaf is clicked, we check our selectedLeaves to select or unselect the clicked one
+        if (!this._leafExistsIn(this.selectedLeaves, leafClickedEvent.leaf)) {
+            this._selectLeaf(leafClickedEvent.leaf);
+        } else {
+            this._unselectLeaf(leafClickedEvent.leaf);
+        }
+
+        // Now that the leaf is selected/unselected, we merge our selectedLeaves with the ones of the event
+        leafClickedEvent.selectedLeaves = this.selectedLeaves;
+
+        if (this.isBranch && this.loggingService) {
+            this.loggingService.log(`⬅ Event sortant de ${this.tree.label} vers un parent:`, leafClickedEvent);
+        } else if (this.loggingService && this.isRoot) {
+            this.loggingService.log(`⬅ Event sortant de la racine:`, leafClickedEvent);
+        }
+
+        this.leafClicked.emit(leafClickedEvent);
     }
 
     public leafClickedCallback() {
@@ -352,37 +374,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         if (index !== -1) {
             this.selectedLeaves.splice(index, 1);
         }
-    }
-
-    private _leafClickedEventReceived(leafClickedEvent: LeafClickedEvent) {
-        console.log(this.tree.label, 'received a click from', leafClickedEvent.leaf.label);
-
-        // Just some logging
-        if (this.loggingService && this.isBranch) {
-            this.loggingService.log(`➡ Event entrant dans le parent ${this.tree.label}:`, leafClickedEvent);
-        } else if (this.loggingService && this.isRoot) {
-            this.loggingService.log(`➡ Event entrant dans la racine:`, leafClickedEvent);
-        }
-
-        // When a child leaf is clicked, we check our selectedLeaves to select or unselect the clicked one
-        const isEventLeafAlreadySelected = this._leafExistsIn(this.selectedLeaves, leafClickedEvent.leaf);
-        if (!isEventLeafAlreadySelected) {
-            this._selectLeaf(leafClickedEvent.leaf);
-        } else if (isEventLeafAlreadySelected) {
-            this._unselectLeaf(leafClickedEvent.leaf);
-        }
-
-        // Now that the leaf is selected/unselected, we merge our selectedLeaves with the ones of the event
-        leafClickedEvent.selectedLeaves = this.selectedLeaves;
-
-        // Just some logging
-        if (this.isBranch && this.loggingService) {
-            this.loggingService.log(`⬅ Event sortant de ${this.tree.label} vers un parent:`, leafClickedEvent);
-        } else if (this.loggingService && this.isRoot) {
-            this.loggingService.log(`⬅ Event sortant de la racine:`, leafClickedEvent);
-        }
-
-        this.leafClicked.emit(leafClickedEvent);
     }
 
     // Function used to check if a given leaf does exist in sleectedLeaves array
