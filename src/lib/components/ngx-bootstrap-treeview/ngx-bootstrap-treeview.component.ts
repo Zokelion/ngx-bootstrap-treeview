@@ -192,7 +192,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
     public onClick() {
         if (this.isLeaf) {
-            this.leafClickedCallback();
+            this.onLeafClicked();
         }
 
         if (this.isBranch) {
@@ -235,30 +235,12 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         this.leafClicked.emit(leafClickedEvent);
     }
 
-    public leafClickedCallback() {
+    public onLeafClicked() {
         if (this.loggingService) {
             this.loggingService.log('🍂 Feuille cliqué:', this.tree.label);
         }
 
-        this.isOpened = !this.isOpened;
-
-        const leaf = new Leaf(this.tree);
-        const selectedLeafIndex = this._leafIndex(this.selectedLeaves, leaf);
-
-        // If the leaf isn't already selected, we select it, otherwise we unselect it
-        if (selectedLeafIndex === -1) {
-            this._selectLeaf(leaf);
-        } else {
-            this._unselectLeaf(leaf);
-        }
-
-        const event = new LeafClickedEvent(leaf, this.selectedLeaves);
-
-        if (this.loggingService) {
-            this.loggingService.log(`⬅ Event sortant de ${this.tree.label} vers un parent:`, event);
-        }
-
-        this.leafClicked.emit(event);
+        this._leafToggle();
     }
 
     public countLeaves(tree: Tree): number {
@@ -275,10 +257,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     }
 
     public select(value: number | string) {
-        if (this.isLeaf && !this.isOpened && this.tree.value === value) {
-            // If unselectedLeaf, we act as if we got clicked
-            this.leafClickedCallback();
-        } else {
+        if (this.isLeaf && this.tree.value === value && !this.isOpened) {
+            this._leafToggle();
+        } else if (this.isRoot || this.isBranch) {
             // this.isRoot || this.isTree
             this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
                 child.select(value);
@@ -287,30 +268,20 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     }
 
     public unselect(value: number | string) {
-        if (this.isLeaf && this.isOpened && this.tree.value === value) {
-            // If selectedLeaf, we act as if we got clicked
-            this.leafClickedCallback();
-        } else {
-            // this.isRoot || this.isTree
+        if (this.isLeaf && this.tree.value === value && this.isOpened) {
+            this._leafToggle();
+        } else if (this.isRoot || this.isBranch) {
             this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
                 child.unselect(value);
             });
         }
     }
 
-    public toggle(value: number | string) {
-        if (this.isLeaf && this.tree.value === value) {
-            // We act as if we got clicked
-            this.leafClickedCallback();
-        } else {
-            // this.isRoot || this.isTree
-            this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
-                child.toggle(value);
-            });
-        }
+    public onBranchClicked(branch: Tree) {
+        this.branchClicked.emit(branch);
     }
 
-    public onBranchClicked(branch: Tree) {
+    public onChildBranchClicked(branch: Tree) {
         this.branchClicked.emit(branch);
     }
 
@@ -327,8 +298,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
     public fold(id: number | string): void {
         if (this.isBranch && this.tree.value === id) {
-            console.log('I,', this.tree.label, 'should be folded');
-
             this.isOpened = false;
             this.childrenState = 'hidden';
         } else if (this.isBranch && this.children.length) {
@@ -340,8 +309,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
     public unfold(id: number | string): void {
         if (this.isBranch && this.tree.value === id) {
-            console.log('I,', this.tree.label, 'should be unfolded');
-
             this.isOpened = true;
             this.childrenState = 'visible';
         } else if (this.isBranch && this.children.length) {
@@ -349,6 +316,23 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
                 child.unfold(id);
             });
         }
+    }
+
+    private _leafToggle(): void {
+        this.isOpened = !this.isOpened;
+
+        const leaf = new Leaf(this.tree);
+        const selectedLeafIndex = this._leafIndex(this.selectedLeaves, leaf);
+
+        if (this.isOpened) {
+            this._selectLeaf(leaf);
+        } else {
+            this._unselectLeaf(leaf);
+        }
+
+        const event = new LeafClickedEvent(leaf, this.selectedLeaves);
+
+        this.leafClicked.emit(event);
     }
 
     private _selectLeaf(leaf: Leaf) {
