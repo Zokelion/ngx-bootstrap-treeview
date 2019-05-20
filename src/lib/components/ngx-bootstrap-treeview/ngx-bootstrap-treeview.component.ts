@@ -199,8 +199,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         }
 
         if (this.isBranch) {
-            // If leaf is not set but we have children, that means we clicked on a link to show/hide content
-            // We change "childrenState" and "isOpened" accordingly
             if (this.loggingService) {
                 this.loggingService.log(`🌴 Branche cliquée: ${this.tree.label}`);
             }
@@ -262,7 +260,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         if (this.isLeaf && this.tree.value === value && !this.isOpened) {
             this._leafToggle();
         } else if (this.isRoot || this.isBranch) {
-            // this.isRoot || this.isTree
             this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
                 child.select(value);
             });
@@ -280,8 +277,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     }
 
     public onBranchClicked() {
-        this.isOpened = !this.isOpened;
-        this.childrenState = this.isOpened ? 'visible' : 'hidden';
+        this._branchToggle();
 
         this.branchClicked.emit(this.tree);
     }
@@ -301,10 +297,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         return true;
     }
 
-    public fold(id: any): void {
-        if (this.isBranch && this.tree.value === id) {
-            this.isOpened = false;
-            this.childrenState = 'hidden';
+    public fold(id: number | string): void {
+        if (this.isBranch && this.tree.value === id && this.isOpened) {
+            this._branchToggle();
         } else if (this.isBranch && this.children.length) {
             this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
                 child.fold(id);
@@ -312,10 +307,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         }
     }
 
-    public unfold(id: any): void {
-        if (this.isBranch && this.tree.value === id) {
-            this.isOpened = true;
-            this.childrenState = 'visible';
+    public unfold(id: number | string): void {
+        if (this.isBranch && this.tree.value === id && !this.isOpened) {
+            this._branchToggle();
         } else if (this.isBranch && this.children.length) {
             this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
                 child.unfold(id);
@@ -337,6 +331,11 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         const event = new LeafClickedEvent(leaf, this.selectedLeaves);
 
         this.leafClicked.emit(event);
+    }
+
+    private _branchToggle(): void {
+        this.isOpened = !this.isOpened;
+        this.childrenState = this.isOpened ? 'visible' : 'hidden';
     }
 
     private _selectLeaf(leaf: Leaf) {
