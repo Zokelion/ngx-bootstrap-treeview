@@ -67,6 +67,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     };
 
     @Input()
+    public disableSelectedElements = false;
+
+    @Input()
     public emptyFolderLabel = 'This folder is empty';
 
     @Input()
@@ -202,10 +205,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
                 this.loggingService.log(`🌴 Branche cliquée: ${this.tree.label}`);
             }
 
-            this.isOpened = !this.isOpened;
-            this.childrenState = this.isOpened ? 'visible' : 'hidden';
-
-            this.branchClicked.emit(this.tree);
+            this.onBranchClicked();
         }
     }
 
@@ -240,7 +240,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
             this.loggingService.log('🍂 Feuille cliqué:', this.tree.label);
         }
 
-        this._leafToggle();
+        if (!this.disableSelectedElements || !this.isOpened) {
+            this._leafToggle();
+        }
     }
 
     public countLeaves(tree: Tree): number {
@@ -277,8 +279,11 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         }
     }
 
-    public onBranchClicked(branch: Tree) {
-        this.branchClicked.emit(branch);
+    public onBranchClicked() {
+        this.isOpened = !this.isOpened;
+        this.childrenState = this.isOpened ? 'visible' : 'hidden';
+
+        this.branchClicked.emit(this.tree);
     }
 
     public onChildBranchClicked(branch: Tree) {
@@ -322,7 +327,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         this.isOpened = !this.isOpened;
 
         const leaf = new Leaf(this.tree);
-        const selectedLeafIndex = this._leafIndex(this.selectedLeaves, leaf);
 
         if (this.isOpened) {
             this._selectLeaf(leaf);
