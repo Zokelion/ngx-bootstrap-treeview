@@ -112,10 +112,10 @@
         <!-- END Custom context menu -->
 
         <div
-            *ngIf="tree.children"
+            *ngIf="tree.children && isOpened"
             class="children"
             [@.disabled]="isAnimationDisabled"
-            [@childrenAnimationTrigger]="childrenState"
+            [@childrenAnimationTrigger]
         >
             <ul *ngIf="tree.children.length === 0">
                 <li>

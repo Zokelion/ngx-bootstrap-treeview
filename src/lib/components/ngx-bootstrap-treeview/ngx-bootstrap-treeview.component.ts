@@ -23,28 +23,8 @@ import { NgxBootstrapTreeviewContextMenus } from '../../models/ngx-bootstrap-tre
     styleUrls: ['./ngx-bootstrap-treeview.component.scss'],
     animations: [
         trigger('childrenAnimationTrigger', [
-            state(
-                'hidden',
-                style({
-                    display: 'none'
-                })
-            ),
-            state(
-                'visible',
-                style({
-                    display: 'block'
-                })
-            ),
-            transition('visible => hidden', [
-                animate(
-                    '0.25s',
-                    keyframes([
-                        style({ transform: 'translateX(0)', offset: 0 }),
-                        style({ transform: 'translateX(-100%)', display: 'none', offset: 1 })
-                    ])
-                )
-            ]),
-            transition('hidden => visible', [
+            transition(':leave', [animate('0.25s', style({ transform: 'translateX(-100%)', display: 'none' }))]),
+            transition(':enter', [
                 animate(
                     '0.25s',
                     keyframes([
@@ -130,7 +110,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     @ViewChildren(NgxBootstrapTreeviewComponent)
     public children: QueryList<NgxBootstrapTreeviewComponent>;
 
-    public childrenState: string;
+    public 5: string;
 
     public selectedLeaves: Leaf[] = [];
 
@@ -185,7 +165,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
         this.isLeaf = !this.isBranch;
 
-        this.childrenState = this.isOpened ? 'visible' : 'hidden';
         this.leavesCount = this.countLeaves(this.tree);
 
         this.preselectedItems.forEach(value => {
@@ -335,7 +314,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
     private _branchToggle(): void {
         this.isOpened = !this.isOpened;
-        this.childrenState = this.isOpened ? 'visible' : 'hidden';
     }
 
     private _selectLeaf(leaf: Leaf) {
