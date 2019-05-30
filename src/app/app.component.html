@@ -36,79 +36,49 @@
 </nav>
 <div class="container-fluid pb-5">
     <router-outlet></router-outlet>
-    <div class="container mb-5">
-        <div class="row">
-            <h1 class="col-12 text-center">
-                Arbres
-            </h1>
+    <div class="row mt-4">
+        <div class="col-12 col-sm-6">
+            <h5>Singleroot tree built using mapper</h5>
+            <ngx-bootstrap-treeview
+                [isOpened]="true"
+                (leafClicked)="singlerootFromMapperLeafClickedEventHandler($event)"
+                [item]="item"
+                [mapper]="mapper"
+                [canSelectBranch]="false"
+                [loggingService]="loggingService"
+            >
+            </ngx-bootstrap-treeview>
         </div>
-        <hr />
-        <div class="row mt-4">
-            <div class="col-12 col-sm-6">
-                <h5>Multiroot tree</h5>
-                <ngx-bootstrap-treeview
-                    [isOpened]="true"
-                    (leafClicked)="multirootTreeLeafClickedEventHandler($event)"
-                    [trees]="trees"
-                    [canSelectBranch]="false"
-                    [loggingService]="loggingService"
-                >
-                </ngx-bootstrap-treeview>
-            </div>
-            <div class="col-12 col-sm-6">
-                <h5>Selected Leaves</h5>
-                <ul *ngIf="selectedLeaves.multiroot">
-                    <li *ngFor="let selectedLeaf of selectedLeaves.multiroot">
-                        {{ selectedLeaf.value }} - {{ selectedLeaf.label }}
-                    </li>
-                </ul>
-            </div>
+        <div class="col-12 col-sm-6">
+            <h5>Selected Leaves</h5>
+            <ul *ngIf="selectedLeaves.singleRootFromMapper">
+                <li *ngFor="let selectedLeaf of selectedLeaves.singleRootFromMapper">
+                    {{ selectedLeaf.value }} - {{ selectedLeaf.label }}
+                </li>
+            </ul>
         </div>
-        <hr />
-        <div class="row mt-4">
-            <div class="col-12 col-sm-6">
-                <h5>Singleroot tree built using mapper</h5>
-                <ngx-bootstrap-treeview
-                    [isOpened]="true"
-                    (leafClicked)="singlerootFromMapperLeafClickedEventHandler($event)"
-                    [item]="item"
-                    [mapper]="mapper"
-                    [canSelectBranch]="false"
-                    [loggingService]="loggingService"
-                >
-                </ngx-bootstrap-treeview>
-            </div>
-            <div class="col-12 col-sm-6">
-                <h5>Selected Leaves</h5>
-                <ul *ngIf="selectedLeaves.singleRootFromMapper">
-                    <li *ngFor="let selectedLeaf of selectedLeaves.singleRootFromMapper">
-                        {{ selectedLeaf.value }} - {{ selectedLeaf.label }}
-                    </li>
-                </ul>
-            </div>
+    </div>
+    <hr />
+    <div class="row mt-4">
+        <div class="col-12 col-sm-6">
+            <h5>Multiroot tree built using mapper</h5>
+            <ngx-bootstrap-treeview
+                [isOpened]="true"
+                (leafClicked)="multirootFromMapperLeafClickedEventHandler($event)"
+                [items]="items"
+                [mapper]="mapper"
+                [canSelectBranch]="false"
+                [loggingService]="loggingService"
+            >
+            </ngx-bootstrap-treeview>
         </div>
-        <hr />
-        <div class="row mt-4">
-            <div class="col-12 col-sm-6">
-                <h5>Multiroot tree built using mapper</h5>
-                <ngx-bootstrap-treeview
-                    [isOpened]="true"
-                    (leafClicked)="multirootFromMapperLeafClickedEventHandler($event)"
-                    [items]="items"
-                    [mapper]="mapper"
-                    [canSelectBranch]="false"
-                    [loggingService]="loggingService"
-                >
-                </ngx-bootstrap-treeview>
-            </div>
-            <div class="col-12 col-sm-6">
-                <h5>Selected Leaves</h5>
-                <ul *ngIf="selectedLeaves.multirootFromMapper">
-                    <li *ngFor="let selectedLeaf of selectedLeaves.multirootFromMapper">
-                        {{ selectedLeaf.value }} - {{ selectedLeaf.label }}
-                    </li>
-                </ul>
-            </div>
+        <div class="col-12 col-sm-6">
+            <h5>Selected Leaves</h5>
+            <ul *ngIf="selectedLeaves.multirootFromMapper">
+                <li *ngFor="let selectedLeaf of selectedLeaves.multirootFromMapper">
+                    {{ selectedLeaf.value }} - {{ selectedLeaf.label }}
+                </li>
+            </ul>
         </div>
     </div>
 </div>

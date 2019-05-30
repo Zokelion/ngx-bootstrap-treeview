@@ -1,43 +1,43 @@
 {
-  "$schema": "../../node_modules/ng-packagr/package.schema.json",
-  "name": "ngx-bootstrap-treeview",
-  "version": "1.4.0",
-  "description": "Ngx Bootstrap Treeview - Simple library to visualize, search and interact with tree data",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Zokelion/ngx-bootstrap-treeview"
-  },
-  "contributors": [
-    "Pierrick Couget <pierrick.couget@gmail.com>"
-  ],
-  "license": "MIT",
-  "keywords": [
-    "tree",
-    "bootstrap",
-    "fontawesome",
-    "angular",
-    "ngx",
-    "ngx-bootstrap",
-    "ngx-bootstrap-treeview",
-    "treeview",
-    "ngx bootstrap treeview",
-    "ngx bootstrap"
-  ],
-  "peerDependencies": {
-    "@angular/animations": "^6.0.0 || ^7.0.0",
-    "@angular/router": "^6.0.0 || ^7.0.0",
-    "@angular/common": "^6.0.0 || ^7.0.0",
-    "@angular/core": "^6.0.0 || ^7.0.0",
-    "@angular/platform-browser": "^6.0.0 || ^7.0.0",
-    "@fortawesome/angular-fontawesome": "^0.2.0",
-    "@fortawesome/fontawesome-svg-core": "^1.2.4",
-    "@fortawesome/free-solid-svg-icons": "^5.3.1"
-  },
-  "ngPackage": {
-    "lib": {
-      "entryFile": "public_api.ts",
-      "flatModuleFile": "ngx-bootstrap-treeview"
+    "$schema": "../../node_modules/ng-packagr/package.schema.json",
+    "name": "ngx-bootstrap-treeview",
+    "version": "1.4.1",
+    "description": "Ngx Bootstrap Treeview - Simple library to visualize, search and interact with tree data",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Zokelion/ngx-bootstrap-treeview"
     },
-    "dest": "../../dist"
-  }
+    "contributors": [
+        "Pierrick Couget <pierrick.couget@gmail.com>"
+    ],
+    "license": "MIT",
+    "keywords": [
+        "tree",
+        "bootstrap",
+        "fontawesome",
+        "angular",
+        "ngx",
+        "ngx-bootstrap",
+        "ngx-bootstrap-treeview",
+        "treeview",
+        "ngx bootstrap treeview",
+        "ngx bootstrap"
+    ],
+    "peerDependencies": {
+        "@angular/animations": "^6.0.0 || ^7.0.0",
+        "@angular/router": "^6.0.0 || ^7.0.0",
+        "@angular/common": "^6.0.0 || ^7.0.0",
+        "@angular/core": "^6.0.0 || ^7.0.0",
+        "@angular/platform-browser": "^6.0.0 || ^7.0.0",
+        "@fortawesome/angular-fontawesome": "^0.2.0",
+        "@fortawesome/fontawesome-svg-core": "^1.2.4",
+        "@fortawesome/free-solid-svg-icons": "^5.3.1"
+    },
+    "ngPackage": {
+        "lib": {
+            "entryFile": "public_api.ts",
+            "flatModuleFile": "ngx-bootstrap-treeview"
+        },
+        "dest": "../../dist"
+    }
 }
