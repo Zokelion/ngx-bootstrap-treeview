@@ -296,6 +296,22 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         }
     }
 
+    public filter(filterString: string): number {
+        let matchingElementsCount = 0;
+
+        if (this.isBranch) {
+            this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
+                matchingElementsCount += child.filter(filterString);
+            });
+        } else if (this.isLeaf) {
+            if (this.tree.label.toLowerCase() === filterString.toLowerCase()) {
+                matchingElementsCount++;
+            }
+        }
+
+        return matchingElementsCount;
+    }
+
     private _leafToggle(): void {
         this.isOpened = !this.isOpened;
 
