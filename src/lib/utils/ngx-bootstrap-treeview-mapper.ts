@@ -13,16 +13,18 @@ export class NgxBootstrapTreeviewMapper<TreeSourceType extends Object, LeafSourc
     }
 
     mapTree(item: TreeSourceType): Tree {
-        const { value, label, children, leaves } = {
+        const { value, label, children, leaves, data } = {
             value: item[this.treeMap.value],
             label: item[this.treeMap.label],
             children: item[this.treeMap.children],
-            leaves: item[this.treeMap.leavesKey]
+            leaves: item[this.treeMap.leavesKey],
+            data: item
         };
 
         const result: Tree = {
             value,
             label,
+            data,
             children: [...children.map(child => this.mapTree(child)), ...leaves.map(leaf => this.mapLeaf(leaf))]
         };
 
@@ -32,7 +34,8 @@ export class NgxBootstrapTreeviewMapper<TreeSourceType extends Object, LeafSourc
     mapLeaf(item: LeafSourceType): Leaf {
         return {
             value: item[this.leafMap.value],
-            label: item[this.leafMap.label]
+            label: item[this.leafMap.label],
+            data: item
         };
     }
 }

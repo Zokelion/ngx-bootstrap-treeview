@@ -3,4 +3,5 @@ export class Tree {
     loadChildren?: Function;
     label: string;
     value: number | string;
+    data?: any;
 }
