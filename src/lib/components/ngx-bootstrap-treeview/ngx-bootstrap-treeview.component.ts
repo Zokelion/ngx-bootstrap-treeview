@@ -10,7 +10,8 @@ import {
     Renderer2,
     AfterViewInit,
     SimpleChanges,
-    OnChanges
+    OnChanges,
+    NgZone
 } from '@angular/core';
 import { Tree } from '../../models/tree.model';
 import {
@@ -143,7 +144,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
 
     public lastContextMenuEvent: MouseEvent;
 
-    constructor(private _host: ElementRef<HTMLElement>, private _renderer: Renderer2) {}
+    constructor(private _host: ElementRef<HTMLElement>, private _renderer: Renderer2, private _zone: NgZone) {}
 
     ngOnInit() {
         // We throw an exception if we have item or items but no mapper indicating how to handle them
@@ -189,8 +190,11 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if ('filterString' in changes) {
-            this.filter(this.filterString);
+        // The this.tree || this.trees is used to avoid anerror since ngOnChanges is called before ngOnInit()
+        if ('filterString' in changes && (this.tree || this.trees)) {
+            this._zone.runOutsideAngular(() => {
+                this.filter(this.filterString);
+            });
         }
     }
     public onClick() {
@@ -330,34 +334,32 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
         this._renderer.addClass(domElement, 'd-none');
     }
 
-    public filter(filterString: string, item?: Tree): number {
-        if (!this.isRoot && !item) {
-            item = this.tree;
-        }
+    public filter(filterString: string, item?: Tree): void {
+        if (this.isRoot) {
+            console.log('Filtering on root');
+            this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
+                child.filter(this.filterString);
+            });
+        } else {
+            if (!item) {
+                item = this.tree;
+                console.log('Item set to', this.tree, this.trees, this.item, this.items);
+            }
 
-        const matchingElementsCount = this.countFilteredItems(filterString, item);
+            const matchingElementsCount = this.countFilteredItems(filterString, item);
 
-        if (!this.isRoot) {
-            console.log('Applying filter on ', item.label, 'with', matchingElementsCount, 'elements matching');
             if (matchingElementsCount === 0) {
                 this.hide();
             } else {
                 this.show();
             }
         }
-
-        return matchingElementsCount;
     }
 
-    public countFilteredItems(filterString: string, item: Tree) {
+    public countFilteredItems(filterString: string, item: Tree): number {
         let matchingElementsCount = 0;
 
-        if (this.isRoot) {
-            matchingElementsCount = this.children.reduce(
-                (acc: number, child: NgxBootstrapTreeviewComponent) => acc + child.filter(filterString),
-                0
-            );
-        } else if (item.children) {
+        if (item.children) {
             if (!filterString.length) {
                 return 1;
             }
