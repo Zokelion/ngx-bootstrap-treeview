@@ -1,7 +1,7 @@
 {
     "$schema": "../../node_modules/ng-packagr/package.schema.json",
     "name": "ngx-bootstrap-treeview",
-    "version": "1.4.1",
+    "version": "1.5.0",
     "description": "Ngx Bootstrap Treeview - Simple library to visualize, search and interact with tree data",
     "repository": {
         "type": "git",
