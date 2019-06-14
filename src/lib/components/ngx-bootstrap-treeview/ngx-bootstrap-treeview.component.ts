@@ -1,4 +1,17 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChildren, QueryList } from '@angular/core';
+import {
+    Component,
+    OnInit,
+    Input,
+    Output,
+    EventEmitter,
+    ViewChildren,
+    QueryList,
+    ElementRef,
+    Renderer2,
+    AfterViewInit,
+    SimpleChanges,
+    OnChanges
+} from '@angular/core';
 import { Tree } from '../../models/tree.model';
 import {
     faSquare,
@@ -36,7 +49,7 @@ import { NgxBootstrapTreeviewContextMenus } from '../../models/ngx-bootstrap-tre
         ])
     ]
 })
-export class NgxBootstrapTreeviewComponent implements OnInit {
+export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
     @Input()
     public canSelectBranch: boolean;
 
@@ -101,6 +114,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
     @Input()
     public allChildrenSelectedIcon: IconDefinition = faCheck;
 
+    @Input()
+    public filterString = '';
+
     @Output()
     public branchClicked = new EventEmitter<Tree>();
 
@@ -127,7 +143,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
 
     public lastContextMenuEvent: MouseEvent;
 
-    constructor() {}
+    constructor(private _host: ElementRef<HTMLElement>, private _renderer: Renderer2) {}
 
     ngOnInit() {
         // We throw an exception if we have item or items but no mapper indicating how to handle them
@@ -172,6 +188,11 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         });
     }
 
+    ngOnChanges(changes: SimpleChanges): void {
+        if ('filterString' in changes) {
+            this.filter(this.filterString);
+        }
+    }
     public onClick() {
         if (this.isLeaf) {
             this.onLeafClicked();
@@ -296,17 +317,67 @@ export class NgxBootstrapTreeviewComponent implements OnInit {
         }
     }
 
-    public filter(filterString: string): number {
+    public show() {
+        const domElement = this._host.nativeElement;
+
+        this._renderer.removeClass(domElement, 'd-none');
+    }
+
+    public hide() {
+        const domElement = this._host.nativeElement;
+
+        console.log('Hid ', this.tree.label);
+        this._renderer.addClass(domElement, 'd-none');
+    }
+
+    public filter(filterString: string, item?: Tree): number {
+        if (!this.isRoot && !item) {
+            item = this.tree;
+        }
+
+        const matchingElementsCount = this.countFilteredItems(filterString, item);
+
+        if (!this.isRoot) {
+            console.log('Applying filter on ', item.label, 'with', matchingElementsCount, 'elements matching');
+            if (matchingElementsCount === 0) {
+                this.hide();
+            } else {
+                this.show();
+            }
+        }
+
+        return matchingElementsCount;
+    }
+
+    public countFilteredItems(filterString: string, item: Tree) {
         let matchingElementsCount = 0;
 
-        if (this.isBranch) {
-            this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
-                matchingElementsCount += child.filter(filterString);
-            });
-        } else if (this.isLeaf) {
-            if (this.tree.label.toLowerCase() === filterString.toLowerCase()) {
+        if (this.isRoot) {
+            matchingElementsCount = this.children.reduce(
+                (acc: number, child: NgxBootstrapTreeviewComponent) => acc + child.filter(filterString),
+                0
+            );
+        } else if (item.children) {
+            if (!filterString.length) {
+                return 1;
+            }
+
+            matchingElementsCount = item.children.reduce(
+                (acc: number, child: Tree) => acc + this.countFilteredItems(filterString, child),
+                0
+            );
+        } else {
+            const regex = new RegExp(filterString, 'i');
+
+            if (regex.test(item.label)) {
                 matchingElementsCount++;
             }
+        }
+
+        if (this.tree) {
+            console.log(matchingElementsCount, 'matching elements in', item.label);
+        } else if (this.trees) {
+            console.log(matchingElementsCount, 'matching elements in root');
         }
 
         return matchingElementsCount;
