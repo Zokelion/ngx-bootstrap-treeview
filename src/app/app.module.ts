@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { NgxBootstrapTreeviewModule } from '../lib/ngx-bootstrap-treeview.module';
@@ -11,6 +12,7 @@ import { CustomStylingComponent } from './custom-styling/custom-styling.componen
 import { MultirootTreeComponent } from './multiroot-tree/multiroot-tree.component';
 import { ContextMenuComponent } from './context-menu/context-menu.component';
 import { ProgrammaticFoldingComponent } from './programmatic-folding/programmatic-folding.component';
+import { FilteringComponent } from './filtering/filtering.component';
 
 @NgModule({
     declarations: [
@@ -20,9 +22,10 @@ import { ProgrammaticFoldingComponent } from './programmatic-folding/programmati
         CustomStylingComponent,
         MultirootTreeComponent,
         ContextMenuComponent,
-        ProgrammaticFoldingComponent
+        ProgrammaticFoldingComponent,
+        FilteringComponent
     ],
-    imports: [BrowserModule, BrowserAnimationsModule, RoutingModule, NgxBootstrapTreeviewModule],
+    imports: [BrowserModule, BrowserAnimationsModule, RoutingModule, NgxBootstrapTreeviewModule, FormsModule],
     providers: [],
     bootstrap: [AppComponent]
 })
