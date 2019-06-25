@@ -330,20 +330,17 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
     public hide() {
         const domElement = this._host.nativeElement;
 
-        console.log('Hid ', this.tree.label);
         this._renderer.addClass(domElement, 'd-none');
     }
 
     public filter(filterString: string, item?: Tree): void {
         if (this.isRoot) {
-            console.log('Filtering on root');
             this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
                 child.filter(this.filterString);
             });
         } else {
             if (!item) {
                 item = this.tree;
-                console.log('Item set to', this.tree, this.trees, this.item, this.items);
             }
 
             const matchingElementsCount = this.countFilteredItems(filterString, item);
@@ -374,12 +371,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
             if (regex.test(item.label)) {
                 matchingElementsCount++;
             }
-        }
-
-        if (this.tree) {
-            console.log(matchingElementsCount, 'matching elements in', item.label);
-        } else if (this.trees) {
-            console.log(matchingElementsCount, 'matching elements in root');
         }
 
         return matchingElementsCount;
