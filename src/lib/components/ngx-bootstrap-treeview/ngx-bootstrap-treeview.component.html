@@ -95,20 +95,19 @@
 
         <!-- Custom context menu -->
         <ngx-bootstrap-treeview-context-menu
-            *ngIf="isLeaf; else branchMenu"
+            *ngIf="contextMenus && contextMenus.leafMenu && isLeaf"
             [config]="contextMenus.leafMenu"
             [firedBy]="lastContextMenuEvent"
             [target]="tree"
         >
         </ngx-bootstrap-treeview-context-menu>
-        <ng-template #branchMenu>
-            <ngx-bootstrap-treeview-context-menu
-                [config]="contextMenus.branchMenu"
-                [firedBy]="lastContextMenuEvent"
-                [target]="tree"
-            >
-            </ngx-bootstrap-treeview-context-menu>
-        </ng-template>
+        <ngx-bootstrap-treeview-context-menu
+            *ngIf="contextMenus && contextMenus.branchMenu && isBranch"
+            [config]="contextMenus.branchMenu"
+            [firedBy]="lastContextMenuEvent"
+            [target]="tree"
+        >
+        </ngx-bootstrap-treeview-context-menu>
         <!-- END Custom context menu -->
 
         <div
