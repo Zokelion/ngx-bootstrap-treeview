@@ -8,5 +8,6 @@ export class Leaf {
     constructor(tree: Tree) {
         this.value = tree.value;
         this.label = tree.label;
+        this.data = tree.data;
     }
 }
