@@ -345,6 +345,12 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
                 this.hide();
             } else {
                 this.show();
+
+                if (filterString !== '') {
+                    this._unfold();
+                } else {
+                    this._fold();
+                }
             }
         }
     }
