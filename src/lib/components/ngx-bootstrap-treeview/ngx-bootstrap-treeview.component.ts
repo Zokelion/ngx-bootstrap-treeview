@@ -301,23 +301,19 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
         return true;
     }
 
-    public fold(id: number | string): void {
-        if (this.isBranch && this.tree.value === id && this.isOpened) {
-            this._branchToggle();
-        } else if (this.isBranch && this.children.length) {
-            this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
-                child.fold(id);
-            });
+    public fold(id?: number | string): void {
+        if (!id) {
+            this._fold();
+        } else {
+            this._foldId(id);
         }
     }
 
-    public unfold(id: number | string): void {
-        if (this.isBranch && this.tree.value === id && !this.isOpened) {
-            this._branchToggle();
-        } else if (this.isBranch && this.children.length) {
-            this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
-                child.unfold(id);
-            });
+    public unfold(id?: number | string): void {
+        if (!id) {
+            this._unfold();
+        } else {
+            this._unfoldId(id);
         }
     }
 
@@ -374,6 +370,66 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
         }
 
         return matchingElementsCount;
+    }
+
+    public unfoldAll() {
+        // A branch will unfold itself
+        if (this.isBranch && !this.isOpened) {
+            this._branchToggle();
+        }
+
+        // If we're not a leaf, we unfold all of our children
+        if (!this.isLeaf) {
+            this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
+                child.unfoldAll();
+            });
+        }
+    }
+
+    public foldAll() {
+        // A branch will fold itself
+        if (this.isBranch && this.isOpened) {
+            this._branchToggle();
+        }
+
+        // If we're not a leaf, we unfold all of our children
+        if (!this.isLeaf) {
+            this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
+                child.foldAll();
+            });
+        }
+    }
+
+    private _unfold() {
+        if (this.isBranch && !this.isOpened) {
+            this._branchToggle();
+        }
+    }
+
+    private _fold() {
+        if (this.isBranch && this.isOpened) {
+            this._branchToggle();
+        }
+    }
+
+    private _unfoldId(id: number | string) {
+        if (this.isBranch && this.tree.value === id && !this.isOpened) {
+            this._branchToggle();
+        } else if (this.isBranch && this.children.length) {
+            this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
+                child.unfold(id);
+            });
+        }
+    }
+
+    private _foldId(id: number | string) {
+        if (this.isBranch && this.tree.value === id && this.isOpened) {
+            this._branchToggle();
+        } else if (this.isBranch && this.children.length) {
+            this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
+                child.fold(id);
+            });
+        }
     }
 
     private _leafToggle(): void {
