@@ -200,9 +200,11 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
 
         this.leavesCount = this.countLeaves(this.tree);
 
-        this.preselectedItems.forEach(value => {
-            this.select(value);
-        });
+        if (this.preselectedItems) {
+            this.preselectedItems.forEach(value => {
+                this.select(value);
+            });
+        }
     }
 
     ngOnChanges(changes: SimpleChanges): void {
