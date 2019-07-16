@@ -226,8 +226,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
 
                         this._changeDetector.detectChanges();
 
-                        console.log(this.children);
-
                         if (this.filterString) {
                             this.unfoldAll();
                         } else {
