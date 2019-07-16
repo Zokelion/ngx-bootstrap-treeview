@@ -1,13 +1,13 @@
 <!-- This part is used if we have a single tree inputed to our component -->
 <ul
     [ngClass]="{
-        branch: tree.children,
-        leaf: !tree.children,
+        branch: displayedTree.children,
+        leaf: !displayedTree.children,
         opened: isOpened,
         'pl-0': isFirstLevel,
         disabled: isLeaf && isOpened && disableSelectedElements
     }"
-    *ngIf="tree"
+    *ngIf="displayedTree"
     class="mb-0"
 >
     <li>
@@ -18,14 +18,14 @@
                 <fa-icon
                     [fixedWidth]="true"
                     [icon]="closedFolderIcon"
-                    *ngIf="tree.children && !isOpened && !selectedLeaves.length"
+                    *ngIf="displayedTree.children && !isOpened && !selectedLeaves.length"
                 ></fa-icon>
 
                 <!-- Folder closed, children selected but not all -->
                 <fa-layers
                     [fixedWidth]="true"
                     *ngIf="
-                        tree.children &&
+                        displayedTree.children &&
                         !isOpened &&
                         selectedLeaves.length > 0 &&
                         selectedLeaves.length < this.leavesCount
@@ -38,7 +38,9 @@
                 <!-- Folder closed, all children selected -->
                 <fa-layers
                     [fixedWidth]="true"
-                    *ngIf="tree.children && !isOpened && selectedLeaves.length === leavesCount && leavesCount > 0"
+                    *ngIf="
+                        displayedTree.children && !isOpened && selectedLeaves.length === leavesCount && leavesCount > 0
+                    "
                 >
                     <fa-icon [fixedWidth]="true" [icon]="closedFolderIcon"></fa-icon>
                     <fa-icon [fixedWidth]="true" [icon]="allChildrenSelectedIcon" transform="shrink-8 down-1"></fa-icon>
@@ -48,14 +50,14 @@
                 <fa-icon
                     [fixedWidth]="true"
                     [icon]="openedFolderIcon"
-                    *ngIf="tree.children && isOpened && !selectedLeaves.length"
+                    *ngIf="displayedTree.children && isOpened && !selectedLeaves.length"
                 ></fa-icon>
 
                 <!-- Folder opened, children selected but not all -->
                 <fa-layers
                     [fixedWidth]="true"
                     *ngIf="
-                        tree.children &&
+                        displayedTree.children &&
                         isOpened &&
                         selectedLeaves.length > 0 &&
                         selectedLeaves.length < this.leavesCount
@@ -72,7 +74,9 @@
                 <!-- Folder opened, all children selected -->
                 <fa-layers
                     [fixedWidth]="true"
-                    *ngIf="tree.children && isOpened && selectedLeaves.length === leavesCount && leavesCount > 0"
+                    *ngIf="
+                        displayedTree.children && isOpened && selectedLeaves.length === leavesCount && leavesCount > 0
+                    "
                 >
                     <fa-icon [fixedWidth]="true" [icon]="openedFolderIcon"></fa-icon>
                     <fa-icon
@@ -85,11 +89,19 @@
                 <!-- /branch icons -->
 
                 <!-- Icons if we're reprensenting a leaf -->
-                <fa-icon [fixedWidth]="true" [icon]="unselectedLeafIcon" *ngIf="!tree.children && !isOpened"></fa-icon>
-                <fa-icon [fixedWidth]="true" [icon]="selectedLeafIcon" *ngIf="!tree.children && isOpened"></fa-icon>
+                <fa-icon
+                    [fixedWidth]="true"
+                    [icon]="unselectedLeafIcon"
+                    *ngIf="!displayedTree.children && !isOpened"
+                ></fa-icon>
+                <fa-icon
+                    [fixedWidth]="true"
+                    [icon]="selectedLeafIcon"
+                    *ngIf="!displayedTree.children && isOpened"
+                ></fa-icon>
             </span>
             <span class="label">
-                {{ tree.label }}
+                {{ displayedTree.label }}
             </span>
         </a>
 
@@ -98,30 +110,30 @@
             *ngIf="contextMenus && contextMenus.leafMenu && isLeaf"
             [config]="contextMenus.leafMenu"
             [firedBy]="lastContextMenuEvent"
-            [target]="tree"
+            [target]="displayedTree"
         >
         </ngx-bootstrap-treeview-context-menu>
         <ngx-bootstrap-treeview-context-menu
             *ngIf="contextMenus && contextMenus.branchMenu && isBranch"
             [config]="contextMenus.branchMenu"
             [firedBy]="lastContextMenuEvent"
-            [target]="tree"
+            [target]="displayedTree"
         >
         </ngx-bootstrap-treeview-context-menu>
         <!-- END Custom context menu -->
 
         <div
-            *ngIf="tree.children && isOpened"
+            *ngIf="displayedTree.children && isOpened"
             class="children"
             [@.disabled]="isAnimationDisabled"
             [@childrenAnimationTrigger]
         >
-            <ul *ngIf="tree.children.length === 0">
+            <ul *ngIf="displayedTree.children.length === 0">
                 <li>
                     <i>{{ emptyFolderLabel }}</i>
                 </li>
             </ul>
-            <ng-container *ngFor="let branch of tree.children">
+            <ng-container *ngFor="let branch of displayedTree.children">
                 <ngx-bootstrap-treeview
                     *ngIf="onElementAdded()"
                     [tree]="branch"
@@ -138,7 +150,6 @@
                     [contextMenus]="contextMenus"
                     [isFirstLevel]="false"
                     [disableSelectedElements]="disableSelectedElements"
-                    [filterString]="filterString"
                 >
                 </ngx-bootstrap-treeview>
             </ng-container>
@@ -148,10 +159,10 @@
 <!-- END Single tree provided -->
 
 <!-- If we provided an array of trees as an input, this part will be called -->
-<ng-container *ngIf="trees && !tree">
+<ng-container *ngIf="displayedTrees">
     <ngx-bootstrap-treeview
-        *ngFor="let tree of trees"
-        [tree]="tree"
+        *ngFor="let displayedTree of displayedTrees"
+        [tree]="displayedTree"
         (branchClicked)="onChildBranchClicked($event)"
         (leafClicked)="onChildLeafClicked($event)"
         [selectedLeafIcon]="selectedLeafIcon"
@@ -165,7 +176,6 @@
         [contextMenus]="contextMenus"
         [disableSelectedElements]="disableSelectedElements"
         [isAnimationDisabled]="isAnimationDisabled"
-        [filterString]="filterString"
     ></ngx-bootstrap-treeview>
 </ng-container>
 <!-- End multiple trees provided -->

@@ -6,10 +6,11 @@
     "scripts": {
         "ng": "ng",
         "start": "ng serve",
-        "build": "ts-node ./tasks/build.ts",
+        "build": "rm -rf dist && ts-node ./tasks/build.ts",
         "test": "ng test",
         "lint": "ng lint",
-        "e2e": "ng e2e"
+        "e2e": "ng e2e",
+        "pack": "npm run build && cd dist && npm pack && cd .."
     },
     "repository": {
         "type": "git",

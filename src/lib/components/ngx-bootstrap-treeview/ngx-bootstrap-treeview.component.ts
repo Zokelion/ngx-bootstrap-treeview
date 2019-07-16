@@ -11,7 +11,8 @@ import {
     AfterViewInit,
     SimpleChanges,
     OnChanges,
-    NgZone
+    NgZone,
+    ChangeDetectorRef
 } from '@angular/core';
 import { Tree } from '../../models/tree.model';
 import {
@@ -144,7 +145,18 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
 
     public lastContextMenuEvent: MouseEvent;
 
-    constructor(private _host: ElementRef<HTMLElement>, private _renderer: Renderer2, private _zone: NgZone) {}
+    public displayedTrees: Tree[];
+
+    public displayedTree: Tree;
+
+    private _filterTrigger: any;
+
+    constructor(
+        private _host: ElementRef<HTMLElement>,
+        private _renderer: Renderer2,
+        private _zone: NgZone,
+        private _changeDetector: ChangeDetectorRef
+    ) {}
 
     ngOnInit() {
         // We throw an exception if we have item or items but no mapper indicating how to handle them
@@ -167,7 +179,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
         if (this.trees && this.trees.length > 1) {
             this.isRoot = true;
             this.isBranch = this.isLeaf = false;
-            return;
+            // return;
         } else if (this.trees) {
             // Otherwise, we have trees but with less than 2 elements, we assign it to tree
             // So ngOnInit() can keep going normaly
@@ -180,7 +192,11 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
             this.isBranch = false;
         }
 
-        this.isLeaf = !this.isBranch;
+        this._resetDisplayedData();
+
+        if (!this.isRoot) {
+            this.isLeaf = !this.isBranch;
+        }
 
         this.leavesCount = this.countLeaves(this.tree);
 
@@ -191,12 +207,37 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         // The this.tree || this.trees is used to avoid anerror since ngOnChanges is called before ngOnInit()
-        if ('filterString' in changes && (this.tree || this.trees)) {
+        if ('filterString' in changes && (this.displayedTree || this.displayedTrees)) {
             this._zone.runOutsideAngular(() => {
-                this.filter(this.filterString);
+                if (this._filterTrigger) {
+                    clearTimeout(this._filterTrigger);
+                    this._filterTrigger = null;
+                }
+
+                this._filterTrigger = setTimeout(() => {
+                    this._zone.run(() => {
+                        if (this.displayedTrees) {
+                            this.displayedTrees = this._filterTrees();
+                        } else if (this.displayedTree) {
+                            this.displayedTree = this._filterTree(this.displayedTree);
+                        }
+
+                        this._changeDetector.detectChanges();
+
+                        console.log(this.children);
+
+                        if (this.filterString) {
+                            this.unfoldAll();
+                        } else {
+                            this._resetDisplayedData();
+                            this.foldAll();
+                        }
+                    });
+                }, 250);
             });
         }
     }
+
     public onClick() {
         if (this.isLeaf) {
             this.onLeafClicked();
@@ -382,6 +423,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
         // A branch will unfold itself
         if (this.isBranch && !this.isOpened) {
             this._branchToggle();
+            this._changeDetector.detectChanges();
         }
 
         // If we're not a leaf, we unfold all of our children
@@ -499,5 +541,71 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
 
     private _leafExistsIn(leaves: Leaf[], leaf: Leaf) {
         return this._leafIndex(leaves, leaf) !== -1;
+    }
+
+    private _copyTree(tree: Tree) {
+        const isTree = !!tree.children;
+
+        const result = {
+            value: tree.value,
+            label: tree.label,
+            data: tree.data
+        };
+
+        if (isTree) {
+            const children = tree.children.map(child => this._copyTree(child));
+
+            return {
+                ...result,
+                children
+            };
+        } else {
+            return result;
+        }
+    }
+
+    private _copyTrees(trees: Tree[]): Tree[] {
+        return trees.map((tree: Tree) => this._copyTree(tree));
+    }
+
+    private _filterTrees(trees = this.trees, filterString = this.filterString): Tree[] {
+        const copies = this._copyTrees(trees);
+
+        if (filterString !== '') {
+            const displayedTrees = copies
+                .map(copy => {
+                    return this._filterTree(copy, filterString);
+                })
+                .filter(filteredCopy => !!filteredCopy);
+
+            return displayedTrees;
+        } else {
+            return copies;
+        }
+    }
+
+    // This method alters tree.children and returns true if any elements matched the filter string
+    private _filterTree(tree: Tree, filterString = this.filterString): Tree {
+        const regex = new RegExp(filterString, 'i');
+
+        if (!tree.children) {
+            // Leaf handling
+            return regex.test(tree.label) ? tree : null;
+        } else if (tree.children && tree.children.length) {
+            // Non empty branches handling
+            tree.children = tree.children.map((child: Tree) => this._filterTree(child)).filter(child => !!child);
+
+            return tree.children.length ? tree : null;
+        }
+
+        return null;
+    }
+
+    private _resetDisplayedData() {
+        if (this.tree) {
+            this.displayedTree = this._copyTree(this.tree);
+        } else if (this.trees) {
+            this.displayedTrees = this._copyTrees(this.trees);
+        }
     }
 }
