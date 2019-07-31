@@ -12,7 +12,8 @@ import {
     SimpleChanges,
     OnChanges,
     NgZone,
-    ChangeDetectorRef
+    ChangeDetectorRef,
+    ViewChild
 } from '@angular/core';
 import { Tree } from '../../models/tree.model';
 import {
@@ -58,7 +59,8 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
     @Input()
     public contextMenus: NgxBootstrapTreeviewContextMenus = {
         leafMenu: { data: {} },
-        branchMenu: { data: {} }
+        branchMenu: { data: {} },
+        rootMenu: { data: {} }
     };
 
     @Input()
@@ -126,10 +128,19 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
     public branchClicked = new EventEmitter<Tree>();
 
     @Output()
-    public leafClicked: EventEmitter<LeafClickedEvent> = new EventEmitter<LeafClickedEvent>();
+    public leafClicked = new EventEmitter<LeafClickedEvent>();
+
+    @Output()
+    public contextMenuTriggered = new EventEmitter<void>();
 
     @ViewChildren(NgxBootstrapTreeviewComponent)
     public children: QueryList<NgxBootstrapTreeviewComponent>;
+
+    @ViewChild('treeview')
+    public treeview: ElementRef<HTMLUListElement>;
+
+    @ViewChild('rootsContainer')
+    public rootsContainer: ElementRef<HTMLDivElement>;
 
     public 5: string;
 
@@ -332,10 +343,20 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
 
     public onChildBranchClicked(branch: Tree) {
         this.branchClicked.emit(branch);
+
+        if (this.rootsContainer) {
+            requestAnimationFrame(() => {
+                // We use requestAnimationFrame because we want this to be processed once rerendering is complete
+                this.rootsContainer.nativeElement.style.height = this.computeHeight() + 'px';
+            });
+        }
     }
 
     public onContextMenu(event: MouseEvent): void {
         // The event will be stopped by context menu component
+        this.lastContextMenuEvent = null;
+        this._changeDetector.detectChanges();
+
         this.lastContextMenuEvent = event;
     }
 
@@ -343,6 +364,11 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
         this.leavesCount = this.countLeaves(this.tree);
 
         return true;
+    }
+
+    public onRootContextMenu(event: MouseEvent) {
+        console.log(event);
+        this.lastContextMenuEvent = event;
     }
 
     public fold(id?: number | string): void {
@@ -449,6 +475,16 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
                 child.foldAll();
             });
         }
+    }
+
+    public computeHeight(): number {
+        if (!this.isRoot) {
+            return this.treeview.nativeElement.scrollHeight;
+        }
+
+        return this.children.reduce((prevValue: number, currentValue: NgxBootstrapTreeviewComponent) => {
+            return prevValue + currentValue.computeHeight();
+        }, 0);
     }
 
     private _unfold() {

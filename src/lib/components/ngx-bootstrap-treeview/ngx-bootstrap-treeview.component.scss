@@ -1,9 +1,12 @@
 ul {
     list-style-type: none;
     overflow: visible;
+    float: left;
+    clear: left;
 
     li {
         position: relative;
+        display: inline-block;
     }
 
     fa-icon {
@@ -27,5 +30,13 @@ ul {
                 transform: skew(-45deg, 0);
             }
         }
+    }
+}
+
+:host {
+    display: block;
+
+    & > div {
+        position: relative;
     }
 }

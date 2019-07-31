@@ -3,4 +3,5 @@ import { NgxBootstrapTreeviewContextMenuConfig } from './ngx-bootstrap-treeview-
 export interface NgxBootstrapTreeviewContextMenus {
     leafMenu?: NgxBootstrapTreeviewContextMenuConfig;
     branchMenu?: NgxBootstrapTreeviewContextMenuConfig;
+    rootMenu?: NgxBootstrapTreeviewContextMenuConfig;
 }

@@ -9,6 +9,7 @@
     }"
     *ngIf="displayedTree"
     class="mb-0"
+    #treeview
 >
     <li>
         <a [routerLink]="[]" (click)="onClick()" (contextmenu)="onContextMenu($event)">
@@ -160,7 +161,14 @@
 <!-- END Single tree provided -->
 
 <!-- If we provided an array of trees as an input, this part will be called -->
-<ng-container *ngIf="displayedTrees">
+<div *ngIf="displayedTrees" (contextmenu)="onRootContextMenu($event)" #rootsContainer>
+    <ngx-bootstrap-treeview-context-menu
+        *ngIf="contextMenus && contextMenus.rootMenu"
+        [config]="contextMenus.rootMenu"
+        [firedBy]="lastContextMenuEvent"
+        [target]="displayedTree"
+    >
+    </ngx-bootstrap-treeview-context-menu>
     <ngx-bootstrap-treeview
         *ngFor="let displayedTree of displayedTrees"
         [tree]="displayedTree"
@@ -179,5 +187,5 @@
         [isAnimationDisabled]="isAnimationDisabled"
         [emptyFolderLabel]="emptyFolderLabel"
     ></ngx-bootstrap-treeview>
-</ng-container>
+</div>
 <!-- End multiple trees provided -->

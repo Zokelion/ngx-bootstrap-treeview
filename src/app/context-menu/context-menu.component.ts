@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { tree } from '../tree-data';
+import { skillsByCategories, Category, Skill } from '../skills-by-categories';
 import { ILoggingService } from 'src/lib/interfaces/ILoggingService.interface';
 import { NgxBootstrapTreeviewContextMenuConfig } from 'src/lib/models/ngx-bootstrap-treeview-context-menu-config.model';
-import { Tree } from 'src/lib/public_api';
+import { Tree, TreeMap, LeafMap, NgxBootstrapTreeviewMapper } from 'src/lib/public_api';
 import { NgxBootstrapTreeviewContextMenus } from 'src/lib/models/ngx-bootstrap-treeview-context-menus.model';
 
 @Component({
@@ -11,7 +11,7 @@ import { NgxBootstrapTreeviewContextMenus } from 'src/lib/models/ngx-bootstrap-t
     styleUrls: ['./context-menu.component.scss']
 })
 export class ContextMenuComponent implements OnInit {
-    public tree = tree;
+    public trees = skillsByCategories;
     public logger: ILoggingService = console;
     public branchContextMenuConfig: NgxBootstrapTreeviewContextMenuConfig = {
         data: {
@@ -48,10 +48,33 @@ export class ContextMenuComponent implements OnInit {
         }
     };
 
+    public rootContextMenuConfig = {
+        data: {
+            'Add new root': (target: Tree) => {
+                console.log(target);
+            }
+        }
+    };
+
     public treeContextMenu: NgxBootstrapTreeviewContextMenus = {
         branchMenu: this.branchContextMenuConfig,
-        leafMenu: this.leafContextMenuConfig
+        leafMenu: this.leafContextMenuConfig,
+        rootMenu: this.rootContextMenuConfig
     };
+
+    public treeMap: TreeMap = {
+        children: 'children',
+        leavesKey: 'skills',
+        value: 'id',
+        label: 'name'
+    };
+
+    public leafMap: LeafMap = {
+        value: 'id',
+        label: 'label'
+    };
+
+    public mapper = new NgxBootstrapTreeviewMapper<Category, Skill>(this.treeMap, this.leafMap);
 
     constructor() {}
 

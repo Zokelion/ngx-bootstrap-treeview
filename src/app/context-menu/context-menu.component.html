@@ -5,7 +5,8 @@
             <div class="tree-container">
                 <ngx-bootstrap-treeview
                     [isOpened]="true"
-                    [tree]="tree"
+                    [items]="trees"
+                    [mapper]="mapper"
                     [canSelectBranch]="false"
                     [loggingService]="logger"
                     [contextMenus]="treeContextMenu"
@@ -25,9 +26,9 @@
         </div>
         <div class="col-12 col-md-5 col-xl-4 data-column">
             <h5>
-                Data sample (one Tree object)
+                Data sample (before mapping)
             </h5>
-            <pre class="data-container">{{ tree | json }}</pre>
+            <pre class="data-container">{{ trees | json }}</pre>
         </div>
     </div>
 </div>
