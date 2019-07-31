@@ -119,6 +119,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
     @Input()
     public filterString = '';
 
+    @Input()
+    public matchBranches = true;
+
     @Output()
     public branchClicked = new EventEmitter<Tree>();
 
@@ -592,6 +595,10 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
             // Leaf handling
             return regex.test(tree.label) ? tree : null;
         } else if (tree.children && tree.children.length) {
+            if (this.matchBranches && regex.test(tree.label)) {
+                return tree;
+            }
+
             // Non empty branches handling
             tree.children = tree.children.map((child: Tree) => this._filterTree(child)).filter(child => !!child);
 
