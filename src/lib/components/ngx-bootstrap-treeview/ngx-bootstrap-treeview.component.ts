@@ -135,9 +135,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
     @Output()
     public leafClicked = new EventEmitter<LeafClickedEvent>();
 
-    @Output()
-    public contextMenuTriggered = new EventEmitter<void>();
-
     @ViewChildren(NgxBootstrapTreeviewComponent)
     public children: QueryList<NgxBootstrapTreeviewComponent>;
 
@@ -146,8 +143,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
 
     @ViewChild('rootsContainer')
     public rootsContainer: ElementRef<HTMLDivElement>;
-
-    public 5: string;
 
     public selectedLeaves: Leaf[] = [];
 
@@ -161,8 +156,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
 
     // If we have "trees" property set and it has more than one tree, this is set to true
     public isRoot: boolean;
-
-    public lastContextMenuEvent: MouseEvent;
 
     public displayedTrees: Tree[];
 
@@ -359,13 +352,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
     }
 
     public onContextMenu(event: MouseEvent): void {
-        // The event will be stopped by context menu component
-        // this.lastContextMenuEvent = null;
-        // this._changeDetector.detectChanges();
-
-        // this.lastContextMenuEvent = event;
-
-        // this.contextMenuTriggered.emit();
         event.stopPropagation();
         event.preventDefault();
 

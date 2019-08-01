@@ -106,17 +106,6 @@
             </span>
         </a>
 
-        <!-- Custom context menu -->
-        <!-- <ngx-bootstrap-treeview-context-menu
-            *ngIf="contextMenus && contextMenus.leafMenu && isLeaf"
-            [config]="contextMenus.leafMenu"
-            [firedBy]="lastContextMenuEvent"
-            [target]="displayedTree"
-        >
-        </ngx-bootstrap-treeview-context-menu> -->
-
-        <!-- END Custom context menu -->
-
         <div
             *ngIf="displayedTree.children && isOpened"
             class="children"
@@ -166,13 +155,6 @@
 
 <!-- If we provided an array of trees as an input, this part will be called -->
 <div *ngIf="displayedTrees" (contextmenu)="onRootContextMenu($event)" #rootsContainer>
-    <!-- <ngx-bootstrap-treeview-context-menu
-        *ngIf="contextMenus && contextMenus.rootMenu"
-        [config]="contextMenus.rootMenu"
-        [firedBy]="lastContextMenuEvent"
-        [target]="displayedTree"
-    >
-    </ngx-bootstrap-treeview-context-menu> -->
     <ngx-bootstrap-treeview
         *ngFor="let displayedTree of displayedTrees"
         [tree]="displayedTree"

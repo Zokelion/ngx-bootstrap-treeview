@@ -80,25 +80,6 @@ export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChang
         if ('config' in changes) {
             this.config = { ...this._defaultConfig, ...changes.config.currentValue };
         }
-
-        // if (this.firedBy) {
-        //     this.firedBy.preventDefault();
-        //     this.firedBy.stopPropagation();
-
-        //     const nativeElement = this.container.nativeElement;
-        //     const x = this.firedBy.layerX.toString();
-        //     const y = this.firedBy.layerY.toString();
-
-        //     this._renderer.setStyle(nativeElement, 'top', y + 'px');
-        //     this._renderer.setStyle(nativeElement, 'left', x + 'px');
-
-        //     this.isVisible = true;
-        //     this.shown.emit();
-        // }
-
-        // if ('firedBy' in changes) {
-        //     this.isVisible = !!changes.firedBy.currentValue;
-        // }
     }
 
     public onDocumentClicked(event: Event) {
