@@ -57,7 +57,7 @@ export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChang
 
     private _activeMenu: NgxBootstrapTreeviewContextMenuActions = null;
 
-    private _lastContextMenuEvent: ContextMenuEvent;
+    public lastContextMenuEvent: ContextMenuEvent;
 
     constructor(private _renderer: Renderer2, private _zone: NgZone, private _contextMenuService: ContextMenuService) {}
 
@@ -83,7 +83,7 @@ export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChang
     }
 
     public onDocumentClicked(event: Event) {
-        if (this._lastContextMenuEvent) {
+        if (this.lastContextMenuEvent) {
             event.preventDefault();
             event.stopPropagation();
 
@@ -92,7 +92,7 @@ export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChang
     }
 
     public onKeyPressed(event: KeyboardEvent) {
-        if (this._lastContextMenuEvent && event.key.toLowerCase() === 'escape') {
+        if (this.lastContextMenuEvent && event.key.toLowerCase() === 'escape') {
             this.hide();
         }
     }
@@ -102,20 +102,20 @@ export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChang
     }
 
     public onItemClicked(label: string): void {
-        this._activeMenu[label](this._lastContextMenuEvent.target);
+        this._activeMenu[label](this.lastContextMenuEvent.target);
     }
 
     public hide(): void {
         this._zone.run(() => {
             this._activeMenu = null;
-            this._lastContextMenuEvent = null;
+            this.lastContextMenuEvent = null;
 
             this.hidden.emit();
         });
     }
 
     public show(contextMenuEvent: ContextMenuEvent): void {
-        this._lastContextMenuEvent = contextMenuEvent;
+        this.lastContextMenuEvent = contextMenuEvent;
 
         if (!contextMenuEvent.target) {
             this._activeMenu = this.rootContextMenu;
@@ -126,8 +126,8 @@ export class NgxBootstrapTreeviewContextMenuComponent implements OnInit, OnChang
         }
 
         const nativeElement = this.container.nativeElement;
-        const x = this._lastContextMenuEvent.event.pageX.toString();
-        const y = this._lastContextMenuEvent.event.pageY.toString();
+        const x = this.lastContextMenuEvent.event.pageX.toString();
+        const y = this.lastContextMenuEvent.event.pageY.toString();
 
         this._renderer.setStyle(nativeElement, 'top', y + 'px');
         this._renderer.setStyle(nativeElement, 'left', x + 'px');

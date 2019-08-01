@@ -7,11 +7,12 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxBootstrapTreeviewContextMenuComponent } from './components/ngx-bootstrap-treeview-context-menu/ngx-bootstrap-treeview-context-menu.component';
 import { EventManager } from '@angular/platform-browser';
 import { NgxBootstrapTreeviewEventManagerService } from './services/ngx-bootstrap-treeview-event-manager.service';
+import { ContextMenuService } from './services/context-menu.service';
 
 @NgModule({
     imports: [CommonModule, FontAwesomeModule, RouterModule.forChild([])],
     declarations: [NgxBootstrapTreeviewComponent, NgxBootstrapTreeviewContextMenuComponent],
     exports: [NgxBootstrapTreeviewComponent],
-    providers: [{ provide: EventManager, useClass: NgxBootstrapTreeviewEventManagerService }]
+    providers: [ContextMenuService, { provide: EventManager, useClass: NgxBootstrapTreeviewEventManagerService }]
 })
 export class NgxBootstrapTreeviewModule {}
