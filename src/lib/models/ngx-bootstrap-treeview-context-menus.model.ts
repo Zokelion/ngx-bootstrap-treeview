@@ -1,7 +1,7 @@
-import { NgxBootstrapTreeviewContextMenuConfig } from './ngx-bootstrap-treeview-context-menu-config.model';
+import { NgxBootstrapTreeviewContextMenuActions } from './ngx-bootstrap-treeview-context-menu-actions.model';
 
 export interface NgxBootstrapTreeviewContextMenus {
-    leafMenu?: NgxBootstrapTreeviewContextMenuConfig;
-    branchMenu?: NgxBootstrapTreeviewContextMenuConfig;
-    rootMenu?: NgxBootstrapTreeviewContextMenuConfig;
+    leafMenu?: NgxBootstrapTreeviewContextMenuActions;
+    branchMenu?: NgxBootstrapTreeviewContextMenuActions;
+    rootMenu?: NgxBootstrapTreeviewContextMenuActions;
 }

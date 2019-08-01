@@ -1,5 +1,5 @@
 import { Tree } from './tree.model';
 
-export interface NgxBootstrapTreeviewContextMenuData {
+export interface NgxBootstrapTreeviewContextMenuActions {
     [label: string]: (clickedItem: Tree) => void;
 }

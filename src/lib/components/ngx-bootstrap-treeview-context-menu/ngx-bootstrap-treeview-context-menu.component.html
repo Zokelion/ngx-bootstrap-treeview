@@ -1,4 +1,8 @@
-<div class="context-menu list-group" [ngClass]="{ 'd-none': !isVisible, 'd-block': isVisible }" #container>
+<div
+    class="context-menu list-group"
+    [ngClass]="{ 'd-none': !_lastContextMenuEvent, 'd-block': _lastContextMenuEvent }"
+    #container
+>
     <button
         class="context-menu-item {{ config.itemsClass }}"
         *ngFor="let label of getLabels()"

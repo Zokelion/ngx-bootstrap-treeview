@@ -8,7 +8,6 @@ import {
     QueryList,
     ElementRef,
     Renderer2,
-    AfterViewInit,
     SimpleChanges,
     OnChanges,
     NgZone,
@@ -31,6 +30,7 @@ import { LeafClickedEvent } from '../../models/leaf-clicked-event.model';
 import { ILoggingService } from '../../interfaces/ILoggingService.interface';
 import { NgxBootstrapTreeviewMapper } from '../../utils/ngx-bootstrap-treeview-mapper';
 import { NgxBootstrapTreeviewContextMenus } from '../../models/ngx-bootstrap-treeview-context-menus.model';
+import { ContextMenuService } from 'src/lib/services/context-menu.service';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -58,9 +58,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
 
     @Input()
     public contextMenus: NgxBootstrapTreeviewContextMenus = {
-        leafMenu: { data: {} },
-        branchMenu: { data: {} },
-        rootMenu: { data: {} }
+        leafMenu: {},
+        branchMenu: {},
+        rootMenu: {}
     };
 
     @Input()
@@ -74,6 +74,11 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
 
     @Input()
     public isFirstLevel = true;
+
+    // This one is true IF AND ONLY IF we're at the top level, be it a root or a branch.
+    // This is because a branch where isFirstLevel = true is not always our first treeview instance
+    @Input()
+    public isFirstInstance = true;
 
     @Input()
     public isOpened: boolean;
@@ -169,7 +174,8 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
         private _host: ElementRef<HTMLElement>,
         private _renderer: Renderer2,
         private _zone: NgZone,
-        private _changeDetector: ChangeDetectorRef
+        private _changeDetector: ChangeDetectorRef,
+        private _contextMenuService: ContextMenuService
     ) {}
 
     ngOnInit() {
@@ -354,10 +360,19 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
 
     public onContextMenu(event: MouseEvent): void {
         // The event will be stopped by context menu component
-        this.lastContextMenuEvent = null;
-        this._changeDetector.detectChanges();
+        // this.lastContextMenuEvent = null;
+        // this._changeDetector.detectChanges();
 
-        this.lastContextMenuEvent = event;
+        // this.lastContextMenuEvent = event;
+
+        // this.contextMenuTriggered.emit();
+        event.stopPropagation();
+        event.preventDefault();
+
+        this._contextMenuService.fire({
+            target: this.tree,
+            event: event
+        });
     }
 
     public onElementAdded(): boolean {
@@ -367,8 +382,13 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
     }
 
     public onRootContextMenu(event: MouseEvent) {
-        console.log(event);
-        this.lastContextMenuEvent = event;
+        event.stopPropagation();
+        event.preventDefault();
+
+        this._contextMenuService.fire({
+            event,
+            target: null
+        });
     }
 
     public fold(id?: number | string): void {
