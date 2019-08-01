@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NgxBootstrapTreeviewMapper, LeafMap, TreeMap, Leaf, LeafClickedEvent } from 'src/lib/public_api';
+import { NgxBootstrapTreeviewMapper, LeafMap, TreeMap, Leaf, LeafClickedEvent } from '../../lib/public_api';
 import { Category, Skill, skillsByCategories } from '../skills-by-categories';
-import { ILoggingService } from 'src/lib/interfaces/ILoggingService.interface';
+import { ILoggingService } from '../../lib/interfaces/ILoggingService.interface';
 
 @Component({
     selector: 'app-filtering',

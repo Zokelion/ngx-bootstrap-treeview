@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Tree, Leaf, LeafClickedEvent } from 'src/lib/public_api';
+import { Tree, Leaf, LeafClickedEvent } from '../../lib/public_api';
 import { tree } from '../tree-data';
-import { ILoggingService } from 'src/lib/interfaces/ILoggingService.interface';
+import { ILoggingService } from '../../lib/interfaces/ILoggingService.interface';
 
 @Component({
     selector: 'app-simple-data',

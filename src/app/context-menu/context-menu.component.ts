@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { skillsByCategories, Category, Skill } from '../skills-by-categories';
-import { ILoggingService } from 'src/lib/interfaces/ILoggingService.interface';
-import { NgxBootstrapTreeviewContextMenuConfig } from 'src/lib/models/ngx-bootstrap-treeview-context-menu-config.model';
+import { ILoggingService } from '../../lib/interfaces/ILoggingService.interface';
 import {
     Tree,
     TreeMap,
     LeafMap,
     NgxBootstrapTreeviewMapper,
     NgxBootstrapTreeviewContextMenuActions
-} from 'src/lib/public_api';
-import { NgxBootstrapTreeviewContextMenus } from 'src/lib/models/ngx-bootstrap-treeview-context-menus.model';
+} from '../../lib/public_api';
+import { NgxBootstrapTreeviewContextMenus } from '../../lib/models/ngx-bootstrap-treeview-context-menus.model';
 
 @Component({
     selector: 'app-context-menu',

@@ -4,7 +4,7 @@ import { NgxBootstrapTreeviewComponent } from './ngx-bootstrap-treeview.componen
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { APP_BASE_HREF } from '@angular/common';
-import { Tree } from 'src/lib/models/tree.model';
+import { Tree } from '../../models/tree.model';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('NgxBootstrapTreeviewComponent', () => {

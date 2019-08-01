@@ -1,7 +1,6 @@
 import {
     Component,
     OnInit,
-    HostListener,
     Input,
     ElementRef,
     Renderer2,
@@ -13,13 +12,9 @@ import {
     EventEmitter
 } from '@angular/core';
 import { NgxBootstrapTreeviewContextMenuConfig } from '../../models/ngx-bootstrap-treeview-context-menu-config.model';
-import { Tree } from '../../models/tree.model';
-import { Leaf } from '../../models/leaf.model';
-import { NgxBootstrapTreeviewContextMenus } from 'src/lib/models/ngx-bootstrap-treeview-context-menus.model';
-import { NgxBootstrapTreeviewContextMenuActions } from 'src/lib/models/ngx-bootstrap-treeview-context-menu-actions.model';
-import { ContextMenuService } from 'src/lib/services/context-menu.service';
-import { ContextMenuEvent } from 'src/lib/models/context-menu-event.model';
-import { last } from '@angular/router/src/utils/collection';
+import { NgxBootstrapTreeviewContextMenuActions } from '../../models/ngx-bootstrap-treeview-context-menu-actions.model';
+import { ContextMenuService } from '../../services/context-menu.service';
+import { ContextMenuEvent } from '../../models/context-menu-event.model';
 
 @Component({
     // tslint:disable-next-line: component-selector

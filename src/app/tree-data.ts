@@ -1,4 +1,4 @@
-import { Tree } from 'src/lib/public_api';
+import { Tree } from '../lib/public_api';
 
 export const tree: Tree = {
     label: 'Programming',

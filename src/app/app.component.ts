@@ -5,7 +5,7 @@ import { ILoggingService } from '../lib/interfaces/ILoggingService.interface';
 import { LeafClickedEvent } from '../lib/models/leaf-clicked-event.model';
 import { faFolder, faFolderOpen, faSquare, faCheckSquare, faCheck, faMinus } from '@fortawesome/pro-light-svg-icons';
 // import { categories, Branch, Cost } from './categories';
-import { NgxBootstrapTreeviewMapper } from 'src/lib/utils/ngx-bootstrap-treeview-mapper';
+import { NgxBootstrapTreeviewMapper } from '../lib/utils/ngx-bootstrap-treeview-mapper';
 import { skillsByCategories, Category, Skill } from './skills-by-categories';
 
 @Component({

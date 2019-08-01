@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { skillsByCategories, Skill, Category } from '../skills-by-categories';
-import { TreeMap, LeafMap, NgxBootstrapTreeviewMapper, Leaf, LeafClickedEvent } from 'src/lib/public_api';
-import { ILoggingService } from 'src/lib/interfaces/ILoggingService.interface';
+import { TreeMap, LeafMap, NgxBootstrapTreeviewMapper, Leaf, LeafClickedEvent } from '../../lib/public_api';
+import { ILoggingService } from '../../lib/interfaces/ILoggingService.interface';
 
 @Component({
     selector: 'app-using-mapper',

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { LeafClickedEvent, Leaf, Tree } from 'src/lib/public_api';
-import { ILoggingService } from 'src/lib/interfaces/ILoggingService.interface';
+import { LeafClickedEvent, Leaf, Tree } from '../../lib/public_api';
+import { ILoggingService } from '../../lib/interfaces/ILoggingService.interface';
 import { faCheck, faMinus, faCheckSquare, faSquare, faFolderOpen, faFolder } from '@fortawesome/pro-light-svg-icons';
 import { tree } from '../tree-data';
 

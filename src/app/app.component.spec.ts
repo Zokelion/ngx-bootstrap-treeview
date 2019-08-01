@@ -2,7 +2,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { APP_BASE_HREF } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Tree } from 'src/lib/models/tree.model';
+import { Tree } from '../lib/models/tree.model';
 import { IconDefinition } from '@fortawesome/pro-light-svg-icons';
 
 @Component({

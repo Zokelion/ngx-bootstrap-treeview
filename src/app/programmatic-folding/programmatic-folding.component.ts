@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { tree } from '../tree-data';
-import { ILoggingService } from 'src/lib/interfaces/ILoggingService.interface';
-import { Tree, Leaf, NgxBootstrapTreeviewComponent, LeafClickedEvent } from 'src/lib/public_api';
+import { ILoggingService } from '../../lib/interfaces/ILoggingService.interface';
+import { Tree, Leaf, NgxBootstrapTreeviewComponent, LeafClickedEvent } from '../../lib/public_api';
 
 @Component({
     selector: 'app-programmatic-folding',
