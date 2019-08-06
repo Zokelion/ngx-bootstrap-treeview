@@ -19,7 +19,7 @@
                 <fa-icon
                     [fixedWidth]="true"
                     [icon]="closedFolderIcon"
-                    *ngIf="displayedTree.children && !isOpened && !selectedLeaves.length"
+                    *ngIf="closedFolderIcon && displayedTree.children && !isOpened && !selectedLeaves.length"
                 ></fa-icon>
 
                 <!-- Folder closed, children selected but not all -->
@@ -32,8 +32,8 @@
                         selectedLeaves.length < this.leavesCount
                     "
                 >
-                    <fa-icon [fixedWidth]="true" [icon]="closedFolderIcon"></fa-icon>
-                    <fa-icon [fixedWidth]="true" [icon]="anyChildrenSelectedIcon" transform="shrink-6 down-1"></fa-icon>
+                    <fa-icon [fixedWidth]="true" [icon]="closedFolderIcon" *ngIf="closedFolderIcon"></fa-icon>
+                    <fa-icon [fixedWidth]="true" [icon]="anyChildrenSelectedIcon" transform="shrink-6 down-1" *ngIf="anyChildrenSelectedIcon"></fa-icon>
                 </fa-layers>
 
                 <!-- Folder closed, all children selected -->
@@ -43,15 +43,15 @@
                         displayedTree.children && !isOpened && selectedLeaves.length === leavesCount && leavesCount > 0
                     "
                 >
-                    <fa-icon [fixedWidth]="true" [icon]="closedFolderIcon"></fa-icon>
-                    <fa-icon [fixedWidth]="true" [icon]="allChildrenSelectedIcon" transform="shrink-8 down-1"></fa-icon>
+                    <fa-icon [fixedWidth]="true" [icon]="closedFolderIcon" *ngIf="closedFolderIcon"></fa-icon>
+                    <fa-icon [fixedWidth]="true" [icon]="allChildrenSelectedIcon" transform="shrink-8 down-1" *ngIf="allChildrenSelectedIcon"></fa-icon>
                 </fa-layers>
 
                 <!-- Folder opened, no children selected -->
                 <fa-icon
                     [fixedWidth]="true"
                     [icon]="openedFolderIcon"
-                    *ngIf="displayedTree.children && isOpened && !selectedLeaves.length"
+                    *ngIf="openedFolderIcon && displayedTree.children && isOpened && !selectedLeaves.length"
                 ></fa-icon>
 
                 <!-- Folder opened, children selected but not all -->
@@ -64,12 +64,13 @@
                         selectedLeaves.length < this.leavesCount
                     "
                 >
-                    <fa-icon [fixedWidth]="true" [icon]="openedFolderIcon"></fa-icon>
+                    <fa-icon [fixedWidth]="true" [icon]="openedFolderIcon" *ngIf="openedFolderIcon"></fa-icon>
                     <fa-icon
                         [fixedWidth]="true"
                         [icon]="anyChildrenSelectedIcon"
                         transform="shrink-8 down-3 right-2"
                         class="opened-folder-mask"
+                        *ngIf="anyChildrenSelectedIcon"
                     ></fa-icon>
                 </fa-layers>
                 <!-- Folder opened, all children selected -->
@@ -79,12 +80,13 @@
                         displayedTree.children && isOpened && selectedLeaves.length === leavesCount && leavesCount > 0
                     "
                 >
-                    <fa-icon [fixedWidth]="true" [icon]="openedFolderIcon"></fa-icon>
+                    <fa-icon [fixedWidth]="true" [icon]="openedFolderIcon" *ngIf="openedFolderIcon"></fa-icon>
                     <fa-icon
                         [fixedWidth]="true"
                         [icon]="allChildrenSelectedIcon"
                         transform="shrink-12 down-3 right-1"
                         class="opened-folder-mask"
+                        *ngIf="allChildrenSelectedIcon"
                     ></fa-icon>
                 </fa-layers>
                 <!-- /branch icons -->
@@ -93,12 +95,12 @@
                 <fa-icon
                     [fixedWidth]="true"
                     [icon]="unselectedLeafIcon"
-                    *ngIf="!displayedTree.children && !isOpened"
+                    *ngIf="unselectedLeafIcon && !displayedTree.children && !isOpened"
                 ></fa-icon>
                 <fa-icon
                     [fixedWidth]="true"
                     [icon]="selectedLeafIcon"
-                    *ngIf="!displayedTree.children && isOpened"
+                    *ngIf="selectedLeafIcon && !displayedTree.children && isOpened"
                 ></fa-icon>
             </span>
             <span class="label">

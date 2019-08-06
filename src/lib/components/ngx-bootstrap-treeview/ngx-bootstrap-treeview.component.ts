@@ -12,7 +12,8 @@ import {
     OnChanges,
     NgZone,
     ChangeDetectorRef,
-    ViewChild
+    ViewChild,
+    AfterViewInit
 } from '@angular/core';
 import { Tree } from '../../models/tree.model';
 import {
@@ -52,7 +53,7 @@ import { ContextMenuService } from '../../services/context-menu.service';
         ])
     ]
 })
-export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
+export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterViewInit {
     @Input()
     public canSelectBranch: boolean;
 
@@ -96,7 +97,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
     public mapper: NgxBootstrapTreeviewMapper<Object, Object>;
 
     @Input()
-    public preselectedItems: any[] = [];
+    public preselectedItems: any[];
 
     @Input()
     public tree: Tree;
@@ -212,12 +213,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
         }
 
         this.leavesCount = this.countLeaves(this.tree);
-
-        if (this.preselectedItems) {
-            this.preselectedItems.forEach(value => {
-                this.select(value);
-            });
-        }
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -251,6 +246,33 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
         }
     }
 
+    ngAfterViewInit() {
+        this.children.forEach(child => {
+            child.preselectedItems = this.preselectedItems;
+        });
+
+        this.children.changes.subscribe(children => {
+            children.forEach((child: NgxBootstrapTreeviewComponent) => {
+                if (!child.preselectedItems) {
+                    child.preselectedItems = this.preselectedItems;
+                    if (this.preselectedItems) {
+                        setTimeout(() => {
+                            this.preselectedItems.forEach(value => {
+                                child.select(value);
+                            });
+                        });
+                    }
+                }
+            });
+        });
+
+        if (this.preselectedItems) {
+            this.preselectedItems.forEach(value => {
+                this.select(value);
+            });
+        }
+    }
+
     public onClick() {
         if (this.isLeaf) {
             this.onLeafClicked();
@@ -280,7 +302,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
         }
 
         // Now that the leaf is selected/unselected, we merge our selectedLeaves with the ones of the event
-        leafClickedEvent.selectedLeaves = this.selectedLeaves;
+        leafClickedEvent.selectedLeaves = [...this.selectedLeaves];
 
         if (this.isBranch && this.loggingService) {
             this.loggingService.log(`⬅ Event sortant de ${this.tree.label} vers un parent:`, leafClickedEvent);
@@ -326,6 +348,12 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
 
     public unselect(value: any) {
         if (this.isLeaf && this.tree.value === value && this.isOpened) {
+            if (this.preselectedItems) {
+                const index = this.preselectedItems.indexOf(value);
+                if (index !== -1) {
+                    this.preselectedItems.splice(index, 1);
+                }
+            }
             this._leafToggle();
         } else if (this.isRoot || this.isBranch) {
             this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
