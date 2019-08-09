@@ -33,7 +33,12 @@
                     "
                 >
                     <fa-icon [fixedWidth]="true" [icon]="closedFolderIcon" *ngIf="closedFolderIcon"></fa-icon>
-                    <fa-icon [fixedWidth]="true" [icon]="anyChildrenSelectedIcon" transform="shrink-6 down-1" *ngIf="anyChildrenSelectedIcon"></fa-icon>
+                    <fa-icon
+                        [fixedWidth]="true"
+                        [icon]="anyChildrenSelectedIcon"
+                        transform="shrink-6 down-1"
+                        *ngIf="anyChildrenSelectedIcon"
+                    ></fa-icon>
                 </fa-layers>
 
                 <!-- Folder closed, all children selected -->
@@ -44,7 +49,12 @@
                     "
                 >
                     <fa-icon [fixedWidth]="true" [icon]="closedFolderIcon" *ngIf="closedFolderIcon"></fa-icon>
-                    <fa-icon [fixedWidth]="true" [icon]="allChildrenSelectedIcon" transform="shrink-8 down-1" *ngIf="allChildrenSelectedIcon"></fa-icon>
+                    <fa-icon
+                        [fixedWidth]="true"
+                        [icon]="allChildrenSelectedIcon"
+                        transform="shrink-8 down-1"
+                        *ngIf="allChildrenSelectedIcon"
+                    ></fa-icon>
                 </fa-layers>
 
                 <!-- Folder opened, no children selected -->
@@ -103,7 +113,7 @@
                     *ngIf="selectedLeafIcon && !displayedTree.children && isOpened"
                 ></fa-icon>
             </span>
-            <span class="label">
+            <span class="label" [ngStyle]="getStyle()" [ngClass]="getClass()">
                 {{ displayedTree.label }}
             </span>
         </a>
@@ -112,7 +122,7 @@
             *ngIf="displayedTree.children && isOpened"
             class="children"
             [@.disabled]="isAnimationDisabled"
-            [@childrenAnimationTrigger]
+            [@childrenAnimationTrigger]="!isAnimationDisabled"
         >
             <ul *ngIf="displayedTree.children.length === 0">
                 <li>
@@ -129,12 +139,16 @@
                     [unselectedLeafIcon]="unselectedLeafIcon"
                     [openedFolderIcon]="openedFolderIcon"
                     [closedFolderIcon]="closedFolderIcon"
-                    [selectOnlyBranches]="selectOnlyBranches"
+                    [disableLeafSelection]="disableLeafSelection"
                     [anyChildrenSelectedIcon]="anyChildrenSelectedIcon"
                     [allChildrenSelectedIcon]="allChildrenSelectedIcon"
                     [loggingService]="loggingService"
                     [isFirstInstance]="false"
                     [isFirstLevel]="false"
+                    [branchSelectedStyle]="branchSelectedStyle"
+                    [branchSelectedClass]="branchSelectedClass"
+                    [leafSelectedStyle]="leafSelectedStyle"
+                    [leafSelectedClass]="leafSelectedClass"
                     [disableSelectedElements]="disableSelectedElements"
                     [emptyFolderLabel]="emptyFolderLabel"
                 >
@@ -156,7 +170,7 @@
 </ngx-bootstrap-treeview-context-menu>
 
 <!-- If we provided an array of trees as an input, this part will be called -->
-<div *ngIf="displayedTrees" (contextmenu)="onRootContextMenu($event)" #rootsContainer>
+<div [style.height]="height" *ngIf="displayedTrees" (contextmenu)="onRootContextMenu($event)" #rootsContainer>
     <ngx-bootstrap-treeview
         *ngFor="let displayedTree of displayedTrees"
         [tree]="displayedTree"
@@ -166,7 +180,11 @@
         [unselectedLeafIcon]="unselectedLeafIcon"
         [openedFolderIcon]="openedFolderIcon"
         [closedFolderIcon]="closedFolderIcon"
-        [selectOnlyBranches]="selectOnlyBranches"
+        [disableLeafSelection]="disableLeafSelection"
+        [branchSelectedStyle]="branchSelectedStyle"
+        [branchSelectedClass]="branchSelectedClass"
+        [leafSelectedStyle]="leafSelectedStyle"
+        [leafSelectedClass]="leafSelectedClass"
         [anyChildrenSelectedIcon]="anyChildrenSelectedIcon"
         [allChildrenSelectedIcon]="allChildrenSelectedIcon"
         [loggingService]="loggingService"

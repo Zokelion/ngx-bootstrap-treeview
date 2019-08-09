@@ -6,29 +6,24 @@ import { Tree } from '../models/tree.model';
 })
 export class SelectedTreesService {
     private _selectedTrees: Tree[] = [];
+    public selectedTree: Tree;
 
     constructor() {}
 
-    public selectPreselectedItems(preselectedItems: string[] | number[], trees: Tree[], selectOnlyBranches: boolean) {
-        trees.forEach(tree => this._iterSelectPreselectedItems(preselectedItems, tree, selectOnlyBranches));
+    public selectPreselectedItems(preselectedItems: string[] | number[], trees: Tree[]) {
+        trees.forEach(tree => this._iterSelectPreselectedItems(preselectedItems, tree));
     }
 
-    private _iterSelectPreselectedItems(
-        preselectedItems: string[] | number[],
-        tree: Tree,
-        selectOnlyBranches: boolean
-    ) {
+    private _iterSelectPreselectedItems(preselectedItems: string[] | number[], tree: Tree) {
         if (
-            this._isSelectable(tree, selectOnlyBranches) &&
+            this._isSelectable(tree) &&
             ((typeof tree.value === 'string' && (<string[]>preselectedItems).includes(<string>tree.value)) ||
                 (typeof tree.value === 'number' && (<number[]>preselectedItems).includes(<number>tree.value)))
         ) {
             this._selectedTrees.push(tree);
         }
         if (tree.children) {
-            tree.children.forEach(child =>
-                this._iterSelectPreselectedItems(preselectedItems, child, selectOnlyBranches)
-            );
+            tree.children.forEach(child => this._iterSelectPreselectedItems(preselectedItems, child));
         }
     }
 
@@ -40,14 +35,14 @@ export class SelectedTreesService {
         return this._selectedTrees.some(t => t.value === tree.value);
     }
 
-    public addTree(tree: Tree, selectOnlyBranches: boolean) {
-        if (this._isSelectable(tree, selectOnlyBranches) && !this._selectedTrees.some(b => b.value === tree.value)) {
+    public addTree(tree: Tree) {
+        if (this._isSelectable(tree) && !this._selectedTrees.some(b => b.value === tree.value)) {
             this._selectedTrees.push(tree);
         }
     }
 
-    public removeTree(tree: Tree, selectOnlyBranches: boolean) {
-        if (this._isSelectable(tree, selectOnlyBranches)) {
+    public removeTree(tree: Tree) {
+        if (this._isSelectable(tree)) {
             const index = this._selectedTrees.findIndex(b => b.value === tree.value);
             if (index !== -1) {
                 this._selectedTrees.splice(index, 1);
@@ -55,7 +50,7 @@ export class SelectedTreesService {
         }
     }
 
-    private _isSelectable(tree: Tree, selectOnlyBranches: boolean): boolean {
-        return (selectOnlyBranches && !!tree.children) || (!selectOnlyBranches && !tree.children);
+    private _isSelectable(tree: Tree): boolean {
+        return !tree.children;
     }
 }

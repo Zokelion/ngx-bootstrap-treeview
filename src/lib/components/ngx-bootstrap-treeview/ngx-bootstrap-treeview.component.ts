@@ -1,30 +1,6 @@
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
-import {
-    AfterViewInit,
-    ChangeDetectorRef,
-    Component,
-    ElementRef,
-    EventEmitter,
-    Input,
-    NgZone,
-    OnChanges,
-    OnInit,
-    Output,
-    QueryList,
-    Renderer2,
-    SimpleChanges,
-    ViewChild,
-    ViewChildren
-} from '@angular/core';
-import {
-    faCheck,
-    faCheckSquare,
-    faFolder,
-    faFolderOpen,
-    faMinus,
-    faSquare,
-    IconDefinition
-} from '@fortawesome/free-solid-svg-icons';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, QueryList, Renderer2, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { faCheck, faCheckSquare, faFolder, faFolderOpen, faMinus, faSquare, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { SelectedTreesService } from 'src/lib/services/selected-trees.service';
 import { ILoggingService } from '../../interfaces/ILoggingService.interface';
 import { LeafClickedEvent } from '../../models/leaf-clicked-event.model';
@@ -54,9 +30,20 @@ import { NgxBootstrapTreeviewMapper } from '../../utils/ngx-bootstrap-treeview-m
         ])
     ]
 })
-export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
+export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterViewInit {
     @Input()
-    public selectOnlyBranches: boolean;
+    public disableLeafSelection: boolean;
+
+    @Input()
+    public branchSelectedStyle: any;
+
+    @Input() public branchSelectedClass: any;
+
+    @Input() public leafSelectedStyle: any;
+
+    @Input() public leafSelectedClass: any;
+
+    @Input() public height: string;
 
     @Input()
     public contextMenus: NgxBootstrapTreeviewContextMenus = {
@@ -216,17 +203,9 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
 
         // Handle pre selected itemps
         if (this.trees && this.preselectedItems) {
-            this._selectedTreesService.selectPreselectedItems(
-                this.preselectedItems,
-                this.trees,
-                this.selectOnlyBranches
-            );
+            this._selectedTreesService.selectPreselectedItems(this.preselectedItems, this.trees);
         } else if (this.tree && this.preselectedItems) {
-            this._selectedTreesService.selectPreselectedItems(
-                this.preselectedItems,
-                [this.tree],
-                this.selectOnlyBranches
-            );
+            this._selectedTreesService.selectPreselectedItems(this.preselectedItems, [this.tree]);
         }
 
         // Select already selected leaves
@@ -234,7 +213,10 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
             .getSelectedTrees()
             .filter(
                 tree =>
-                    !tree.children && this.tree.children && this.tree.children.some(child => child.value === tree.value)
+                    !tree.children &&
+                    this.tree &&
+                    this.tree.children &&
+                    this.tree.children.some(child => child.value === tree.value)
             )
             .forEach(tree => {
                 const leaf = new Leaf(tree);
@@ -286,8 +268,12 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
         }
     }
 
+    ngAfterViewInit() {
+        this._updateRootsContainerHeight();
+    }
+
     public onClick() {
-        if (this.isLeaf) {
+        if (this.isLeaf && !this.disableLeafSelection) {
             this.onLeafClicked();
         }
 
@@ -380,8 +366,11 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
 
     public onChildBranchClicked(branch: Tree) {
         this.branchClicked.emit(branch);
+        this._updateRootsContainerHeight();
+    }
 
-        if (this.rootsContainer) {
+    private _updateRootsContainerHeight() {
+        if (this.rootsContainer && !this.height) {
             requestAnimationFrame(() => {
                 // We use requestAnimationFrame because we want this to be processed once rerendering is complete
                 this.rootsContainer.nativeElement.style.height = this.computeHeight() + 'px';
@@ -570,10 +559,10 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
 
         if (this.isOpened) {
             this._selectLeaf(leaf);
-            this._selectedTreesService.addTree(this.tree, this.selectOnlyBranches);
+            this._selectedTreesService.addTree(this.tree);
         } else {
             this._unselectLeaf(leaf);
-            this._selectedTreesService.removeTree(this.tree, this.selectOnlyBranches);
+            this._selectedTreesService.removeTree(this.tree);
         }
 
         const event = new LeafClickedEvent(leaf, this.selectedLeaves);
@@ -583,11 +572,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
 
     private _branchToggle(): void {
         this.isOpened = !this.isOpened;
-        if (this.isOpened) {
-            this._selectedTreesService.addTree(this.tree, this.selectOnlyBranches);
-        } else {
-            this._selectedTreesService.removeTree(this.tree, this.selectOnlyBranches);
-        }
+        this._selectedTreesService.selectedTree = this.tree;
     }
 
     private _selectLeaf(leaf: Leaf) {
@@ -700,6 +685,22 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
             this.displayedTree = this._copyTree(this.tree);
         } else if (this.trees) {
             this.displayedTrees = this._copyTrees(this.trees);
+        }
+    }
+
+    public getStyle(): any {
+        return this._getEitherIfBranchOrLeafSelected(this.branchSelectedStyle, this.leafSelectedStyle);
+    }
+
+    public getClass(): any {
+        return this._getEitherIfBranchOrLeafSelected(this.branchSelectedClass, this.leafSelectedClass);
+    }
+
+    private _getEitherIfBranchOrLeafSelected(brancheSelectedAny: any, leafSelectedAny: any): any {
+        if (this._selectedTreesService.selectedTree === this.tree && this.tree.children) {
+            return brancheSelectedAny;
+        } else if (this.isOpened && !this.tree.children) {
+            return leafSelectedAny;
         }
     }
 }
