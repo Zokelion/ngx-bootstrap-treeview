@@ -92,7 +92,7 @@ For further documentation refer to the [API Documentation](#api-documentation) p
     [isOpened]="true"
     (leafClicked)="lightStyleLeafClickedEventHandler($event)"
     [tree]="tree"
-    [canSelectBranch]="false"
+    [selectOnlyBranches]="false"
     [selectedLeafIcon]="faCheckSquare"
     [unselectedLeafIcon]="faSquare"
     [openedFolderIcon]="faFolderOpen"
@@ -243,7 +243,7 @@ And then, back to some HTML:
 <ngx-bootstrap-treeview
     [isOpened]="true"
     [trees]="trees"
-    [canSelectBranch]="false"
+    [selectOnlyBranches]="false"
     [selectedLeafIcon]="faCheckSquare"
     [unselectedLeafIcon]="faSquare"
     [openedFolderIcon]="faFolderOpen"
@@ -340,7 +340,7 @@ Here is a list of all the @Input():
 |          items          |             Object[]             |      `undefined`       | List of objects you want to display in the treeview. The tree will use the mapper and iterate over this to build the view.                |
 |        isOpened         |             boolean              |        `false`         | If true, first level tree(s) is/are opened by default                                                                                     |
 |   isAnimationDisabled   |             boolean              |        `false`         | Allows the user to disable any animation on branches folding/unfolding                                                                    |
-|     canSelectBranch     |             boolean              |        `false`         | Not implemented yet, will come with custom right click implementation                                                                     |
+|   selectOnlyBranches    |             boolean              |        `false`         | Only branches can be selected                                                                                                             |
 |    openedFolderIcon     |          IconDefinition          |     `faFolderOpen`     | Icon used to represent an opened branch                                                                                                   |
 |    closedFolderIcon     |          IconDefinition          |       `faFolder`       | Icon used to represent a closed branch                                                                                                    |
 |   unselectedLeafIcon    |          IconDefinition          |       `faSquare`       | Icon used on not selected leaves                                                                                                          |

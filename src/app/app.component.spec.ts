@@ -1,9 +1,9 @@
-import { TestBed, async } from '@angular/core/testing';
-import { AppComponent } from './app.component';
 import { APP_BASE_HREF } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Tree } from '../lib/models/tree.model';
+import { async, TestBed } from '@angular/core/testing';
 import { IconDefinition } from '@fortawesome/pro-light-svg-icons';
+import { Tree } from '../lib/models/tree.model';
+import { AppComponent } from './app.component';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -35,9 +35,6 @@ class NgxBootstrapTreeviewComponentStub {
 
     @Input()
     public unselectedLeafIcon: IconDefinition;
-
-    @Input()
-    public canSelectBranch: IconDefinition;
 }
 
 describe('AppComponent', () => {

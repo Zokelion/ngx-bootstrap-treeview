@@ -1,37 +1,38 @@
+import { animate, keyframes, style, transition, trigger } from '@angular/animations';
 import {
+    AfterViewInit,
+    ChangeDetectorRef,
     Component,
-    OnInit,
-    Input,
-    Output,
-    EventEmitter,
-    ViewChildren,
-    QueryList,
     ElementRef,
+    EventEmitter,
+    Input,
+    NgZone,
+    OnChanges,
+    OnInit,
+    Output,
+    QueryList,
     Renderer2,
     SimpleChanges,
-    OnChanges,
-    NgZone,
-    ChangeDetectorRef,
     ViewChild,
-    AfterViewInit
+    ViewChildren
 } from '@angular/core';
-import { Tree } from '../../models/tree.model';
 import {
-    faSquare,
+    faCheck,
     faCheckSquare,
     faFolder,
     faFolderOpen,
     faMinus,
-    faCheck,
+    faSquare,
     IconDefinition
 } from '@fortawesome/free-solid-svg-icons';
-import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
-import { Leaf } from '../../models/leaf.model';
-import { LeafClickedEvent } from '../../models/leaf-clicked-event.model';
+import { SelectedTreesService } from 'src/lib/services/selected-trees.service';
 import { ILoggingService } from '../../interfaces/ILoggingService.interface';
-import { NgxBootstrapTreeviewMapper } from '../../utils/ngx-bootstrap-treeview-mapper';
+import { LeafClickedEvent } from '../../models/leaf-clicked-event.model';
+import { Leaf } from '../../models/leaf.model';
 import { NgxBootstrapTreeviewContextMenus } from '../../models/ngx-bootstrap-treeview-context-menus.model';
+import { Tree } from '../../models/tree.model';
 import { ContextMenuService } from '../../services/context-menu.service';
+import { NgxBootstrapTreeviewMapper } from '../../utils/ngx-bootstrap-treeview-mapper';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -53,9 +54,9 @@ import { ContextMenuService } from '../../services/context-menu.service';
         ])
     ]
 })
-export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterViewInit {
+export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
     @Input()
-    public canSelectBranch: boolean;
+    public selectOnlyBranches: boolean;
 
     @Input()
     public contextMenus: NgxBootstrapTreeviewContextMenus = {
@@ -97,7 +98,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterVi
     public mapper: NgxBootstrapTreeviewMapper<Object, Object>;
 
     @Input()
-    public preselectedItems: any[];
+    public preselectedItems: string[] | number[];
 
     @Input()
     public tree: Tree;
@@ -169,7 +170,8 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterVi
         private _renderer: Renderer2,
         private _zone: NgZone,
         private _changeDetector: ChangeDetectorRef,
-        private _contextMenuService: ContextMenuService
+        private _contextMenuService: ContextMenuService,
+        private _selectedTreesService: SelectedTreesService
     ) {}
 
     ngOnInit() {
@@ -212,6 +214,44 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterVi
             this.isLeaf = !this.isBranch;
         }
 
+        // Handle pre selected itemps
+        if (this.trees && this.preselectedItems) {
+            this._selectedTreesService.selectPreselectedItems(
+                this.preselectedItems,
+                this.trees,
+                this.selectOnlyBranches
+            );
+        } else if (this.tree && this.preselectedItems) {
+            this._selectedTreesService.selectPreselectedItems(
+                this.preselectedItems,
+                [this.tree],
+                this.selectOnlyBranches
+            );
+        }
+
+        // Select already selected leaves
+        this._selectedTreesService
+            .getSelectedTrees()
+            .filter(
+                tree =>
+                    !tree.children && this.tree.children && this.tree.children.some(child => child.value === tree.value)
+            )
+            .forEach(tree => {
+                const leaf = new Leaf(tree);
+                this._selectLeaf(leaf);
+                const event = new LeafClickedEvent(leaf, this.selectedLeaves);
+                this.leafClicked.emit(event);
+            });
+
+        // Select this tree
+        if (this._selectedTreesService.isSelected(this.tree)) {
+            if (this.isBranch) {
+                this._branchToggle();
+            } else {
+                this._leafToggle();
+            }
+        }
+
         this.leavesCount = this.countLeaves(this.tree);
     }
 
@@ -246,33 +286,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
-    ngAfterViewInit() {
-        this.children.forEach(child => {
-            child.preselectedItems = this.preselectedItems;
-        });
-
-        this.children.changes.subscribe(children => {
-            children.forEach((child: NgxBootstrapTreeviewComponent) => {
-                if (!child.preselectedItems) {
-                    child.preselectedItems = this.preselectedItems;
-                    if (this.preselectedItems) {
-                        setTimeout(() => {
-                            this.preselectedItems.forEach(value => {
-                                child.select(value);
-                            });
-                        });
-                    }
-                }
-            });
-        });
-
-        if (this.preselectedItems) {
-            this.preselectedItems.forEach(value => {
-                this.select(value);
-            });
-        }
-    }
-
     public onClick() {
         if (this.isLeaf) {
             this.onLeafClicked();
@@ -295,9 +308,12 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterVi
         }
 
         // When a child leaf is clicked, we check our selectedLeaves to select or unselect the clicked one
-        if (!this._leafExistsIn(this.selectedLeaves, leafClickedEvent.leaf)) {
+        if (
+            !this._leafExistsIn(this.selectedLeaves, leafClickedEvent.leaf) &&
+            this._leafExistsIn(leafClickedEvent.selectedLeaves, leafClickedEvent.leaf)
+        ) {
             this._selectLeaf(leafClickedEvent.leaf);
-        } else {
+        } else if (!this._leafExistsIn(leafClickedEvent.selectedLeaves, leafClickedEvent.leaf)) {
             this._unselectLeaf(leafClickedEvent.leaf);
         }
 
@@ -348,12 +364,6 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterVi
 
     public unselect(value: any) {
         if (this.isLeaf && this.tree.value === value && this.isOpened) {
-            if (this.preselectedItems) {
-                const index = this.preselectedItems.indexOf(value);
-                if (index !== -1) {
-                    this.preselectedItems.splice(index, 1);
-                }
-            }
             this._leafToggle();
         } else if (this.isRoot || this.isBranch) {
             this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
@@ -560,8 +570,10 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterVi
 
         if (this.isOpened) {
             this._selectLeaf(leaf);
+            this._selectedTreesService.addTree(this.tree, this.selectOnlyBranches);
         } else {
             this._unselectLeaf(leaf);
+            this._selectedTreesService.removeTree(this.tree, this.selectOnlyBranches);
         }
 
         const event = new LeafClickedEvent(leaf, this.selectedLeaves);
@@ -571,6 +583,11 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterVi
 
     private _branchToggle(): void {
         this.isOpened = !this.isOpened;
+        if (this.isOpened) {
+            this._selectedTreesService.addTree(this.tree, this.selectOnlyBranches);
+        } else {
+            this._selectedTreesService.removeTree(this.tree, this.selectOnlyBranches);
+        }
     }
 
     private _selectLeaf(leaf: Leaf) {
