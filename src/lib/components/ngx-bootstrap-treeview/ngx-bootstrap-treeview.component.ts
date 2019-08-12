@@ -505,7 +505,23 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterVi
         return matchingElementsCount;
     }
 
-    public unfoldAll() {
+    public unfoldAll(id?: number | string) {
+        if (!id) {
+            this._unfoldAll();
+        } else {
+            this._unfoldAllId(id);
+        }
+    }
+
+    public foldAll(id?: number | string) {
+        if (!id) {
+            this._foldAll();
+        } else {
+            this._foldAllId(id);
+        }
+    }
+
+    private _unfoldAll() {
         // A branch will unfold itself
         if (this.isBranch && !this.isOpened) {
             this._branchToggle();
@@ -520,7 +536,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
-    public foldAll() {
+    private _foldAll() {
         // A branch will fold itself
         if (this.isBranch && this.isOpened) {
             this._branchToggle();
@@ -530,6 +546,26 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterVi
         if (!this.isLeaf) {
             this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
                 child.foldAll();
+            });
+        }
+    }
+
+    private _unfoldAllId(id: number | string) {
+        if (this.isBranch && this.tree.value === id) {
+            this.unfoldAll();
+        } else if ((this.isBranch || this.isRoot) && this.children.length) {
+            this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
+                child.unfoldAll(id);
+            });
+        }
+    }
+
+    private _foldAllId(id: number | string) {
+        if (this.isBranch && this.tree.value === id) {
+            this.foldAll();
+        } else if ((this.isBranch || this.isRoot) && this.children.length) {
+            this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
+                child.foldAll(id);
             });
         }
     }
@@ -765,16 +801,21 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterVi
      * @param sort sort by alphabetical order after insertion if true
      */
     public addTree(parentId: number | string, tree: Tree, sort: boolean) {
-        const toAdd = [
-            this.getTreeById(this._getTrees(this.trees, this.tree), parentId, 'branch'),
-            this.getTreeById(this._getTrees(this.displayedTrees, this.displayedTree), parentId, 'branch')
-        ];
+        let toAdd: any[];
+        if (!parentId) {
+            toAdd = [{ children: this.trees }, { children: this.displayedTrees }];
+        } else {
+            toAdd = [
+                this.getTreeById(this._getTrees(this.trees, this.tree), parentId, 'branch'),
+                this.getTreeById(this._getTrees(this.displayedTrees, this.displayedTree), parentId, 'branch')
+            ];
+        }
         toAdd
             .filter(e => !!e)
-            .forEach(parent => {
+            .forEach((parent: Tree) => {
                 if (parent.children.every(child => child.value !== tree.value)) {
                     parent.children.push(this._copyTree(tree));
-                    if (sort && !this.isRoot) {
+                    if (sort) {
                         parent.children.sort((childA, childB) => {
                             if (childA.children && !childB.children) {
                                 return -1;

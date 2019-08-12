@@ -32,6 +32,9 @@ export class SelectedTreesService {
     }
 
     public isSelected(tree: Tree) {
+        if (!tree) {
+            return false;
+        }
         return this._selectedTrees.some(t => t.value === tree.value);
     }
 
