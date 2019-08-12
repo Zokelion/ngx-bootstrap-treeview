@@ -712,6 +712,10 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
+    /*********************
+     *   Custom styles   *
+     *********************/
+
     public getStyle(): any {
         return this._getEitherIfBranchOrLeafSelected(this.branchSelectedStyle, this.leafSelectedStyle);
     }
@@ -728,16 +732,38 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
+    /*********************
+     *  Utility methods  *
+     *********************/
+
+    /**
+     * Convert item to tree and add it to the children of the tree with parentId
+     * @param parentId id of tree to add item
+     * @param item item to convert
+     * @param type add branch or leaf
+     * @param sort sort by alphabetical order after insertion if true
+     */
     public addItem(parentId: number | string, item: Object, type: 'branch' | 'leaf', sort?: boolean) {
         const tree = this._getTree(item, type);
         this.addTree(parentId, tree, sort);
     }
 
+    /**
+     * Update values of converted item in tree
+     * @param item item to convert
+     * @param type update branch or leaf
+     */
     public updateItem(item: Object, type: 'branch' | 'leaf') {
         const tree = this._getTree(item, type);
         this.updateTree(tree);
     }
 
+    /**
+     * Add tree to parent
+     * @param parentId id of tree to add tree
+     * @param tree tree to add
+     * @param sort sort by alphabetical order after insertion if true
+     */
     public addTree(parentId: number | string, tree: Tree, sort: boolean) {
         const toAdd = [
             this.getTreeById(this._getTrees(this.trees, this.tree), parentId, 'branch'),
@@ -764,6 +790,10 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterVi
         this.children.forEach(treeview => treeview.addTree(parentId, tree, sort));
     }
 
+    /**
+     * Update values of tree
+     * @param tree to update
+     */
     public updateTree(tree: Tree) {
         const toUpdate = [
             this.getTree(this._getTrees(this.trees, this.tree), tree),
@@ -777,6 +807,11 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterVi
         this.children.forEach(treeview => treeview.updateTree(tree));
     }
 
+    /**
+     * Remove tree with id from tree
+     * @param id id of tree to remove
+     * @param type remove branch or leaf
+     */
     public remove(id: number | string, type: 'branch' | 'leaf') {
         const toRemove = [
             this.getParentTreeById(this._getTrees(this.trees, this.tree), id, type),
@@ -800,6 +835,11 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterVi
         this.children.forEach(treeview => treeview.remove(id, type));
     }
 
+    /**
+     * Convert item into Tree or Leaf
+     * @param item to convert
+     * @param type convert into branch (Tree) or leaf (Leaf)
+     */
     private _getTree(item: Object, type?: 'branch' | 'leaf'): Tree {
         if (type === 'leaf') {
             return this.mapper.mapLeaf(item);
@@ -808,6 +848,11 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
+    /**
+     * Search tree coressponding to searched tree
+     * @param trees to search
+     * @param find tree to find
+     */
     public getTree(trees: Tree[], find: Tree): Tree {
         for (const tree of trees) {
             if ((!find.children && !tree.children) || (find.children && tree.children)) {
@@ -824,6 +869,12 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterVi
         return null;
     }
 
+    /**
+     * Search tree coressponding to searched id
+     * @param trees to search
+     * @param id id of tree to find
+     * @param type search branch or leaf
+     */
     public getTreeById(trees: Tree[], id: number | string, type: 'branch' | 'leaf'): Tree {
         for (const tree of trees) {
             if ((type === 'leaf' && !tree.children) || (type === 'branch' && tree.children)) {
@@ -840,6 +891,12 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterVi
         return null;
     }
 
+    /**
+     * Search parent tree which contains searched tree id
+     * @param trees to search
+     * @param id of tree to find
+     * @param type search branch or leaf
+     */
     public getParentTreeById(trees: Tree[], id: number | string, type: 'branch' | 'leaf'): Tree {
         for (const tree of trees) {
             if (tree.children) {
@@ -860,6 +917,11 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterVi
         return null;
     }
 
+    /**
+     * Choose the right trees to search
+     * @param trees list for multitree
+     * @param tree current tree
+     */
     private _getTrees(trees: Tree[], tree: Tree): Tree[] {
         if (trees) {
             return trees;
