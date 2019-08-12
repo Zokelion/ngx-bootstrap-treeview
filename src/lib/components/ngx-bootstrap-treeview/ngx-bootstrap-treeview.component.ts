@@ -1,6 +1,30 @@
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, QueryList, Renderer2, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import { faCheck, faCheckSquare, faFolder, faFolderOpen, faMinus, faSquare, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import {
+    AfterViewInit,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    NgZone,
+    OnChanges,
+    OnInit,
+    Output,
+    QueryList,
+    Renderer2,
+    SimpleChanges,
+    ViewChild,
+    ViewChildren
+} from '@angular/core';
+import {
+    faCheck,
+    faCheckSquare,
+    faFolder,
+    faFolderOpen,
+    faMinus,
+    faSquare,
+    IconDefinition
+} from '@fortawesome/free-solid-svg-icons';
 import { SelectedTreesService } from 'src/lib/services/selected-trees.service';
 import { ILoggingService } from '../../interfaces/ILoggingService.interface';
 import { LeafClickedEvent } from '../../models/leaf-clicked-event.model';
@@ -701,6 +725,148 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterVi
             return brancheSelectedAny;
         } else if (this.isOpened && !this.tree.children) {
             return leafSelectedAny;
+        }
+    }
+
+    public addItem(parentId: number | string, item: Object, type: 'branch' | 'leaf', sort?: boolean) {
+        const tree = this._getTree(item, type);
+        this.addTree(parentId, tree, sort);
+    }
+
+    public updateItem(item: Object, type: 'branch' | 'leaf') {
+        const tree = this._getTree(item, type);
+        this.updateTree(tree);
+    }
+
+    public addTree(parentId: number | string, tree: Tree, sort: boolean) {
+        const toAdd = [
+            this.getTreeById(this._getTrees(this.trees, this.tree), parentId, 'branch'),
+            this.getTreeById(this._getTrees(this.displayedTrees, this.displayedTree), parentId, 'branch')
+        ];
+        toAdd
+            .filter(e => !!e)
+            .forEach(parent => {
+                if (parent.children.every(child => child.value !== tree.value)) {
+                    parent.children.push(this._copyTree(tree));
+                    if (sort && !this.isRoot) {
+                        parent.children.sort((childA, childB) => {
+                            if (childA.children && !childB.children) {
+                                return -1;
+                            } else if (!childA.children && childB.children) {
+                                return 1;
+                            } else {
+                                return childA.label.localeCompare(childB.label);
+                            }
+                        });
+                    }
+                }
+            });
+        this.children.forEach(treeview => treeview.addTree(parentId, tree, sort));
+    }
+
+    public updateTree(tree: Tree) {
+        const toUpdate = [
+            this.getTree(this._getTrees(this.trees, this.tree), tree),
+            this.getTree(this._getTrees(this.displayedTrees, this.displayedTree), tree)
+        ];
+        toUpdate
+            .filter(e => !!e)
+            .forEach(oldTree => {
+                Object.assign(oldTree, this._copyTree(tree));
+            });
+        this.children.forEach(treeview => treeview.updateTree(tree));
+    }
+
+    public remove(id: number | string, type: 'branch' | 'leaf') {
+        const toRemove = [
+            this.getParentTreeById(this._getTrees(this.trees, this.tree), id, type),
+            this.getParentTreeById(this._getTrees(this.displayedTrees, this.displayedTree), id, type)
+        ];
+        toRemove
+            .filter(e => !!e)
+            .forEach(parent => {
+                const index = parent.children.findIndex(child => {
+                    if ((type === 'leaf' && !child.children) || (type === 'branch' && child.children)) {
+                        if (id === child.value) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+                if (index !== -1) {
+                    parent.children.splice(index, 1);
+                }
+            });
+        this.children.forEach(treeview => treeview.remove(id, type));
+    }
+
+    private _getTree(item: Object, type?: 'branch' | 'leaf'): Tree {
+        if (type === 'leaf') {
+            return this.mapper.mapLeaf(item);
+        } else {
+            return this.mapper.mapTree(item);
+        }
+    }
+
+    public getTree(trees: Tree[], find: Tree): Tree {
+        for (const tree of trees) {
+            if ((!find.children && !tree.children) || (find.children && tree.children)) {
+                if (find.value === tree.value) {
+                    return tree;
+                }
+            } else if (tree.children) {
+                const child = this.getTree(tree.children, find);
+                if (child) {
+                    return child;
+                }
+            }
+        }
+        return null;
+    }
+
+    public getTreeById(trees: Tree[], id: number | string, type: 'branch' | 'leaf'): Tree {
+        for (const tree of trees) {
+            if ((type === 'leaf' && !tree.children) || (type === 'branch' && tree.children)) {
+                if (id === tree.value) {
+                    return tree;
+                }
+            } else if (tree.children) {
+                const child = this.getTreeById(tree.children, id, type);
+                if (child) {
+                    return child;
+                }
+            }
+        }
+        return null;
+    }
+
+    public getParentTreeById(trees: Tree[], id: number | string, type: 'branch' | 'leaf'): Tree {
+        for (const tree of trees) {
+            if (tree.children) {
+                for (const child of tree.children) {
+                    if ((type === 'leaf' && !child.children) || (type === 'branch' && child.children)) {
+                        if (id === child.value) {
+                            return tree;
+                        }
+                    } else if (child.children) {
+                        const search = this.getParentTreeById(child.children, id, type);
+                        if (search) {
+                            return tree;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private _getTrees(trees: Tree[], tree: Tree): Tree[] {
+        if (trees) {
+            return trees;
+        } else if (tree) {
+            return [tree];
+        } else {
+            return [];
         }
     }
 }
