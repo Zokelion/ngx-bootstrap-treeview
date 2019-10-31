@@ -1,36 +1,38 @@
+import { animate, keyframes, style, transition, trigger } from '@angular/animations';
 import {
+    AfterViewInit,
+    ChangeDetectorRef,
     Component,
-    OnInit,
-    Input,
-    Output,
-    EventEmitter,
-    ViewChildren,
-    QueryList,
     ElementRef,
+    EventEmitter,
+    Input,
+    NgZone,
+    OnChanges,
+    OnInit,
+    Output,
+    QueryList,
     Renderer2,
     SimpleChanges,
-    OnChanges,
-    NgZone,
-    ChangeDetectorRef,
-    ViewChild
+    ViewChild,
+    ViewChildren
 } from '@angular/core';
-import { Tree } from '../../models/tree.model';
 import {
-    faSquare,
+    faCheck,
     faCheckSquare,
     faFolder,
     faFolderOpen,
     faMinus,
-    faCheck,
+    faSquare,
     IconDefinition
 } from '@fortawesome/free-solid-svg-icons';
-import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
-import { Leaf } from '../../models/leaf.model';
-import { LeafClickedEvent } from '../../models/leaf-clicked-event.model';
+import { SelectedTreesService } from 'src/lib/services/selected-trees.service';
 import { ILoggingService } from '../../interfaces/ILoggingService.interface';
-import { NgxBootstrapTreeviewMapper } from '../../utils/ngx-bootstrap-treeview-mapper';
+import { LeafClickedEvent } from '../../models/leaf-clicked-event.model';
+import { Leaf } from '../../models/leaf.model';
 import { NgxBootstrapTreeviewContextMenus } from '../../models/ngx-bootstrap-treeview-context-menus.model';
+import { Tree } from '../../models/tree.model';
 import { ContextMenuService } from '../../services/context-menu.service';
+import { NgxBootstrapTreeviewMapper } from '../../utils/ngx-bootstrap-treeview-mapper';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -52,9 +54,20 @@ import { ContextMenuService } from '../../services/context-menu.service';
         ])
     ]
 })
-export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
+export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges, AfterViewInit {
     @Input()
-    public canSelectBranch: boolean;
+    public disableLeafSelection: boolean;
+
+    @Input()
+    public branchSelectedStyle: any;
+
+    @Input() public branchSelectedClass: any;
+
+    @Input() public leafSelectedStyle: any;
+
+    @Input() public leafSelectedClass: any;
+
+    @Input() public height: string;
 
     @Input()
     public contextMenus: NgxBootstrapTreeviewContextMenus = {
@@ -96,7 +109,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
     public mapper: NgxBootstrapTreeviewMapper<Object, Object>;
 
     @Input()
-    public preselectedItems: any[] = [];
+    public preselectedItems: string[] | number[];
 
     @Input()
     public tree: Tree;
@@ -168,7 +181,8 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
         private _renderer: Renderer2,
         private _zone: NgZone,
         private _changeDetector: ChangeDetectorRef,
-        private _contextMenuService: ContextMenuService
+        private _contextMenuService: ContextMenuService,
+        private _selectedTreesService: SelectedTreesService
     ) {}
 
     ngOnInit() {
@@ -211,13 +225,40 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
             this.isLeaf = !this.isBranch;
         }
 
-        this.leavesCount = this.countLeaves(this.tree);
-
-        if (this.preselectedItems) {
-            this.preselectedItems.forEach(value => {
-                this.select(value);
-            });
+        // Handle pre selected itemps
+        if (this.trees && this.preselectedItems) {
+            this._selectedTreesService.selectPreselectedItems(this.preselectedItems, this.trees);
+        } else if (this.tree && this.preselectedItems) {
+            this._selectedTreesService.selectPreselectedItems(this.preselectedItems, [this.tree]);
         }
+
+        // Select already selected leaves
+        this._selectedTreesService
+            .getSelectedTrees()
+            .filter(
+                tree =>
+                    !tree.children &&
+                    this.tree &&
+                    this.tree.children &&
+                    this.tree.children.some(child => child.value === tree.value)
+            )
+            .forEach(tree => {
+                const leaf = new Leaf(tree);
+                this._selectLeaf(leaf);
+                const event = new LeafClickedEvent(leaf, this.selectedLeaves);
+                this.leafClicked.emit(event);
+            });
+
+        // Select this tree
+        if (this._selectedTreesService.isSelected(this.tree)) {
+            if (this.isBranch) {
+                this._branchToggle();
+            } else {
+                this._leafToggle();
+            }
+        }
+
+        this.leavesCount = this.countLeaves(this.tree);
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -251,8 +292,12 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
         }
     }
 
+    ngAfterViewInit() {
+        this._updateRootsContainerHeight();
+    }
+
     public onClick() {
-        if (this.isLeaf) {
+        if (this.isLeaf && !this.disableLeafSelection) {
             this.onLeafClicked();
         }
 
@@ -273,14 +318,17 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
         }
 
         // When a child leaf is clicked, we check our selectedLeaves to select or unselect the clicked one
-        if (!this._leafExistsIn(this.selectedLeaves, leafClickedEvent.leaf)) {
+        if (
+            !this._leafExistsIn(this.selectedLeaves, leafClickedEvent.leaf) &&
+            this._leafExistsIn(leafClickedEvent.selectedLeaves, leafClickedEvent.leaf)
+        ) {
             this._selectLeaf(leafClickedEvent.leaf);
-        } else {
+        } else if (!this._leafExistsIn(leafClickedEvent.selectedLeaves, leafClickedEvent.leaf)) {
             this._unselectLeaf(leafClickedEvent.leaf);
         }
 
         // Now that the leaf is selected/unselected, we merge our selectedLeaves with the ones of the event
-        leafClickedEvent.selectedLeaves = this.selectedLeaves;
+        leafClickedEvent.selectedLeaves = [...this.selectedLeaves];
 
         if (this.isBranch && this.loggingService) {
             this.loggingService.log(`⬅ Event sortant de ${this.tree.label} vers un parent:`, leafClickedEvent);
@@ -342,8 +390,11 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
 
     public onChildBranchClicked(branch: Tree) {
         this.branchClicked.emit(branch);
+        this._updateRootsContainerHeight();
+    }
 
-        if (this.rootsContainer) {
+    private _updateRootsContainerHeight() {
+        if (this.rootsContainer && !this.height) {
             requestAnimationFrame(() => {
                 // We use requestAnimationFrame because we want this to be processed once rerendering is complete
                 this.rootsContainer.nativeElement.style.height = this.computeHeight() + 'px';
@@ -454,7 +505,23 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
         return matchingElementsCount;
     }
 
-    public unfoldAll() {
+    public unfoldAll(id?: number | string) {
+        if (!id) {
+            this._unfoldAll();
+        } else {
+            this._unfoldAllId(id);
+        }
+    }
+
+    public foldAll(id?: number | string) {
+        if (!id) {
+            this._foldAll();
+        } else {
+            this._foldAllId(id);
+        }
+    }
+
+    private _unfoldAll() {
         // A branch will unfold itself
         if (this.isBranch && !this.isOpened) {
             this._branchToggle();
@@ -469,7 +536,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
         }
     }
 
-    public foldAll() {
+    private _foldAll() {
         // A branch will fold itself
         if (this.isBranch && this.isOpened) {
             this._branchToggle();
@@ -479,6 +546,26 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
         if (!this.isLeaf) {
             this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
                 child.foldAll();
+            });
+        }
+    }
+
+    private _unfoldAllId(id: number | string) {
+        if (this.isBranch && this.tree.value === id) {
+            this.unfoldAll();
+        } else if ((this.isBranch || this.isRoot) && this.children.length) {
+            this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
+                child.unfoldAll(id);
+            });
+        }
+    }
+
+    private _foldAllId(id: number | string) {
+        if (this.isBranch && this.tree.value === id) {
+            this.foldAll();
+        } else if ((this.isBranch || this.isRoot) && this.children.length) {
+            this.children.forEach((child: NgxBootstrapTreeviewComponent) => {
+                child.foldAll(id);
             });
         }
     }
@@ -532,8 +619,10 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
 
         if (this.isOpened) {
             this._selectLeaf(leaf);
+            this._selectedTreesService.addTree(this.tree);
         } else {
             this._unselectLeaf(leaf);
+            this._selectedTreesService.removeTree(this.tree);
         }
 
         const event = new LeafClickedEvent(leaf, this.selectedLeaves);
@@ -543,6 +632,7 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
 
     private _branchToggle(): void {
         this.isOpened = !this.isOpened;
+        this._selectedTreesService.selectedTree = this.tree;
     }
 
     private _selectLeaf(leaf: Leaf) {
@@ -655,6 +745,231 @@ export class NgxBootstrapTreeviewComponent implements OnInit, OnChanges {
             this.displayedTree = this._copyTree(this.tree);
         } else if (this.trees) {
             this.displayedTrees = this._copyTrees(this.trees);
+        }
+    }
+
+    /*********************
+     *   Custom styles   *
+     *********************/
+
+    public getStyle(): any {
+        return this._getEitherIfBranchOrLeafSelected(this.branchSelectedStyle, this.leafSelectedStyle);
+    }
+
+    public getClass(): any {
+        return this._getEitherIfBranchOrLeafSelected(this.branchSelectedClass, this.leafSelectedClass);
+    }
+
+    private _getEitherIfBranchOrLeafSelected(brancheSelectedAny: any, leafSelectedAny: any): any {
+        if (this._selectedTreesService.selectedTree === this.tree && this.tree.children) {
+            return brancheSelectedAny;
+        } else if (this.isOpened && !this.tree.children) {
+            return leafSelectedAny;
+        }
+    }
+
+    /*********************
+     *  Utility methods  *
+     *********************/
+
+    /**
+     * Convert item to tree and add it to the children of the tree with parentId
+     * @param parentId id of tree to add item
+     * @param item item to convert
+     * @param type add branch or leaf
+     * @param sort sort by alphabetical order after insertion if true
+     */
+    public addItem(parentId: number | string, item: Object, type: 'branch' | 'leaf', sort?: boolean) {
+        const tree = this._getTree(item, type);
+        this.addTree(parentId, tree, sort);
+    }
+
+    /**
+     * Update values of converted item in tree
+     * @param item item to convert
+     * @param type update branch or leaf
+     */
+    public updateItem(item: Object, type: 'branch' | 'leaf') {
+        const tree = this._getTree(item, type);
+        this.updateTree(tree);
+    }
+
+    /**
+     * Add tree to parent
+     * @param parentId id of tree to add tree
+     * @param tree tree to add
+     * @param sort sort by alphabetical order after insertion if true
+     */
+    public addTree(parentId: number | string, tree: Tree, sort: boolean) {
+        let toAdd: any[];
+        if (!parentId) {
+            toAdd = [{ children: this.trees }, { children: this.displayedTrees }];
+        } else {
+            toAdd = [
+                this.getTreeById(this._getTrees(this.trees, this.tree), parentId, 'branch'),
+                this.getTreeById(this._getTrees(this.displayedTrees, this.displayedTree), parentId, 'branch')
+            ];
+        }
+        toAdd
+            .filter(e => !!e)
+            .forEach((parent: Tree) => {
+                if (parent.children.every(child => child.value !== tree.value)) {
+                    parent.children.push(this._copyTree(tree));
+                    if (sort) {
+                        parent.children.sort((childA, childB) => {
+                            if (childA.children && !childB.children) {
+                                return -1;
+                            } else if (!childA.children && childB.children) {
+                                return 1;
+                            } else {
+                                return childA.label.localeCompare(childB.label);
+                            }
+                        });
+                    }
+                }
+            });
+        this.children.forEach(treeview => treeview.addTree(parentId, tree, sort));
+    }
+
+    /**
+     * Update values of tree
+     * @param tree to update
+     */
+    public updateTree(tree: Tree) {
+        const toUpdate = [
+            this.getTree(this._getTrees(this.trees, this.tree), tree),
+            this.getTree(this._getTrees(this.displayedTrees, this.displayedTree), tree)
+        ];
+        toUpdate
+            .filter(e => !!e)
+            .forEach(oldTree => {
+                Object.assign(oldTree, this._copyTree(tree));
+            });
+        this.children.forEach(treeview => treeview.updateTree(tree));
+    }
+
+    /**
+     * Remove tree with id from tree
+     * @param id id of tree to remove
+     * @param type remove branch or leaf
+     */
+    public remove(id: number | string, type: 'branch' | 'leaf') {
+        const toRemove = [
+            this.getParentTreeById(this._getTrees(this.trees, this.tree), id, type),
+            this.getParentTreeById(this._getTrees(this.displayedTrees, this.displayedTree), id, type)
+        ];
+        toRemove
+            .filter(e => !!e)
+            .forEach(parent => {
+                const index = parent.children.findIndex(child => {
+                    if ((type === 'leaf' && !child.children) || (type === 'branch' && child.children)) {
+                        if (id === child.value) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+                if (index !== -1) {
+                    parent.children.splice(index, 1);
+                }
+            });
+        this.children.forEach(treeview => treeview.remove(id, type));
+    }
+
+    /**
+     * Convert item into Tree or Leaf
+     * @param item to convert
+     * @param type convert into branch (Tree) or leaf (Leaf)
+     */
+    private _getTree(item: Object, type?: 'branch' | 'leaf'): Tree {
+        if (type === 'leaf') {
+            return this.mapper.mapLeaf(item);
+        } else {
+            return this.mapper.mapTree(item);
+        }
+    }
+
+    /**
+     * Search tree coressponding to searched tree
+     * @param trees to search
+     * @param find tree to find
+     */
+    public getTree(trees: Tree[], find: Tree): Tree {
+        for (const tree of trees) {
+            if ((!find.children && !tree.children) || (find.children && tree.children)) {
+                if (find.value === tree.value) {
+                    return tree;
+                }
+            } else if (tree.children) {
+                const child = this.getTree(tree.children, find);
+                if (child) {
+                    return child;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Search tree coressponding to searched id
+     * @param trees to search
+     * @param id id of tree to find
+     * @param type search branch or leaf
+     */
+    public getTreeById(trees: Tree[], id: number | string, type: 'branch' | 'leaf'): Tree {
+        for (const tree of trees) {
+            if ((type === 'leaf' && !tree.children) || (type === 'branch' && tree.children)) {
+                if (id === tree.value) {
+                    return tree;
+                }
+            } else if (tree.children) {
+                const child = this.getTreeById(tree.children, id, type);
+                if (child) {
+                    return child;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Search parent tree which contains searched tree id
+     * @param trees to search
+     * @param id of tree to find
+     * @param type search branch or leaf
+     */
+    public getParentTreeById(trees: Tree[], id: number | string, type: 'branch' | 'leaf'): Tree {
+        for (const tree of trees) {
+            if (tree.children) {
+                for (const child of tree.children) {
+                    if ((type === 'leaf' && !child.children) || (type === 'branch' && child.children)) {
+                        if (id === child.value) {
+                            return tree;
+                        }
+                    } else if (child.children) {
+                        const search = this.getParentTreeById(child.children, id, type);
+                        if (search) {
+                            return tree;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Choose the right trees to search
+     * @param trees list for multitree
+     * @param tree current tree
+     */
+    private _getTrees(trees: Tree[], tree: Tree): Tree[] {
+        if (trees) {
+            return trees;
+        } else if (tree) {
+            return [tree];
+        } else {
+            return [];
         }
     }
 }

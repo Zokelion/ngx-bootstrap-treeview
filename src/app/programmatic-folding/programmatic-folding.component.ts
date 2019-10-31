@@ -13,6 +13,16 @@ export class ProgrammaticFoldingComponent implements OnInit {
     public tree: Tree = tree;
     public logger: ILoggingService = console;
 
+    public android = {
+        label: 'Android',
+        value: 144
+    }
+
+    public newAndroid = {
+        label: 'Android Google',
+        value: 144
+    }
+
     @ViewChild('treeview')
     public treeview: NgxBootstrapTreeviewComponent;
 

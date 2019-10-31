@@ -8,11 +8,16 @@ import { NgxBootstrapTreeviewContextMenuComponent } from './components/ngx-boots
 import { EventManager } from '@angular/platform-browser';
 import { NgxBootstrapTreeviewEventManagerService } from './services/ngx-bootstrap-treeview-event-manager.service';
 import { ContextMenuService } from './services/context-menu.service';
+import { SelectedTreesService } from './services/selected-trees.service';
 
 @NgModule({
     imports: [CommonModule, FontAwesomeModule, RouterModule.forChild([])],
     declarations: [NgxBootstrapTreeviewComponent, NgxBootstrapTreeviewContextMenuComponent],
     exports: [NgxBootstrapTreeviewComponent],
-    providers: [ContextMenuService, { provide: EventManager, useClass: NgxBootstrapTreeviewEventManagerService }]
+    providers: [
+        ContextMenuService,
+        SelectedTreesService,
+        { provide: EventManager, useClass: NgxBootstrapTreeviewEventManagerService }
+    ]
 })
 export class NgxBootstrapTreeviewModule {}

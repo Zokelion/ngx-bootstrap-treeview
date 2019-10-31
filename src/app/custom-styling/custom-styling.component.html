@@ -7,14 +7,17 @@
                     [isOpened]="true"
                     (leafClicked)="onLeafClicked($event)"
                     [tree]="tree"
-                    [canSelectBranch]="false"
+                    [disableLeafSelection]="true"
+                    [branchSelectedStyle]="{ color: 'red' }"
+                    [leafSelectedStyle]="{ color: 'pink' }"
                     [selectedLeafIcon]="faCheckSquare"
-                    [unselectedLeafIcon]="faSquare"
+                    [unselectedLeafIcon]="undefined"
                     [openedFolderIcon]="faFolderOpen"
                     [closedFolderIcon]="faFolder"
                     [anyChildrenSelectedIcon]="faMinus"
                     [allChildrenSelectedIcon]="faCheck"
                     [loggingService]="logger"
+                    [preselectedItems]="[131,132]"
                 >
                 </ngx-bootstrap-treeview>
             </div>
@@ -39,7 +42,7 @@
     [isOpened]="true"
     (leafClicked)="onLeafClicked($event)"
     [tree]="tree"
-    [canSelectBranch]="false"
+    [disableLeafSelection]="false"
     [selectedLeafIcon]="faCheckSquare"
     [unselectedLeafIcon]="faSquare"
     [openedFolderIcon]="faFolderOpen"

@@ -19,7 +19,15 @@
                 <button class="btn btn-primary mb-2" (click)="onFoldButtonClicked(13)">Fold "C#" via TS</button>
                 <button class="btn btn-primary mb-2" (click)="onUnfoldButtonClicked(13)">Unfold "C#" via TS</button>
                 <button class="btn btn-primary mb-2" (click)="treeview.fold(14)">Fold "Java" without TS</button>
-                <button class="btn btn-primary mb-2" (click)="treeview.unfold(14)">Unfold "Java" without TS</button>
+                <button class="btn btn-primary mb-2" (click)="treeview.remove(144, 'leaf')">
+                    Remove "Android" from Java
+                </button>
+                <button class="btn btn-primary mb-2" (click)="treeview.addTree(14, android)">
+                    Add "Android" to Java
+                </button>
+                <button class="btn btn-primary mb-2" (click)="treeview.updateTree(newAndroid)">
+                    Update "Android" to "Android Google" in Java
+                </button>
             </div>
         </div>
         <div class="col-12 col-md-5 col-xl-4">
