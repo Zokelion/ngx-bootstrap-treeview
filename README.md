@@ -219,7 +219,7 @@ The next paragraphs will just show some HTML snippets that rely on these datas. 
 All icons can be customized, as long as you have access to them in your FontAwesome library. As an example, here, we're using FontAwesome light style. First, let's take an eye to what our TS should look like:
 ```ts
 // Import the every IconDefinition you'll want to use
-import { faFolder, faFolderOpen, faSquare, faCheckSquare, faCheck, faMinus } from '@fortawesome/pro-light-svg-icons';
+import { faFolder, faFolderOpen, faSquare, faCheckSquare, faCheck, faMinus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'app-root',
@@ -426,3 +426,6 @@ interface LeafMap {
 
 -   [Angular FontAwesome](https://github.com/FortAwesome/angular-fontawesome) when it comes to icons
 -   Some of the [Bootstrap](https://getbootstrap.com/) classes
+-   @fortawesome/free-solid-svg-icons
+-   @fortawesome/angular-fontawesome
+-   @fortawesome/fontawesome-svg-core
