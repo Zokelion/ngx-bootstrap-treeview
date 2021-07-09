@@ -279,7 +279,7 @@ If we want to get a tree from such data, we must first re-organize it. That's wh
 As explained above, a mapper takes two types as arguments. First one is the type that will be converted in branch (Tree object), second one is the type that will be converted in leaves.
 Here, our declaration would look like so:
 ```ts
-const mapper: NgxBootsrapTreeviewMapper<Category, Skill>;
+const mapper: NgxBootstrapTreeviewMapper<Category, Skill>;
 ```
 Note that it's just a declaration. To instanciate it, we'll need to indicate how our data will be mapped. So let's dive a bit further into the maps.
 
